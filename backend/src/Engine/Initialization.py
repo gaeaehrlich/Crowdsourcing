@@ -1,8 +1,7 @@
 from  backend.src.dishes.models import DistanceMatrix, Rank, UserDishMatrix
 from django.contrib.auth.models import User
+from backend.src.Engine.Utils import averaged_mean, values_list_flat
 import numpy as np
-import threading
-
 
 
 def initialize():
@@ -10,20 +9,21 @@ def initialize():
     CreateUserDishMatrix()
 
 
-def calculate_distance(user1_ranking, user2_ranking):
-    np1 = np.array(user1_ranking.values_list('stars', flat=True))
-    np2 = np.array(user2_ranking.values_list('stars', flat=True))
-    return np.linalg.norm(np1-np2, ord=2)
+def calculate_distance(user1_ranking, user2_ranking): # order by dish is crucial!
+    user1_stars = np.array(values_list_flat(user1_ranking.order_by('dish'), 'stars'))
+    user2_stars = np.array(values_list_flat(user2_ranking.order_by('dish'), 'stars'))
+    return np.linalg.norm(user1_stars - user2_stars, ord=2) # TODO: try different orders
 
 
 def calculate_all_distance():
-    all_users = User.objects.all() # TODO: create liuse st of unordered tuples and user_user_distance()
+    all_users = User.objects.all()
     for user1 in all_users:
         for user2 in all_users:
             if user1 != user2:
                 distance = DistanceMatrix(col=user1, row=user2)
                 user1_ranking = Rank.objects.filter(user=user1, stars__gt=0)
-                user2_ranking = Rank.objects.filter(user=user2, dish__in=user1_ranking)
+                user2_ranking = Rank.objects.filter(user=user2,
+                                                    dish__in=user1_ranking.values_list('dish', flat=True))
                 distance.distance = calculate_distance(user1_ranking, user2_ranking)
                 distance.save()
 
@@ -34,17 +34,11 @@ def KNN(user, k = 5):
 
 def AddEstimation(user):
     user_dishes = Rank.objects.filter(user=user).values_list('dish', flat=True)
-    neighbors = KNN(user) #.values('user', 'distance')
+    neighbors = KNN(user)
     for dish in user_dishes:
         estimate = Rank.objects.get(user=user).stars
-        if estimate == 0:
-            sum = 0
-            for neighbor in neighbors:
-                rank = Rank.objects.get(user=neighbor, dish=dish)
-                estimate += rank.stars * np.exp(-1 * neighbor.distance)
-                sum += np.exp(-1 * neighbor.distance)
-            estimate = estimate / sum
-
+        if estimate == 0: # else - go in the table as is
+            estimate =  averaged_mean(dish, neighbors)
         dish_estimation = UserDishMatrix(dish=dish, user=user, estimate=estimate)
         dish_estimation.save()
 
@@ -52,12 +46,6 @@ def AddEstimation(user):
 def CreateUserDishMatrix():
     for user in User.objects.all():
         AddEstimation(user)
-
-
-def k_multi_thread(target, args, k = 5):
-    t = threading.Thread(target=target, args=args)
-    t.start()
-    t.join()
 
 
 if __name__ == '__main__':

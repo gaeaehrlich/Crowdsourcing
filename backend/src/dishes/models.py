@@ -65,14 +65,14 @@ class Rank(models.Model):
 
 
 class DistanceMatrix(models.Model):
-    col = models.ForeignKey(User, related_name='Distance_column', on_delete=models.PROTECT)
-    row = models.ForeignKey(User, related_name='Distance_row', on_delete=models.PROTECT)
+    col = models.ForeignKey(User, related_name='col', on_delete=models.PROTECT)
+    row = models.ForeignKey(User, related_name='row', on_delete=models.PROTECT)
     distance = models.FloatField()
 
 
 class UserDishMatrix(models.Model):
-    dish = models.ForeignKey(Dish, related_name='UserDish_column', on_delete=models.PROTECT)
-    user = models.ForeignKey(User, related_name='UserDish_row', on_delete=models.PROTECT)
+    dish = models.ForeignKey(Dish, related_name='%(class)s', on_delete=models.PROTECT)
+    user = models.ForeignKey(User, related_name='%(class)s', on_delete=models.PROTECT)
     estimate = models.FloatField()
     last_update = models.DateTimeField(default=datetime.datetime.now)
 
@@ -80,16 +80,17 @@ class Tag(models.Model):
     title = models.CharField(max_length=30, unique=True)
 
 class TagTag(models.Model):
-    col = models.ForeignKey(Tag, related_name='TagTag_column', on_delete=models.PROTECT)
-    row = models.ForeignKey(Tag, related_name='TagTag_row', on_delete=models.PROTECT)
+    col = models.ForeignKey(Tag, related_name='col', on_delete=models.PROTECT)
+    row = models.ForeignKey(Tag, related_name='row', on_delete=models.PROTECT)
     distance = models.FloatField()
 
 class DishTag(models.Model):
-    dish = models.ForeignKey(Dish, related_name='DishTag_column', on_delete=models.PROTECT)
-    tag = models.ForeignKey(Tag, related_name='DishTag_row', on_delete=models.PROTECT)
+    dish = models.ForeignKey(Dish, related_name='%(class)s', on_delete=models.PROTECT)
+    tag = models.ForeignKey(Tag, related_name='%(class)s', on_delete=models.PROTECT)
 
 # TODO: add table of ingredients - remember when user is alergic / cosher / vegi / vegen
 
 class Constraint(models.Model):
-    user = models.ForeignKey(User, related_name='Constraint_col', on_delete=models.PROTECT)
-    tag = models.ForeignKey(Tag, related_name='Constraint_row', on_delete=models.PROTECT)
+    user = models.ForeignKey(User, related_name='%(class)s', on_delete=models.PROTECT)
+    tag = models.ForeignKey(Tag, related_name='%(class)s', on_delete=models.PROTECT)
+

@@ -8,13 +8,13 @@ def func(tag):
 
 def cal_tag_loss(tag, dish):
     dish_tags = DishTag.objects.filter(dish=dish)
-    return np.min(map(func(tag), np.array(dish_tags)))
+    return np.min(map(func(tag), dish_tags))
 
 
 def cal_dish_loss(user, tags, dish):
-    min_loss = float('inf')
+    min_loss = cal_tag_loss(tags[0], dish)
     min_tag = tags[0]
-    for tag in tags:
+    for tag in tags[1:]:
         tag_loss = cal_tag_loss(tag, dish)
         if tag_loss < min_loss:
             min_loss = tag_loss
