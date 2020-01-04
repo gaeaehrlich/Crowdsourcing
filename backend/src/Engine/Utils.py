@@ -1,5 +1,5 @@
 import numpy as np
-from  backend.src.dishes.models import Rank
+from Crowdsourcing.backend.src.dishes.models import Rank, Dish , Profile
 import threading
 
 
@@ -14,8 +14,18 @@ def averaged_mean(dish, neighbors): # order is important for averaged_mean
     return np.average(stars_list, distance_list) # can raise ZeroDivisionError? check
 
 
-def add_empty_ranks(): # TODO: for self checking implement or find a way to avoid it
-    pass
+def add_empty_ranks(): # TODO: IS THIS OK ?
+    users = values_list_flat(Profile.objects.all(), "user")
+    for user in users:
+        add_empty_ranks(user)
+
+
+def add_empty_ranks_for_user(user):
+    dishes = values_list_flat(Dish.objects.all(), "dish")
+    ranked_dishes = values_list_flat(Rank.objects.filter(user=user), "dish")
+    for dish in dishes:
+        if dish not in ranked_dishes:
+            Rank.objects.create(user=user, dish=dish)
 
 
 # TODO: Orin - decide later where to use
