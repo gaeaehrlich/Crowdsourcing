@@ -43,16 +43,6 @@ class DishPage extends React.Component {
             <Tag>{tag}</Tag>
         )}
                         </div>
-                        <List
-                            split={false}
-                            dataSource={this.state.tags}
-                            itemLayout={'horizontal'}
-                            renderItem={item => (
-                                <List.Item>
-                                    <Tag>{item}</Tag>
-                                </List.Item>
-                            )}
-                        />
                     </Col>
                     <Col span={12}>
                         <Title level={3}>
