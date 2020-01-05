@@ -1,5 +1,5 @@
 import numpy as np
-from Crowdsourcing.backend.src.dishes.models import Rank, Dish , Profile
+from Crowdsourcing.backend.src.dishes.models import Rank, Dish, Profile
 import threading
 
 

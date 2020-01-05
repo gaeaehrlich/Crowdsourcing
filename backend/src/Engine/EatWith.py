@@ -38,20 +38,24 @@ def best_resturant_for_group(users_list, tags_list, area):
     n = len(users_list)
     restaurants = Utils.values_list_flat(RestaurantArea.objects.filter(area=area), "restaurant")
     min_loss_val = float('inf')
+    users_loss = []
     for restaurant in restaurants:
+        # constraints
         loss = 0
         user_recommended_dish_list = []
+        current_users_lost = []
         for i in range(n):
             user_loss, recommended_dish = restaurant_loss(users_list[i], tags_list[i], restaurant)
+            current_users_lost.append(user_loss)
             loss += user_loss
             user_recommended_dish_list.append((users_list[i], recommended_dish))
-        if min_loss_val > loss :
+        if min_loss_val > loss:
             best_restaurant = restaurant
             user_and_dish_at_restaurant = user_recommended_dish_list
-    if min_loss_val == float('inf') :
-        print("what to do ????")
-        # TODO : to ask chen
-    return best_restaurant, user_and_dish_at_restaurant
+            user_loss = user_and_dish_at_restaurant
+    if min_loss_val == float('inf'):
+        return None
+    return best_restaurant, user_and_dish_at_restaurant, user_loss
 
 
 # TODO : if there is no dish in  restaurant that match user constrains???
@@ -71,7 +75,7 @@ def restaurant_loss(user, tags, restaurant):
     for dish in dishes:
         bad_dish = False
         dish_tags = Utils.values_list_flat(DishTag.objects.filter(dish=dish), "tag")
-        for constraint in user_constrains: # TODO - ask chen about that
+        for constraint in user_constrains:
             if constraint not in dish_tags:
                 bad_dish = True
                 break

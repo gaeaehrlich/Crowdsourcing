@@ -48,7 +48,7 @@ def update_estimation(cell):
     neighbors = KNN(user)
     cell.estimate = averaged_mean(dish, neighbors)
     cell.last_update = datetime.now()
-    # TODO : save here or not?
+
 
 
 # TODO: ONLY UPDATE FOR USERS THAT ONE OF THEIR KNN CHANGED! (RATED A DISH LATELY)
