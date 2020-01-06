@@ -88,9 +88,19 @@ class DishTag(models.Model):
     dish = models.ForeignKey(Dish, related_name='%(class)s', on_delete=models.PROTECT)
     tag = models.ForeignKey(Tag, related_name='%(class)s', on_delete=models.PROTECT)
 
-# TODO: add table of ingredients - remember when user is alergic / cosher / vegi / vegen
 
+class RestaurantTag(models.Model):
+    restaurant = models.ForeignKey(Restaurant, related_name='%(class)s', on_delete=models.PROTECT)
+    tag = models.ForeignKey(Tag, related_name='%(class)s', on_delete=models.PROTECT)
+
+
+# TODO: add table of ingredients - remember when user is alergic / cosher / vegi / vegen
+# is this that table ?
 class Constraint(models.Model):
     user = models.ForeignKey(User, related_name='%(class)s', on_delete=models.PROTECT)
     tag = models.ForeignKey(Tag, related_name='%(class)s', on_delete=models.PROTECT)
 
+
+class RestaurantArea(models.Model):
+    restaurant = models.ForeignKey(Restaurant, related_name='%(class)s', on_delete=models.PROTECT)
+    area = models.ForeignKey(CityArea, related_name='%(class)s', on_delete=models.PROTECT)
