@@ -1,4 +1,7 @@
-from  backend.src.dishes.models import DistanceMatrix, Rank, UserDishMatrix
+import sys
+sys.path.insert(0, '/home/chen/Crowdsourcing/backend/dishes/models')
+
+from ..dishes.modelsS import DistanceMatrix, Rank, UserDishMatrix
 from django.contrib.auth.models import User
 from backend.src.Engine.Utils import averaged_mean, values_list_flat
 import numpy as np
