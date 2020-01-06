@@ -2,15 +2,28 @@ import numpy as np
 from  ..models import Rank
 import threading
 
+def get_dishes(query_set):
+    return list(map(lambda x: x.dish, query_set))
 
-def values_list_flat(query_set, type):
-    return query_set.values_list(type, flat=True) # because we do this allot
+def get_users(query_set):
+    return list(map(lambda x: x.user, query_set))
 
+def get_stars(query_set):
+    return list(map(lambda x: x.stars, query_set))
+
+def get_restaurants(query_set):
+    return list(map(lambda x: x.restaurant, query_set))
+
+def get_tags(query_set):
+    return list(map(lambda x: x.tag, query_set))
+
+def get_rows(query_set):
+    return list(map(lambda x: x.row, query_set))
 
 def averaged_mean(dish, neighbors): # order is important for averaged_mean
-    ranks = Rank.objects.get(user__in=values_list_flat(neighbors, 'user'), dish=dish)
-    stars_list = values_list_flat(ranks.order_by('user'), 'stars')
-    distance_list = np.exp(-1 * np.array(values_list_flat(neighbors.order_by('user'), 'distance')))
+    ranks = Rank.objects.filter(user__in=get_rows(neighbors), dish=dish)
+    stars_list = get_stars(ranks.order_by('user'))
+    distance_list = np.exp(-1 * np.array(get_rows(neighbors.order_by('row'))))
     return np.average(stars_list, distance_list) # can raise ZeroDivisionError? check
 
 

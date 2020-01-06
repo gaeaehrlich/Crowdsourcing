@@ -1,6 +1,6 @@
-from Crowdsourcing.backend.src.dishes.models import UserDishMatrix, Dish, Restaurant, DishTag, TagTag,\
+from ..models import UserDishMatrix, Dish, Restaurant, DishTag, TagTag,\
     Constraint, RestaurantTag, RestaurantArea
-from Crowdsourcing.backend.src.Engine import Utils
+from .Utils import get_restaurants, get_tags
 import numpy as np
 
 
@@ -36,7 +36,7 @@ def best_resturant_for_group(users_list, tags_list, area):
     :return: the recommended restaurant and list of (user, recommended_dish)
     """
     n = len(users_list)
-    restaurants = Utils.values_list_flat(RestaurantArea.objects.filter(area=area), "restaurant")
+    restaurants = get_restaurants(RestaurantArea.objects.filter(area=area), "restaurant")
     min_loss_val = float('inf')
     users_loss = []
     for restaurant in restaurants:
@@ -69,12 +69,12 @@ def restaurant_loss(user, tags, restaurant):
     """
     dishes = Dish.objects.filter(resturant=restaurant)
     # FILTER OUT THE BAD DISHES THAT CAN KILL THEM Manually :
-    user_constrains = Utils.values_list_flat(Constraint.objects.filter(user=user), "tag")
+    user_constrains = get_tags(Constraint.objects.filter(user=user))
     dishes_loss =[float('inf')]
     appropriate_dishes = [None]
     for dish in dishes:
         bad_dish = False
-        dish_tags = Utils.values_list_flat(DishTag.objects.filter(dish=dish), "tag")
+        dish_tags = get_tags(DishTag.objects.filter(dish=dish))
         for constraint in user_constrains:
             if constraint not in dish_tags:
                 bad_dish = True
