@@ -1,10 +1,10 @@
 import numpy as np
-from  backend.src.dishes.models import Rank
+from  ..models import Rank
 import threading
 
 
-def values_list_flat(values_list, type):
-    return values_list.orderby(type, flat=True) # because we do this allot
+def values_list_flat(query_set, type):
+    return query_set.values_list(type, flat=True) # because we do this allot
 
 
 def averaged_mean(dish, neighbors): # order is important for averaged_mean

@@ -1,9 +1,9 @@
-from backend.src.Engine.Utils import averaged_mean, k_multi_thread
-from backend.src.dishes.models import DistanceMatrix, Rank, UserDishMatrix, Dish
+from.Utils import averaged_mean, k_multi_thread
+from ..models import DistanceMatrix, Rank, UserDishMatrix, Dish
 from django.contrib.auth.models import User
 from datetime import datetime, timedelta
 from math import sqrt
-from backend.src.Engine.Initialization import calculate_distance, KNN
+from .Initialization import calculate_distance, KNN
 
 
 def user_user_distance(new_user, old_user):

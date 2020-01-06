@@ -1,4 +1,4 @@
-from  backend.src.dishes.models import UserDishMatrix, Dish, Restaurant, DishTag, TagTag
+from  ..models import UserDishMatrix, Dish, Restaurant, DishTag, TagTag
 import numpy as np
 
 
