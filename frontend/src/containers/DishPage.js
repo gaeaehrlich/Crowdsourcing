@@ -1,7 +1,7 @@
 import React from "react";
 import axios from 'axios';
 
-import {Card} from 'antd';
+import {Card, List, Comment} from 'antd';
 import { Typography } from 'antd';
 import { Tag } from 'antd';
 import { Row, Col } from 'antd';
@@ -27,11 +27,11 @@ class DishPage extends React.Component {
             dish_id: dishID
         });
         axios.get(`http://127.0.0.1:8000/api/dish/${dishID}`).then(res => {
-            console.log(res.data.restaurant);
+            console.log(res.data.reviews);
             this.setState({
-                dish_name: res.data.title,
+                dish_name: res.data.name,
                 restaurant_name: res.data.restaurant.name,
-        // address: res.data.restaurant.street.name,
+                // address: res.data.restaurant.street.name,
                 price: res.data.price,
                 reviews: res.data.reviews,
 
@@ -53,8 +53,8 @@ class DishPage extends React.Component {
                         <h6 style={{marginRight: 0, display: 'inline' }}>Tags:</h6>
                         <div>
                             {this.state.tags.map((tag) =>
-            <Tag>{tag}</Tag>
-        )}
+                                <Tag>{tag}</Tag>
+                            )}
                         </div>
                     </Col>
                     <Col span={12}>
@@ -64,7 +64,21 @@ class DishPage extends React.Component {
                     </Col>
                 </Row>
 
-
+                <List
+                    itemLayout="horizontal"
+                    dataSource={this.state.reviews}
+                    renderItem={review => (
+                        <li>
+                            <Comment
+                                // actions={item.actions}
+                                author={review.author.username}
+                                // avatar={item.avatar}
+                                content={review.description}
+                                // datetime={item.datetime}
+                            />
+                        </li>
+                    )}
+                />
                 <Card title={this.state.dish_id} >
                     <p>{this.state.dish_id}</p>
                 </Card>
