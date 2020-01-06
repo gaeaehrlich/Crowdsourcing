@@ -48,10 +48,12 @@ class CustomLayout extends React.Component {
                 </span>
               }
             >
-              <Menu.ItemGroup title="Item 1">
-                <Menu.Item key="1">Option 1</Menu.Item>
+                {this.props.isAuthenticated ?
+                    <Menu.Item key="1">< Link to={`/history/${this.props.token}`}>History</Link></Menu.Item>
+                    :
+                    null
+                }
                 <Menu.Item key="2">Option 2</Menu.Item>
-              </Menu.ItemGroup>
               <Menu.ItemGroup title="Iteom 2">
                 <Menu.Item key="3">Option 3</Menu.Item>
                 <Menu.Item key="4">Option 4</Menu.Item>
