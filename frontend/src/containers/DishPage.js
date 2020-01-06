@@ -2,7 +2,7 @@ import React from "react";
 import axios from 'axios';
 
 import {Card} from 'antd';
-import { List, Typography } from 'antd';
+import { Typography } from 'antd';
 import { Tag } from 'antd';
 import { Row, Col } from 'antd';
 
@@ -15,14 +15,27 @@ class DishPage extends React.Component {
         dish_id: 0,
         dish_name: 'The New Noodle',
         restaurant_name: 'Giraffe',
-        price: 58,
+        address: '',
+        price: 0,
         tags:['Asian', 'Vegan', 'shit'],
-        dish: {}
+        reviews: []
     };
 
     componentDidMount() {
+        const dishID = this.props.match.params.dishID
         this.setState({
-            dish_id: this.props.match.params.dishID
+            dish_id: dishID
+        });
+        axios.get(`http://127.0.0.1:8000/api/dish/${dishID}`).then(res => {
+            console.log(res.data.restaurant);
+            this.setState({
+                dish_name: res.data.title,
+                restaurant_name: res.data.restaurant.name,
+        // address: res.data.restaurant.street.name,
+                price: res.data.price,
+                reviews: res.data.reviews,
+
+            });
         });
     }
 

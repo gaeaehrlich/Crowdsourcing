@@ -9,7 +9,7 @@ const BaseRouter = () => (
   <div>
     <Route exact path="/login/" component={Login} />{" "}
     <Route exact path="/signup/" component={Signup} />{" "}
-    <Route exact path="/dish/2" component={DishPage} />{" "}
+    <Route exact path="/dish/:dishID" component={DishPage} />{" "}
   </div>
 );
 
