@@ -1,5 +1,5 @@
 import React from "react";
-import { List, Avatar, Icon } from 'antd';
+import { List, Icon } from 'antd';
 
 const IconText = ({ type, text }) => (
   <span>
@@ -24,9 +24,7 @@ const Reviews = (props) => {
           <List.Item
             key={item.title}
             actions={[
-              <IconText type="star-o" text="156" key="list-vertical-star-o" />,
-              <IconText type="like-o" text="156" key="list-vertical-like-o" />,
-              <IconText type="message" text="2" key="list-vertical-message" />,
+              <IconText type="star-o" text={item.stars} key="list-vertical-star-o" />,
             ]}
             extra={
               <img
@@ -37,8 +35,7 @@ const Reviews = (props) => {
             }
           >
             <List.Item.Meta
-              avatar={<Avatar src={item.avatar} />}
-              title={<a href={`/${item.id}/`}>{item.title}</a>}
+              title={<a href={`/${item.id}/`}>{item.dish.title}</a>}
               description={item.description}
             />
             {item.content}

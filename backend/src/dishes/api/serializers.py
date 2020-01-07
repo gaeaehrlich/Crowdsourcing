@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from rest_framework import serializers
 
 from ..models import Dish
@@ -11,6 +12,8 @@ class DishSerializer(serializers.ModelSerializer):
 
 
 class ReviewSerializer(serializers.ModelSerializer):
+    dish = DishSerializer()
+
     class Meta:
         model = Review
-        fields = ('id', 'dish', 'description')
+        fields = ('id', 'dish', 'description', 'stars')

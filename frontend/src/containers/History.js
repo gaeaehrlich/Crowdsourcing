@@ -2,7 +2,6 @@ import React from "react";
 import axios from 'axios';
 
 import Reviews from "../components/Reviews";
-import connect from "react-redux/lib/connect/connect";
 
 class HistoryList extends React.Component {
 

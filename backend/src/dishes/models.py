@@ -53,8 +53,12 @@ class Street(models.Model):
 
 class Review(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    description = models.CharField(max_length=100)
     dish = models.ForeignKey(Dish, related_name='%(class)s', on_delete=models.PROTECT, default=None)
+    description = models.CharField(max_length=100)
+    stars = models.IntegerField(
+        default=0,
+        validators=[MaxValueValidator(5), MinValueValidator(0)]
+    )
 
 
 class Rank(models.Model):
