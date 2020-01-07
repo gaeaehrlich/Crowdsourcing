@@ -1,7 +1,5 @@
 from django.contrib import admin
 from django.urls import path, include
-#from rest_framework.authtoken.views import obtain_auth_token
-#from django_core.views import TestView
 
 urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
@@ -9,6 +7,4 @@ urlpatterns = [
     path('rest-auth/registration/', include('rest_auth.registration.urls')),
     path('api/', include('dishes.api.urls')),
     path('admin/', admin.site.urls),
-    #path('', TestView.as_view(), name='test'),
-    #path('api/token/', obtain_auth_token, name='obtain-token'),
 ]

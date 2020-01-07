@@ -20,5 +20,9 @@ class HistoryListView(ListAPIView):
     serializer_class = ReviewSerializer
 
     def get_queryset(self):
-        self.token = get_object_or_404(Review, name=self.kwargs['publisher'])
-        return Review.object.filter(id=Token.objects.get(key=self.token).user)
+        token = self.kwargs.get("pk")
+        if token:
+            token_obj = Token.objects.get(key=token)
+            if token_obj:
+                user = token_obj.user
+                return Review.objects.filter(author=user)
