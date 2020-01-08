@@ -27,9 +27,9 @@ class DishPage extends React.Component {
             dish_id: dishID
         });
         axios.get(`http://127.0.0.1:8000/api/dish/${dishID}`).then(res => {
-            console.log(res.data.reviews);
+            console.log(res.data);
             this.setState({
-                dish_name: res.data.name,
+                dish_name: res.data.title,
                 restaurant_name: res.data.restaurant.name,
                 // address: res.data.restaurant.street.name,
                 price: res.data.price,
@@ -79,9 +79,6 @@ class DishPage extends React.Component {
                         </li>
                     )}
                 />
-                <Card title={this.state.dish_id} >
-                    <p>{this.state.dish_id}</p>
-                </Card>
             </dom>
         )
     }

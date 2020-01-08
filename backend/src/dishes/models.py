@@ -10,7 +10,7 @@ class Dish(models.Model):
     title = models.CharField(max_length=120)
     content = models.TextField()
     price = models.IntegerField(default=0)
-    restaurant = models.ForeignKey('Restaurant', related_name='%(class)s', on_delete=models.PROTECT, default=None)
+    restaurant = models.ForeignKey('Restaurant', related_name='dishes', on_delete=models.PROTECT, default=None)
 
     def __str__(self):
         return self.title
