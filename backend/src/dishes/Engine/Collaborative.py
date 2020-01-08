@@ -20,7 +20,8 @@ def user_user_distance(new_user, old_user):
 def add_distances_for_new_user(new_user):
     for old_user in User.objects.all():
         if old_user != new_user:
-            k_multi_thread(target=user_user_distance(), args=[new_user, old_user])
+            user_user_distance(user_user_distance)
+            #k_multi_thread(target=user_user_distance(), args=[new_user, old_user])
 
 
 def update_distance(distance, diff):

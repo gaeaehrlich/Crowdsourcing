@@ -1,6 +1,6 @@
 from ..models import DistanceMatrix, Rank, UserDishMatrix
 from django.contrib.auth.models import User
-from .Utils import averaged_mean, get_dishes, get_stars, get_users
+from .Utils import averaged_mean, get_dishes, get_stars, get_users, get_rows
 import numpy as np
 
 
@@ -12,7 +12,7 @@ def initialize():
 def calculate_distance(user1_ranking, user2_ranking): # order by dish is crucial!
     user1_stars = np.array(get_stars(user1_ranking.order_by('dish')))
     user2_stars = np.array(get_stars(user2_ranking.order_by('dish')))
-    return np.linalg.norm(user1_stars - user2_stars, ord=2) # TODO: try different orders
+    return np.linalg.norm(user1_stars - user2_stars) # TODO: try different orders
 
 
 def calculate_all_distance():
@@ -38,7 +38,7 @@ def AddEstimation(user):
     for dish in user_dishes:
         estimate = Rank.objects.get(user=user, dish=dish).stars
         if estimate == 0: # else - go in the table as is
-            estimate =  averaged_mean(dish, neighbors)
+            estimate =  averaged_mean(user, dish, get_rows(neighbors))
         dish_estimation = UserDishMatrix(dish=dish, user=user, estimate=estimate)
         dish_estimation.save()
 

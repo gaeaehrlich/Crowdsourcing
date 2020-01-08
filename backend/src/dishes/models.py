@@ -10,7 +10,7 @@ class Dish(models.Model):
     title = models.CharField(max_length=120)
     content = models.TextField()
     restaurant = models.ForeignKey('Restaurant', related_name='%(class)s', on_delete=models.PROTECT)
-
+# TODO: LIST
 
     def __str__(self):
         return self.title
