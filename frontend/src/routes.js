@@ -5,6 +5,7 @@ import Login from "./containers/Login";
 import Signup from "./containers/Signup";
 import DishPage from "./containers/DishPage";
 import RestPage from "./containers/RestPage";
+import MainPage from "./containers/MainPage"
 
 const BaseRouter = () => (
   <div>
@@ -12,6 +13,7 @@ const BaseRouter = () => (
     <Route exact path="/signup/" component={Signup} />{" "}
     <Route exact path="/dish/:dishID" component={DishPage} />{" "}
     <Route exact path="/rest/:restID" component={RestPage} />{" "}
+    <Route exact path="/" component={MainPage} />{" "}
   </div>
 );
 
