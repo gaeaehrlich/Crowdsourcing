@@ -1,4 +1,4 @@
-from.Utils import averaged_mean, k_multi_thread
+from .Utils import averaged_mean, get_dishes
 from ..models import DistanceMatrix, Rank, UserDishMatrix, Dish
 from django.contrib.auth.models import User
 from datetime import datetime, timedelta
@@ -6,22 +6,24 @@ from math import sqrt
 from .Initialization import calculate_distance, KNN
 
 
-def user_user_distance(new_user, old_user):
+def user_user_distance(new_user, old_user): # can break to 2 code duplication!
     new_user_rank = Rank.objects.filter(user=new_user)
     old_user_rank = Rank.objects.filter(user=old_user)
+    new_user_rank_positive = new_user_rank.filter(stars__gt=0)
+    old_user_rank_positive = old_user_rank.filter(stars__gt=0)
     distance1 = DistanceMatrix(col=new_user, row=old_user)
-    distance1.distance = calculate_distance(new_user_rank, old_user_rank.filter(dish__in=new_user_rank))
+    distance1.distance = calculate_distance(new_user_rank_positive,
+                                            old_user_rank.filter(dish__in=get_dishes(new_user_rank_positive)))
     distance1.save()
     distance2 = DistanceMatrix(col=old_user, row=new_user)
-    distance2.distance = calculate_distance(old_user_rank, new_user_rank.filter(dish__in=new_user_rank))
+    distance2.distance = calculate_distance(old_user_rank_positive,
+                                            new_user_rank.filter(dish__in=get_dishes(old_user_rank_positive)))
     distance2.save()
 
 
 def add_distances_for_new_user(new_user):
-    for old_user in User.objects.all():
-        if old_user != new_user:
-            user_user_distance(user_user_distance)
-            #k_multi_thread(target=user_user_distance(), args=[new_user, old_user])
+    for old_user in User.objects.exclude(pk=new_user.pk):
+        user_user_distance(new_user, old_user)
 
 
 def update_distance(distance, diff):
@@ -30,13 +32,15 @@ def update_distance(distance, diff):
 
 def update_distance_for_new_rank(rank):
     user = rank.user
-    dish = rank.dish
-    for other in User.objects.all():
-        other_stars = Rank.objects.get(user=other, dish=dish).stars
+
+    for other in User.objects.exclude(pk=user.pk):
+        other_stars = Rank.objects.get(user=other, dish=rank.dish).stars
         diff = abs(rank.stars - other_stars)
+
         distance = DistanceMatrix.objects.get(col=user, row=other)
         distance.distance = update_distance(distance.distance, diff)
         distance.save(['distance'])
+
         if other_stars > 0: # update for the old user
             distance = DistanceMatrix.objects.get(col=other, row=user)
             distance.distance = update_distance(distance.distance, diff)

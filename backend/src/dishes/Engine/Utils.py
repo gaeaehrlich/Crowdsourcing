@@ -1,6 +1,8 @@
 import numpy as np
-from  ..models import Rank, DistanceMatrix
+from ..models import Rank, DistanceMatrix, Dish
 import threading
+from django.contrib.auth.models import User
+
 
 def get_dishes(query_set):
     return list(map(lambda x: x.dish, query_set))
@@ -33,8 +35,17 @@ def averaged_mean(user, dish, neighbors): # order is important for averaged_mean
     #return np.average([ [stars_list[i], distance_list[i]] for i in range(len(stars_list))]) # can raise ZeroDivisionError? check
     return np.average(a=stars_list, weights=distance_list)
 
-def add_empty_ranks(): # TODO: for self checking implement or find a way to avoid it
-    pass
+def add_empty_ranks(): # TODO: IS THIS OK ?
+    for user in User.objects.all():
+        add_empty_ranks(user)
+
+
+def add_empty_ranks_for_user(user):
+    ranked_dishes = get_dishes(Rank.objects.filter(user=user))
+
+    for dish in Dish.objects.all():
+        if dish not in ranked_dishes:
+            Rank.objects.create(user=user, dish=dish)
 
 
 # TODO: Orin - decide later where to use

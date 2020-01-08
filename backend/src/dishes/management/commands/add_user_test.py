@@ -1,8 +1,11 @@
+from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand
-from ...Engine.Initialization import initialize
+from ...Engine.Utils import add_empty_ranks_for_user
+
 
 class Command(BaseCommand):
     help = 'Displays current time'
 
     def handle(self, *args, **kwargs):
-        initialize()
+        gaea = User.objects.get(first_name='gaea')
+        add_empty_ranks_for_user(gaea)
