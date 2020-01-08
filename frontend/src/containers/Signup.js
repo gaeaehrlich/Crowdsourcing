@@ -24,12 +24,12 @@ class RegistrationForm extends React.Component {
         this.props.history.push('/');
       }
     });
-  }
+  };
 
   handleConfirmBlur = (e) => {
     const value = e.target.value;
     this.setState({ confirmDirty: this.state.confirmDirty || !!value });
-  }
+  };
 
   compareToFirstPassword = (rule, value, callback) => {
     const form = this.props.form;
@@ -38,7 +38,7 @@ class RegistrationForm extends React.Component {
     } else {
       callback();
     }
-  }
+  };
 
   validateToNextPassword = (rule, value, callback) => {
     const form = this.props.form;
@@ -46,7 +46,7 @@ class RegistrationForm extends React.Component {
       form.validateFields(['confirm'], { force: true });
     }
     callback();
-  }
+  };
 
 
   render() {
@@ -122,12 +122,12 @@ const mapStateToProps = (state) => {
         loading: state.loading,
         error: state.error
     }
-}
+};
 
 const mapDispatchToProps = dispatch => {
     return {
         onAuth: (username, email, password1, password2) => dispatch(actions.authSignup(username, email, password1, password2))
     }
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(WrappedRegistrationForm);
