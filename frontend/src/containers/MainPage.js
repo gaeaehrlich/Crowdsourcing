@@ -1,17 +1,11 @@
 import React from "react";
 import axios from 'axios';
 
-import {List} from 'antd';
-import { Typography, AutoComplete} from 'antd';
+import { AutoComplete} from 'antd';
 import { Tag } from 'antd';
 import { Row, Col } from 'antd';
 
 
-const { Title } = Typography;
-
-function log(e) {
-    console.log(e);
-}
 
 class DishPage extends React.Component {
 

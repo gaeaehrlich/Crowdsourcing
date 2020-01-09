@@ -6,6 +6,7 @@ import Signup from "./containers/Signup";
 import DishPage from "./containers/DishPage";
 import RestPage from "./containers/RestPage";
 import MainPage from "./containers/MainPage"
+import EatwithPage from "./containers/EatwithPage"
 
 const BaseRouter = () => (
   <div>
@@ -14,6 +15,7 @@ const BaseRouter = () => (
     <Route exact path="/dish/:dishID" component={DishPage} />{" "}
     <Route exact path="/rest/:restID" component={RestPage} />{" "}
     <Route exact path="/" component={MainPage} />{" "}
+    <Route exact path="/eatwith" component={EatwithPage} />{" "}
   </div>
 );
 
