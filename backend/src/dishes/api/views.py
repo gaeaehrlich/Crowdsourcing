@@ -1,8 +1,8 @@
 from rest_framework.authtoken.models import Token
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 
-from ..models import Dish, Review
-from .serializers import DishSerializer, ReviewSerializer
+from ..models import Dish, Review, Profile
+from .serializers import DishSerializer, ReviewSerializer, ProfileSerializer
 
 
 class DishesListView(ListAPIView):
@@ -15,7 +15,7 @@ class DishesDetailView(RetrieveAPIView):
     serializer_class = DishSerializer
 
 
-class HistoryListView(ListAPIView):
+class UserReviewsListView(ListAPIView):
     serializer_class = ReviewSerializer
 
     def get_queryset(self):
@@ -25,3 +25,15 @@ class HistoryListView(ListAPIView):
             if token_obj:
                 user = token_obj.user
                 return Review.objects.filter(author=user)
+
+
+class UserDetailView(ListAPIView):
+    serializer_class = ProfileSerializer
+
+    def get_queryset(self):
+        token = self.kwargs.get("pk")
+        if token:
+            token_obj = Token.objects.get(key=token)
+            if token_obj:
+                user = token_obj.user
+                return Profile.objects.filter(user=user)

@@ -42,12 +42,8 @@ class CustomLayout extends React.Component {
                     <Menu onClick={handleClick} style={{width: 200}} mode="vertical">
 
                         <SubMenu key="sub1" title={ <span><Icon type="user"/><span>My account</span></span> } >
-                            <Menu.Item key="1">< Link to={`/history/${this.props.token}`}>History</Link></Menu.Item>
-                            <Menu.Item key="2">Option 2</Menu.Item>
-                            <Menu.ItemGroup title="Iteom 2">
-                                <Menu.Item key="3">Option 3</Menu.Item>
-                                <Menu.Item key="4">Option 4</Menu.Item>
-                            </Menu.ItemGroup>
+                            <Menu.Item key="1">< Link to={`/userreviews/${this.props.token}/`}>My posts</Link></Menu.Item>
+                            <Menu.Item key="2"><Link to={`/liked/${this.props.token}/`}>Posts I liked</Link></Menu.Item>
                         </SubMenu>
 
                         <SubMenu key="sub2" title={ <span><Icon type="form"/><span>Recommend</span></span>} />

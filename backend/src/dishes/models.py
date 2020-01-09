@@ -12,17 +12,26 @@ User = get_user_model()
 class Dish(models.Model):
     title = models.CharField(max_length=120)
     content = models.TextField()
-    #restaurant = models.ForeignKey('Restaurant', related_name='%(class)s', on_delete=models.PROTECT, default=None)
+    restaurant = models.ForeignKey('Restaurant', related_name='%(class)s', on_delete=models.PROTECT, default=None, null=True)
 
     def __str__(self):
         return self.title
 
 
+class Review(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    dish = models.ForeignKey(Dish, related_name='%(class)s', on_delete=models.PROTECT, default=None)
+    description = models.CharField(max_length=100)
+    stars = models.IntegerField(
+        default=0,
+        validators=[MaxValueValidator(5), MinValueValidator(0)]
+    )
+    likes = models.IntegerField(default=0)
+
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    bio = models.TextField(max_length=500, blank=True) # until we decide what's what
     location = models.CharField(max_length=30, blank=True)
-    birth_date = models.DateField(null=True, blank=True)
     level = models.IntegerField(
         default=0,
         validators=[
@@ -30,6 +39,7 @@ class Profile(models.Model):
             MinValueValidator(1)
         ]
     )
+    likes = models.ManyToManyField(Review, related_name="posts_liked", blank=True)
 
 
 class Address(models.Model):
@@ -56,16 +66,6 @@ class Street(models.Model):
     name = models.CharField(max_length=30)
     city = models.ForeignKey(City, related_name='%(class)s', on_delete=models.PROTECT, default=None)
     city_area = models.ForeignKey(CityArea, related_name='%(class)s', on_delete=models.PROTECT, default=None)
-
-
-class Review(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
-    dish = models.ForeignKey(Dish, related_name='%(class)s', on_delete=models.PROTECT, default=None)
-    description = models.CharField(max_length=100)
-    stars = models.IntegerField(
-        default=0,
-        validators=[MaxValueValidator(5), MinValueValidator(0)]
-    )
 
 
 class Rank(models.Model):

@@ -1,12 +1,14 @@
 import React from "react";
 import { List, Icon } from 'antd';
 
+
 const IconText = ({ type, text }) => (
   <span>
     <Icon type={type} style={{ marginRight: 8 }} />
     {text}
   </span>
 );
+
 
 const Reviews = (props) => {
     return(
@@ -25,6 +27,7 @@ const Reviews = (props) => {
             key={item.title}
             actions={[
               <IconText type="star-o" text={item.stars} key="list-vertical-star-o" />,
+              <IconText type="like-o" text={item.likes} key="list-vertical-like-o" />,
             ]}
             extra={
               <img

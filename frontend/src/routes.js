@@ -3,13 +3,15 @@ import { Route } from "react-router-dom";
 
 import Login from "./containers/Login";
 import Signup from "./containers/Signup";
-import History from "./containers/History";
+import UserReviews from "./containers/UserReviews";
+import UserLikes from "./containers/UserLikes";
 
 const BaseRouter = () => (
   <div>
     <Route exact path="/login/" component={Login} />
     <Route exact path="/signup/" component={Signup} />
-    <Route exact path="/history/:token/" component={History} />
+    <Route exact path="/userreviews/:token/" component={UserReviews} />
+    <Route exact path="/liked/:token/" component={UserLikes} />
   </div>
 );
 
