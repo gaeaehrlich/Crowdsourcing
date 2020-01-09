@@ -29,6 +29,12 @@ class Review(models.Model):
     likes = models.IntegerField(default=0)
 
 
+class Gift(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    restaurant = models.ForeignKey('Restaurant', related_name='%(class)s', on_delete=models.PROTECT)
+    description = models.CharField(max_length=500)
+
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     location = models.CharField(max_length=30, blank=True)
@@ -40,6 +46,7 @@ class Profile(models.Model):
         ]
     )
     likes = models.ManyToManyField(Review, related_name="posts_liked", blank=True)
+    gifts = models.ManyToManyField(Gift, related_name="posts_liked", blank=True)
 
 
 class Address(models.Model):
@@ -49,7 +56,7 @@ class Address(models.Model):
 
 
 class Restaurant(models.Model):
-    name = models.CharField(max_length=30, unique=True)  # do we want it to be unique?
+    name = models.CharField(max_length=30, unique=True)
     address = models.ForeignKey(Address, related_name='%(class)s', on_delete=models.PROTECT, default=None)
 
 

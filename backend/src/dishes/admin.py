@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from django.contrib import admin
 
 from .models import Dish, Profile, Address, Restaurant, City, CityArea, Street, Review, Rank, DistanceMatrix, \
-    UserDishMatrix, Tag, TagTag, DishTag, RestaurantTag, Constraint, RestaurantArea
+    UserDishMatrix, Tag, TagTag, DishTag, RestaurantTag, Constraint, RestaurantArea, Gift
 
 admin.site.register(Dish)
 
@@ -13,6 +13,8 @@ admin.site.register(Profile)
 admin.site.register(Address)
 
 admin.site.register(Restaurant)
+
+admin.site.register(Gift)
 
 admin.site.register(City)
 
