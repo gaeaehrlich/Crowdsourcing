@@ -26,8 +26,8 @@ def add_distances_for_new_user(new_user):
         user_user_distance(new_user, old_user)
 
 
-def update_distance(distance, diff):
-    return sqrt(pow(distance, 2) + diff)
+def update_distance(distance, diff, prev):
+    return sqrt(pow(distance, 2) + diff -pow(prev, 2)) # should be gte then 0
 
 
 def update_distance_for_new_rank(rank):
@@ -37,26 +37,15 @@ def update_distance_for_new_rank(rank):
         other = distance_cell.row
         other_stars = Rank.objects.get(user=other, dish=rank.dish).stars
         diff = abs(rank.stars - other_stars)
-        distance_cell.distance = update_distance(distance_cell.distance, diff)
-        distance_cell.save(['distance'])
+        new_distance = update_distance(distance_cell.distance, diff, 0)
+        distance_cell.distance = new_distance
+        distance_cell.save()
 
         if other_stars > 0: # update for the old user
             distance_cell = DistanceMatrix.objects.get(col=other, row=user)
-            distance_cell.distance = update_distance(distance_cell.distance, diff)
-            distance_cell.save(['distance'])
-
-
-    #for other in User.objects.exclude(pk=user.pk):
-        # other_stars = Rank.objects.get(user=other, dish=rank.dish).stars
-        # diff = abs(rank.stars - other_stars)
-        # distance = DistanceMatrix.objects.get(col=user, row=other)
-        # distance.distance = update_distance(distance.distance, diff)
-        # distance.save(['distance'])
-
-        #if other_stars > 0: # update for the old user
-            # distance = DistanceMatrix.objects.get(col=other, row=user)
-            # distance.distance = update_distance(distance.distance, diff)
-            # distance.save(['distance'])
+            new_distance = update_distance(distance_cell.distance, diff, other_stars)
+            distance_cell.distance = new_distance
+            distance_cell.save()
 
 
 def update_estimation(cell):
