@@ -34,8 +34,9 @@ class GiftSerializer(serializers.ModelSerializer):
 class ProfileSerializer(serializers.ModelSerializer):
     likes = ReviewSerializer(read_only=True, many=True)
     gifts = GiftSerializer(read_only=True, many=True)
-    searches = DishSerializer(many=True)
+    searches = DishSerializer(read_only=True, many=True)
 
     class Meta:
         model = Profile
-        fields = ('user', 'location', 'level', 'likes', 'gifts', 'searches')
+        fields = ('user', 'location', 'level', 'likes', 'gifts', 'searches',
+                  'allergic', 'cosher', 'vegetarian', 'vegan')

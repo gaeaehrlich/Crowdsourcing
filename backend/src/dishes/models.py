@@ -48,6 +48,10 @@ class Profile(models.Model):
     likes = models.ManyToManyField(Review, related_name="posts_liked", blank=True)
     gifts = models.ManyToManyField(Gift, related_name="posts_liked", blank=True)
     searches = models.ManyToManyField(Dish, related_name='%(class)s', blank=True)
+    allergic = models.CharFieldField(max_length=100, blank=True)
+    cosher = models.BooleanField(default=False)
+    vegetarian = models.BooleanField(default=False)
+    vegan = models.BooleanField(default=False)
 
 
 class Address(models.Model):

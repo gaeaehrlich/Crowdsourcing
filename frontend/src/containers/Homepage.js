@@ -2,6 +2,7 @@ import React from "react";
 import axios from 'axios';
 
 import Reminder from "../components/Reminder";
+import {connect} from "react-redux";
 
 
 class HomepageLayout extends React.Component {
@@ -27,9 +28,10 @@ class HomepageLayout extends React.Component {
     render() {
         return (
             <div>
-                {this.state.searches ?
+                {this.props.isAuthenticated && this.state.searches.length > 0 ?
                 <div>
                 <h3>Have you tried these courses?</h3>
+                    <br/>
                     <Reminder data={this.state.searches}/>
                </div>
                : null }
@@ -38,5 +40,11 @@ class HomepageLayout extends React.Component {
     }
 }
 
+const mapStateToProps = state => {
+  return {
+    isAuthenticated: state.token !== null,
+    token: state.token
+  }
+};
 
-export default HomepageLayout;
+export default connect(mapStateToProps)(HomepageLayout);

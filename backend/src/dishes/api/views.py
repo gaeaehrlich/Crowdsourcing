@@ -1,5 +1,5 @@
 from rest_framework.authtoken.models import Token
-from rest_framework.generics import ListAPIView, RetrieveAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, UpdateAPIView
 
 from ..models import Dish, Review, Profile, Gift
 from .serializers import DishSerializer, ReviewSerializer, ProfileSerializer, GiftSerializer
@@ -37,6 +37,16 @@ class UserDetailView(ListAPIView):
             if token_obj:
                 user = token_obj.user
                 return Profile.objects.filter(user=user)
+
+
+class UserCreateView(CreateAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+
+
+class UserUpdateView(UpdateAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
 
 
 class GiftListView(ListAPIView):

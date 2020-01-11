@@ -43,18 +43,22 @@ class UserGiftsList extends React.Component {
             if(title === "Beginner" && this.state.level >= 10) return "finish";
             if(title === "Intermediate" && this.state.level >= 25) return "finish";
             if(title === "Reliable" && this.state.level >= 75) return "finish";
-            if(title === "Critic" && this.state.level == 100) return "finish";
+            if(title === "Critic" && this.state.level === 100) return "finish";
             return "wait";
         };
 
         return (
-            <div> Reviews level:
+            <div>
+                <h3>Reviews level:</h3>
+                <br/>
               <Steps>
                 <Step status={ProgressBarStatus("Beginner")} title="Beginner" icon={<Icon type="user" />} />
                 <Step status={ProgressBarStatus("Intermediate")} title="Intermediate" icon={<Icon type="meh" />} />
                 <Step status={ProgressBarStatus("Reliable")} title="Reliable" icon={<Icon type="smile" />} />
                 <Step status={ProgressBarStatus("Critic")} title="Critic" icon={<Icon type="trophy" />} />
               </Steps>
+                <br /><br/><br/>
+                <h3>Available gifts:</h3>
             <Gifts data={this.state.gifts}/>
             </div>
         )

@@ -7,10 +7,6 @@ import * as actions from '../store/actions/auth';
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
 
-function handleClick(e) {
-    console.log('click', e);
-}
-
 
 class CustomLayout extends React.Component {
     render() {
@@ -21,7 +17,6 @@ class CustomLayout extends React.Component {
           <Menu
             theme="dark"
             mode="horizontal"
-            defaultSelectedKeys={['2']}
             style={{ lineHeight: '64px' }}
           >
               {
@@ -39,15 +34,18 @@ class CustomLayout extends React.Component {
         <Layout>
             {this.props.isAuthenticated ?
                 <Sider width={200} style={{background: '#fff'}}>
-                    <Menu onClick={handleClick} style={{width: 200}} mode="vertical">
+                    <Menu style={{width: 200}} mode="vertical">
 
-                        <SubMenu key="sub1" title={ <span><Icon type="user"/><span>My account</span></span> } >
+                        <SubMenu key="sub1" title={ <span><Icon type="home"/><span><Link to={`/`}>Homepage</Link></span></span> } >
+                         </SubMenu>
+
+                        <SubMenu key="sub2" title={ <span><Icon type="user"/><span>My account</span></span> } >
                             <Menu.Item key="1">< Link to={`/userreviews/${this.props.token}/`}>My posts</Link></Menu.Item>
                             <Menu.Item key="2"><Link to={`/liked/${this.props.token}/`}>Posts I liked</Link></Menu.Item>
                             <Menu.Item key="3"><Link to={`/usergifts/${this.props.token}/`}>Available gifts</Link></Menu.Item>
                         </SubMenu>
 
-                        <SubMenu key="sub2" title={ <span><Icon type="form"/><span>Recommend</span></span>} />
+                        <SubMenu key="sub3" title={ <span><Icon type="form"/><span>Recommend</span></span>} />
 
                         <SubMenu key="sub4" title={ <span><Icon type="setting"/><span>Settings</span></span>} >
                             <Menu.Item key="9">Change my preferences</Menu.Item>
@@ -74,6 +72,7 @@ class CustomLayout extends React.Component {
         )
     }
 }
+
 
 const mapDispatchToProps = dispatch => {
     return {

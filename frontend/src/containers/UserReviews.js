@@ -2,9 +2,7 @@ import React from "react";
 import axios from 'axios';
 
 import Reviews from "../components/Reviews";
-import { Steps, Icon } from 'antd';
 
-const { Step } = Steps;
 
 class UserReviewsList extends React.Component {
 
