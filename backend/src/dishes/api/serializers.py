@@ -23,17 +23,19 @@ class ReviewSerializer(serializers.ModelSerializer):
         fields = ('author', 'dish', 'description', 'stars', 'likes')
 
 
-class ProfileSerializer(serializers.ModelSerializer):
-    likes = ReviewSerializer(read_only=True, many=True)
-
-    class Meta:
-        model = Profile
-        fields = ('user', 'location', 'level', 'likes')
-
-
 class GiftSerializer(serializers.ModelSerializer):
     restaurant = RestaurantSerializer()
 
     class Meta:
         model = Gift
         fields = ('user', 'restaurant', 'description')
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    likes = ReviewSerializer(read_only=True, many=True)
+    gifts = GiftSerializer(read_only=True, many=True)
+    searches = DishSerializer(many=True)
+
+    class Meta:
+        model = Profile
+        fields = ('user', 'location', 'level', 'likes', 'gifts', 'searches')

@@ -6,9 +6,11 @@ import Signup from "./containers/Signup";
 import UserReviews from "./containers/UserReviews";
 import UserLikes from "./containers/UserLikes";
 import UserGifts from "./containers/UserGifts";
+import Homepage from "./containers/Homepage";
 
 const BaseRouter = () => (
   <div>
+    <Route exact path='/' component={Homepage} />
     <Route exact path="/login/" component={Login} />
     <Route exact path="/signup/" component={Signup} />
     <Route exact path="/userreviews/:token/" component={UserReviews} />

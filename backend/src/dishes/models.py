@@ -47,6 +47,7 @@ class Profile(models.Model):
     )
     likes = models.ManyToManyField(Review, related_name="posts_liked", blank=True)
     gifts = models.ManyToManyField(Gift, related_name="posts_liked", blank=True)
+    searches = models.ManyToManyField(Dish, related_name='%(class)s', blank=True)
 
 
 class Address(models.Model):
