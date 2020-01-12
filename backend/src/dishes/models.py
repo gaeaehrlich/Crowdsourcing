@@ -5,11 +5,18 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 import datetime
 from django.db import models
 
-# add tag as ManyToMany!
+class Tag(models.Model):
+    title = models.CharField(max_length=30, unique=True)
+
+    def __str__(self):
+        return self.title
+
+
 class Dish(models.Model):
     title = models.CharField(max_length=120)
     content = models.TextField()
     restaurant = models.ForeignKey('Restaurant', related_name='%(class)s', on_delete=models.PROTECT)
+    tag = models.ManyToManyField(Tag, related_name="dishes", blank=True)
 
     def __str__(self):
         return self.title
@@ -25,6 +32,9 @@ class Review(models.Model):
     )
     likes = models.IntegerField(default=0)
 
+    def __str__(self):
+        return " ".join(map(str,[self.dish, self.author.username]))
+
 
 class Gift(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -32,8 +42,6 @@ class Gift(models.Model):
     description = models.CharField(max_length=500)
 
 
-class Tag(models.Model):
-    title = models.CharField(max_length=30, unique=True)
 
 
 class Profile(models.Model):
@@ -56,25 +64,40 @@ class Address(models.Model):
     street = models.ForeignKey('Street', related_name='%(class)s', on_delete=models.PROTECT)
     number = models.IntegerField()
 
+    def __str__(self):
+        return " ".join(map(str, [self.street, self.number]))
+
 
 class Restaurant(models.Model):
     name = models.CharField(max_length=30)
-    address = models.ForeignKey(Address, related_name='%(class)s', on_delete=models.PROTECT)
+    city_area = models.ForeignKey('CityArea', related_name='%(class)s', on_delete=models.PROTECT)
+    street = models.ForeignKey('Street', related_name='%(class)s', on_delete=models.PROTECT)
+    number = models.IntegerField()
+
+    def __str__(self):
+        return " ".join([self.name])
 
 
 class City(models.Model):
     name = models.CharField(max_length=30, unique=True)
 
+    def __str__(self):
+        return self.name
+
 
 class CityArea(models.Model):
     name = models.CharField(max_length=30, unique=True)
     city = models.ForeignKey(City, related_name='%(class)s', on_delete=models.PROTECT)
+    def __str__(self):
+        return " ".join([str(self.city), self.name])
 
 
 class Street(models.Model):
     name = models.CharField(max_length=30)
-    city = models.ForeignKey(City, related_name='%(class)s', on_delete=models.PROTECT)
     city_area = models.ForeignKey(CityArea, related_name='%(class)s', on_delete=models.PROTECT)
+
+    def __str__(self):
+        return " ".join([self.name, str(self.city_area)])
 
 
 class DistanceMatrix(models.Model):

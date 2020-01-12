@@ -3,5 +3,5 @@ from django.contrib.auth.models import User
 
 
 
-def search_dishes(user, tags):
+def search_dishes(user, tags, num):
     pass
