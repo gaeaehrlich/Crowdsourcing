@@ -1,6 +1,8 @@
 from rest_framework import serializers
 
-from ..models import Dish, Review, Restaurant, Gift, Tag, Profile
+from ..models import Dish, Review, Restaurant, Gift, Tag, Profile, CityArea
+
+
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
@@ -21,7 +23,7 @@ class DishSimpleSerializer(serializers.ModelSerializer):
     # test = serializers.RelatedField(source='restaurant', read_only=True)
     class Meta:
         model = Dish
-        fields = ('id', 'title', 'content', 'price',)
+        fields = ('id', 'title', 'content',)
         # fields = '__all__'
         depth=1
 
@@ -30,7 +32,7 @@ class RestaurantSerializer(serializers.ModelSerializer):
     dishes = DishSimpleSerializer(read_only=True, many=True)
     class Meta:
         model = Restaurant
-        fields = ('id', 'name', 'city', 'number', 'dishes')
+        fields = ('id', 'name', 'city_area', 'number', 'dishes')
         # fields = '__all__'
         depth=1
 
@@ -47,6 +49,11 @@ class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
         fields = ('title',)
+
+class CityAreaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CityArea
+        fields = ('name',)
 
 
 class ProfileSerializer(serializers.ModelSerializer):

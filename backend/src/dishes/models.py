@@ -13,9 +13,10 @@ class Tag(models.Model):
 
 
 class Dish(models.Model):
+    # TODO: add price
     title = models.CharField(max_length=120)
     content = models.TextField()
-    restaurant = models.ForeignKey('Restaurant', related_name='%(class)s', on_delete=models.PROTECT)
+    restaurant = models.ForeignKey('Restaurant', related_name='dishes', on_delete=models.PROTECT)
     tag = models.ManyToManyField(Tag, related_name="dishes", blank=True)
 
     def __str__(self):

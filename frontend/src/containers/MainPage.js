@@ -21,22 +21,45 @@ class DishPage extends React.Component {
         reviews: []
     };
 
-    componentDidMount() {
-        const dishID = this.props.match.params.dishID
-        this.setState({
-            dish_id: dishID
-        });
-        axios.get(`http://127.0.0.1:8000/api/dish/${dishID}`).then(res => {
-            console.log(res.data);
+    setTags = obj => {
+        let temp;
+        axios.get(`http://127.0.0.1:8000/api/tag`).then(res => {
+            temp = res.data.map(tag=>tag['title']);
             this.setState({
-                dish_name: res.data.title,
-                restaurant_name: res.data.restaurant.name,
-                // address: res.data.restaurant.street.name,
-                price: res.data.price,
-                reviews: res.data.reviews,
-
+                init_tags: temp
             });
         });
+    };
+
+    setCityAreas = obj => {
+        let temp;
+        axios.get(`http://127.0.0.1:8000/api/cityarea`).then(res => {
+            temp = res.data.map(tag=>tag['name']);
+            this.setState({
+                init_areas: temp
+            });
+        });
+    };
+
+    componentDidMount() {
+        this.setTags();
+        this.setCityAreas()
+
+        // const dishID = this.props.match.params.dishID
+        // this.setState({
+        //     dish_id: dishID
+        // });
+        // axios.get(`http://127.0.0.1:8000/api/dish/${dishID}`).then(res => {
+        //     console.log(res.data);
+        //     this.setState({
+        //         dish_name: res.data.title,
+        //         restaurant_name: res.data.restaurant.name,
+        //         // address: res.data.restaurant.street.name,
+        //         price: res.data.price,
+        //         reviews: res.data.reviews,
+        //
+        //     });
+        // });
     }
 
 
