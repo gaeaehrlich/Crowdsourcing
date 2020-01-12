@@ -15,12 +15,40 @@ class Dish(models.Model):
         return self.title
 
 
+class Review(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    dish = models.ForeignKey(Dish, related_name='%(class)s', on_delete=models.PROTECT, default=None)
+    description = models.CharField(max_length=100, blank=True)
+    stars = models.IntegerField(
+        default=0,
+        validators=[MaxValueValidator(5), MinValueValidator(0)]
+    )
+    likes = models.IntegerField(default=0)
+
+
+class Gift(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    restaurant = models.ForeignKey('Restaurant', related_name='%(class)s', on_delete=models.PROTECT)
+    description = models.CharField(max_length=500)
+
+
+class Tag(models.Model):
+    title = models.CharField(max_length=30, unique=True)
+
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    bio = models.TextField(max_length=500, blank=True) # until we decide what's what
-    location = models.CharField(max_length=30, blank=True)
-    birth_date = models.DateField(null=True, blank=True)
-    points = models.IntegerField()
+    level = models.IntegerField(
+        default=0,
+        validators=[
+            MaxValueValidator(100),
+            MinValueValidator(1)
+        ]
+    )
+    likes = models.ManyToManyField(Review, related_name="posts_liked", blank=True)
+    gifts = models.ManyToManyField(Gift, related_name="posts_liked", blank=True)
+    searches = models.ManyToManyField(Dish, related_name='%(class)s', blank=True)
+    preferences = models.ManyToManyField(Tag, blank=True)
 
 
 class Address(models.Model):
@@ -49,21 +77,6 @@ class Street(models.Model):
     city_area = models.ForeignKey(CityArea, related_name='%(class)s', on_delete=models.PROTECT)
 
 
-class Review(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
-    description = models.CharField(max_length=100)
-    dish = models.ForeignKey(Dish, related_name='%(class)s', on_delete=models.PROTECT)
-
-# unite with UserDish
-class Rank(models.Model):
-    user = models.ForeignKey(User, related_name='%(class)s', on_delete=models.PROTECT)
-    dish = models.ForeignKey(Dish, related_name='%(class)s', on_delete=models.PROTECT)
-    stars = models.IntegerField(
-        default=0,
-        validators=[MaxValueValidator(5), MinValueValidator(0)]
-     )
-
-
 class DistanceMatrix(models.Model):
     col = models.ForeignKey(User, related_name='col', on_delete=models.PROTECT)
     row = models.ForeignKey(User, related_name='row', on_delete=models.PROTECT)
@@ -78,8 +91,6 @@ class UserDishMatrix(models.Model):
     estimate = models.FloatField()
     last_update = models.DateTimeField(default=datetime.datetime.now)
 
-class Tag(models.Model):
-    title = models.CharField(max_length=30, unique=True)
 
 class TagTag(models.Model):
     col = models.ForeignKey(Tag, related_name='col', on_delete=models.PROTECT)
@@ -93,13 +104,6 @@ class DishTag(models.Model):
 
 class RestaurantTag(models.Model):
     restaurant = models.ForeignKey(Restaurant, related_name='%(class)s', on_delete=models.PROTECT)
-    tag = models.ForeignKey(Tag, related_name='%(class)s', on_delete=models.PROTECT)
-
-
-# TODO: add table of ingredients - remember when user is alergic / cosher / vegi / vegen
-# is this that table ?
-class Constraint(models.Model):
-    user = models.ForeignKey(User, related_name='%(class)s', on_delete=models.PROTECT)
     tag = models.ForeignKey(Tag, related_name='%(class)s', on_delete=models.PROTECT)
 
 
