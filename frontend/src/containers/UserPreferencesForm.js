@@ -1,29 +1,27 @@
 import React from "react";
+import axios from 'axios';
 import {Form, Select, Checkbox, Row, Col, Button} from 'antd';
 
 const { Option } = Select;
 
-let selected = [];
-let kosher = 0, vegetarian = 0, vegan = 0;
-
 class PreferencesForm extends React.Component {
-    handleSelect = e => {
-        selected.push(e);
-    };
-
-    handleCheck = e => {
-        if(e.checked) {
-            if(e.value === "cosher") kosher = 1;
-            if(e.value === "vegetarian") vegetarian = 1;
-            if(e.target.value === "vegan") vegan = 1;
-        }
-    };
-
-    handleSubmit = (event, request) => {
+    handleSubmit = (event, requestType) => {
         event.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
+                let tags = values['select-multiple'].concat(values['checkbox-group']);
+                switch (requestType) {
+                    case 'post':
+                        axios.post('http://127.0.0.1:8000/api/user/', {
+                                user: ,
+                                level: 0,
+                                likes: [],
+                                gifts: [],
+                                searches: [],
+                                preferences: tags
+
+                        })
+                }
             }
         });
     };
