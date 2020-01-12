@@ -19,8 +19,8 @@ class PreferencesForm extends React.Component {
         }
     };
 
-    handleSubmit = e => {
-        e.preventDefault();
+    handleSubmit = (event, request) => {
+        event.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 console.log('Received values of form: ', values);
