@@ -67,6 +67,12 @@ class EatwithPage extends React.Component {
         });
     };
 
+    onSearchArea = searchText => {
+        this.setState({
+            possible_areas: !searchText ? [] : this.state.init_areas.filter(area => area.startsWith(searchText)),
+        });
+    };
+
     render() {
         const { getFieldDecorator, getFieldValue } = this.props.form;
         const formItemLayout = {
@@ -140,65 +146,89 @@ class EatwithPage extends React.Component {
                 </Form.Item>
                 <Row>
                     <Col >
-                <Form.Item
-                    {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
-                    label={index === 0 ? 'Tags' : ''}
-                    required={false}
-                    key={k}
-                    style={{visibility:"visible"}}
-                >
-                    {getFieldDecorator(`tags[${k}][1]`, {
-                        validateTrigger: ['onChange', 'onBlur'],
-                        rules: [
-                            {
-                                required: false,
-                                whitespace: true,
-                            },
-                        ],
-                    })(<AutoComplete
-                        dataSource={this.state.possible_tags}
-                        style={{ width: '15%' }}
-                        onSelect={this.onSelectTag}
-                        onSearch={this.onSearchTag}
-                        placeholder="Tag"
-                    />)}
+                        <Form.Item
+                            {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
+                            label={index === 0 ? 'Tags' : ''}
+                            required={false}
+                            key={k}
+                            style={{visibility:"visible"}}
+                        >
+                            {getFieldDecorator(`tags[${k}][1]`, {
+                                validateTrigger: ['onChange', 'onBlur'],
+                                rules: [
+                                    {
+                                        required: false,
+                                        whitespace: true,
+                                    },
+                                ],
+                            })(<AutoComplete
+                                dataSource={this.state.possible_tags}
+                                style={{ width: '15%' }}
+                                onSelect={this.onSelectTag}
+                                onSearch={this.onSearchTag}
+                                placeholder="Tag"
+                            />)}
 
-                </Form.Item>
+                        </Form.Item>
                     </Col>
-                <Col >
-                <Form.Item
-                    {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
-                    label={index === 0 ? 'Tags' : ''}
-                    required={false}
-                    key={k}
-                    style={{visibility:"visible", }}
-                >
-                    {getFieldDecorator(`tags[${k}][2]`, {
-                        validateTrigger: ['onChange', 'onBlur'],
-                        rules: [
-                            {
-                                required: false,
-                                whitespace: true,
-                            },
-                        ],
-                    })(<AutoComplete
-                        dataSource={this.state.possible_tags}
-                        style={{ width: '15%' }}
-                        onSelect={this.onSelectTag}
-                        onSearch={this.onSearchTag}
-                        placeholder="Tag"
-                    />)}
+                    <Col >
+                        <Form.Item
+                            {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
+                            label={index === 0 ? 'Tags' : ''}
+                            required={false}
+                            key={k}
+                            style={{visibility:"visible", }}
+                        >
+                            {getFieldDecorator(`tags[${k}][2]`, {
+                                validateTrigger: ['onChange', 'onBlur'],
+                                rules: [
+                                    {
+                                        required: false,
+                                        whitespace: true,
+                                    },
+                                ],
+                            })(<AutoComplete
+                                dataSource={this.state.possible_tags}
+                                style={{ width: '15%' }}
+                                onSelect={this.onSelectTag}
+                                onSearch={this.onSearchTag}
+                                placeholder="Tag"
+                            />)}
 
-                </Form.Item>
+                        </Form.Item>
                     </Col>
-            </Row>
+                </Row>
 
             </Row>
 
         ));
         return (
             <Form onSubmit={this.handleSubmit}>
-                            <Title level={2}>Eat With</Title>
+                <Title level={2}>Eat With</Title>
+                <Form.Item >
+
+                </Form.Item>
+                <Form.Item
+                            style={{visibility:"visible", }}
+                        >
+                            {getFieldDecorator(`area`, {
+                                validateTrigger: ['onChange', 'onBlur'],
+                                rules: [
+                                    {
+                                        required: false,
+                                        whitespace: true,
+                                        message: 'Please enter area'
+                                    },
+                                ],
+                            })(<AutoComplete
+                        dataSource={this.state.possible_areas}
+                        style={{ width: 200 }}
+                        // onSelect={this.onSetArea}
+                        onSearch={this.onSearchArea}
+                        placeholder="Area"
+                    />)}
+
+                        </Form.Item>
                 {formItems}
                 <Form.Item {...formItemLayoutWithOutLabel}>
                     <Button type="dashed" onClick={this.add} style={{ width: '60%' }}>
