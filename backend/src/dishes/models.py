@@ -10,7 +10,6 @@ class Dish(models.Model):
     title = models.CharField(max_length=120)
     content = models.TextField()
     restaurant = models.ForeignKey('Restaurant', related_name='%(class)s', on_delete=models.PROTECT)
-# TODO: LIST
 
     def __str__(self):
         return self.title
@@ -21,6 +20,7 @@ class Profile(models.Model):
     bio = models.TextField(max_length=500, blank=True) # until we decide what's what
     location = models.CharField(max_length=30, blank=True)
     birth_date = models.DateField(null=True, blank=True)
+    points = models.IntegerField()
 
 
 class Address(models.Model):
@@ -30,7 +30,7 @@ class Address(models.Model):
 
 
 class Restaurant(models.Model):
-    name = models.CharField(max_length=30)  # do we want it to be unique?
+    name = models.CharField(max_length=30)
     address = models.ForeignKey(Address, related_name='%(class)s', on_delete=models.PROTECT)
 
 
@@ -68,6 +68,7 @@ class DistanceMatrix(models.Model):
     col = models.ForeignKey(User, related_name='col', on_delete=models.PROTECT)
     row = models.ForeignKey(User, related_name='row', on_delete=models.PROTECT)
     distance = models.FloatField()
+
 
 # add a field that tells us if the estimation is real or not
 # or even better - unite with Rank table!!!!!!!!!!!!!

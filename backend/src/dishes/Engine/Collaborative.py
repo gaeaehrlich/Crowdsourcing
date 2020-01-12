@@ -6,7 +6,7 @@ from math import sqrt
 import numpy as np
 
 
-def calculate_distance(user1_ranking, user2_ranking): # order by dish is crucial!
+def calculate_distance(user1_ranking, user2_ranking):
     user1_stars = np.array(get_stars(user1_ranking.order_by('dish')))
     user2_stars = np.array(get_stars(user2_ranking.order_by('dish')))
     return np.linalg.norm(user1_stars - user2_stars) # TODO: try different orders
