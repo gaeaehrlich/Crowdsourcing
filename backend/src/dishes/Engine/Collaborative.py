@@ -1,9 +1,15 @@
-from .Utils import averaged_mean, get_dishes
+from .Utils import averaged_mean, get_dishes, get_stars, KNN
 from ..models import DistanceMatrix, Rank, UserDishMatrix, Dish
 from django.contrib.auth.models import User
 from datetime import datetime, timedelta
 from math import sqrt
-from .Initialization import calculate_distance, KNN
+import numpy as np
+
+
+def calculate_distance(user1_ranking, user2_ranking): # order by dish is crucial!
+    user1_stars = np.array(get_stars(user1_ranking.order_by('dish')))
+    user2_stars = np.array(get_stars(user2_ranking.order_by('dish')))
+    return np.linalg.norm(user1_stars - user2_stars) # TODO: try different orders
 
 
 def user_user_distance(new_user, old_user): # can break to 2 code duplication!
@@ -51,19 +57,20 @@ def update_distance_for_new_rank(rank):
 def update_estimation(cell):
     user = cell.user
     dish = cell.dish
-    neighbors = KNN(user)
-    cell.estimate = averaged_mean(dish, neighbors)
+    neighbors = KNN(user, dish)
+    assert len(neighbors) > 0
+    cell.estimate = averaged_mean(user, dish, neighbors)
     cell.last_update = datetime.now()
     # save here or not?
 
 
 # TODO: ONLY UPDATE FOR USERS THAT ONE OF THEIR KNN CHANGED! (RATED A DISH LATELY)
-def update_estimations(days = 1):
+def update_estimations(days = 0):
     t = datetime.now() - timedelta(days=days)
-    old_cells = UserDishMatrix.objects.filter(last_update__ls=t)
+    old_cells = UserDishMatrix.objects.filter(last_update__lt=t)
     for cell in old_cells:
         update_estimation(cell)
-        cell.save(['estimate', 'last_update'])
+        cell.save()
 
 
 def add_estimations_for_new_user(user):

@@ -1,18 +1,13 @@
 from ..models import DistanceMatrix, Rank, UserDishMatrix
 from django.contrib.auth.models import User
-from .Utils import averaged_mean, get_dishes, get_stars, get_users, get_rows
-import numpy as np
+from .Utils import averaged_mean, get_dishes, KNN
+from .Collaborative import calculate_distance
+from django.db.models import Q
 
 
 def initialize():
     calculate_all_distance()
     CreateUserDishMatrix()
-
-
-def calculate_distance(user1_ranking, user2_ranking): # order by dish is crucial!
-    user1_stars = np.array(get_stars(user1_ranking.order_by('dish')))
-    user2_stars = np.array(get_stars(user2_ranking.order_by('dish')))
-    return np.linalg.norm(user1_stars - user2_stars) # TODO: try different orders
 
 
 def calculate_all_distance():
@@ -28,17 +23,14 @@ def calculate_all_distance():
                 distance.save()
 
 
-def KNN(user, k = 5):
-    return DistanceMatrix.objects.filter(col=user).order_by('distance')[:k]
-
-
-def AddEstimation(user):
-    user_dishes = get_dishes(Rank.objects.filter(user=user))
-    neighbors = KNN(user)
+def AddEstimation(user): #bug!!!
+    user_dishes = get_dishes(Rank.objects.filter(user=user, stars__gt=0))
     for dish in user_dishes:
+        neighbors = KNN(user, dish)
         estimate = Rank.objects.get(user=user, dish=dish).stars
         if estimate == 0: # else - go in the table as is
-            estimate =  averaged_mean(user, dish, get_rows(neighbors))
+            assert len(neighbors) > 0
+            estimate =  averaged_mean(user, dish, neighbors)
         dish_estimation = UserDishMatrix(dish=dish, user=user, estimate=estimate)
         dish_estimation.save()
 

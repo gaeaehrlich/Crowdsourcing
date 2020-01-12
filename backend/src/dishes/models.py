@@ -5,7 +5,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 import datetime
 from django.db import models
 
-
+# add tag as ManyToMany!
 class Dish(models.Model):
     title = models.CharField(max_length=120)
     content = models.TextField()
@@ -30,7 +30,7 @@ class Address(models.Model):
 
 
 class Restaurant(models.Model):
-    name = models.CharField(max_length=30, unique=True)  # do we want it to be unique?
+    name = models.CharField(max_length=30)  # do we want it to be unique?
     address = models.ForeignKey(Address, related_name='%(class)s', on_delete=models.PROTECT)
 
 
@@ -54,7 +54,7 @@ class Review(models.Model):
     description = models.CharField(max_length=100)
     dish = models.ForeignKey(Dish, related_name='%(class)s', on_delete=models.PROTECT)
 
-
+# unite with UserDish
 class Rank(models.Model):
     user = models.ForeignKey(User, related_name='%(class)s', on_delete=models.PROTECT)
     dish = models.ForeignKey(Dish, related_name='%(class)s', on_delete=models.PROTECT)
@@ -69,7 +69,8 @@ class DistanceMatrix(models.Model):
     row = models.ForeignKey(User, related_name='row', on_delete=models.PROTECT)
     distance = models.FloatField()
 
-
+# add a field that tells us if the estimation is real or not
+# or even better - unite with Rank table!!!!!!!!!!!!!
 class UserDishMatrix(models.Model):
     dish = models.ForeignKey(Dish, related_name='%(class)s', on_delete=models.PROTECT)
     user = models.ForeignKey(User, related_name='%(class)s', on_delete=models.PROTECT)
