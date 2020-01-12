@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from ..models import Dish, Profile, Review, Gift, Restaurant
+from ..models import Dish, Profile, Review, Tag, Gift, Restaurant
 
 
 class RestaurantSerializer(serializers.ModelSerializer):
@@ -31,12 +31,18 @@ class GiftSerializer(serializers.ModelSerializer):
         fields = ('user', 'restaurant', 'description')
 
 
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = ('title',)
+
+
 class ProfileSerializer(serializers.ModelSerializer):
     likes = ReviewSerializer(read_only=True, many=True)
     gifts = GiftSerializer(read_only=True, many=True)
     searches = DishSerializer(read_only=True, many=True)
+    preferences = TagSerializer(read_only=True, many=True)
 
     class Meta:
         model = Profile
-        fields = ('user', 'location', 'level', 'likes', 'gifts', 'searches',
-                  'allergic', 'cosher', 'vegetarian', 'vegan')
+        fields = ('user', 'location', 'level', 'likes', 'gifts', 'searches', 'preferences')
