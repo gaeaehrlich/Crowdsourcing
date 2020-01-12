@@ -1,40 +1,54 @@
-from ..models import DistanceMatrix, Rank, UserDishMatrix
-from django.contrib.auth.models import User
-from .Utils import averaged_mean, get_dishes, KNN
+from .Utils import averaged_mean, knn, add_empty_review_for_user
 from .Collaborative import calculate_distance
-from django.db.models import Q
+from django.contrib.auth.models import User
+from ..models import Review, DistanceMatrix, Estimation
 
 
 def initialize():
+    add_empty_reviews()
     calculate_all_distance()
-    CreateUserDishMatrix()
+    create_estimations()
+
+
+def add_empty_reviews():
+    for user in User.objects.all():
+        add_empty_review_for_user(user)
 
 
 def calculate_all_distance():
     all_users = User.objects.all()
+
     for user1 in all_users:
         for user2 in all_users:
             if user1 != user2:
-                distance = DistanceMatrix(col=user1, row=user2)
-                user1_ranking = Rank.objects.filter(user=user1, stars__gt=0)
-                user2_ranking = Rank.objects.filter(user=user2,
-                                                    dish__in=user1_ranking.values_list('dish', flat=True))
-                distance.distance = calculate_distance(user1_ranking, user2_ranking)
-                distance.save()
+                user1_reviews = Review.objects.filter(author=user1,
+                                                      stars__gt=0)
+                user2_reviews = Review.objects.filter(author=user2,
+                                                      dish__in=user1_reviews
+                                                      .values_list('dish', flat=True))
+
+                distance = calculate_distance(user1_reviews,
+                                              user2_reviews)
+
+                DistanceMatrix.objects.create(col=user1,
+                                              row=user2,
+                                              distance=distance)
 
 
-def AddEstimation(user): #bug!!!
-    user_dishes = get_dishes(Rank.objects.filter(user=user, stars__gt=0))
-    for dish in user_dishes:
-        neighbors = KNN(user, dish)
-        estimate = Rank.objects.get(user=user, dish=dish).stars
-        if estimate == 0: # else - go in the table as is
+def create_estimation_for_user(user):
+
+    for review in Review.objects.filter(author=user):
+        dish = review.dish
+        estimate = review.stars
+        if estimate == 0:
+            neighbors = knn(user, dish)
             assert len(neighbors) > 0
             estimate =  averaged_mean(user, dish, neighbors)
-        dish_estimation = UserDishMatrix(dish=dish, user=user, estimate=estimate)
-        dish_estimation.save()
+        Estimation.objects.create(dish=dish,
+                                  user=user,
+                                  estimate=estimate)
 
 
-def CreateUserDishMatrix():
+def create_estimations():
     for user in User.objects.all():
-        AddEstimation(user)
+        create_estimation_for_user(user)

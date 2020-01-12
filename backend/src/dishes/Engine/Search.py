@@ -1,4 +1,4 @@
-from ..models import DistanceMatrix, Rank, UserDishMatrix
+from ..models import DistanceMatrix, UserDishMatrix
 from django.contrib.auth.models import User
 
 
