@@ -44,8 +44,7 @@ def averaged_mean(user, dish, neighbors):
     # the order of both lists is important
     stars_list = list(map(neighbor_to_stars, neighbors))
     weights = np.exp(-1 * np.array(list(map(neighbor_to_distance, neighbors))))
-    assert(len(stars_list) == len(weights))
-    assert(len(stars_list) > 0)
+
     #  np.average can raise ZeroDivisionError
     # we need to build the data base so that this is not possible
     return np.average(a=stars_list, weights=weights)

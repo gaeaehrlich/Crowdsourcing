@@ -92,7 +92,7 @@ class DistanceMatrix(models.Model):
 class Estimation(models.Model):
     dish = models.ForeignKey(Dish, related_name='%(class)s', on_delete=models.PROTECT)
     user = models.ForeignKey(User, related_name='%(class)s', on_delete=models.PROTECT)
-    estimate = models.FloatField()
+    estimate = models.FloatField(default=0)
     last_update = models.DateTimeField(default=timezone.now)
 
 

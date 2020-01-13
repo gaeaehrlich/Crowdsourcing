@@ -68,8 +68,8 @@ def update_estimation(cell):
     user = cell.user
     dish = cell.dish
     neighbors = knn(user, dish)
-    assert len(neighbors) > 0
-    cell.estimate = averaged_mean(user, dish, neighbors)
+    if len(neighbors > 0):
+        cell.estimate = averaged_mean(user, dish, neighbors)
     cell.last_update = timezone.now()
     cell.save()
 

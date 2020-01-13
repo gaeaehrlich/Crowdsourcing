@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from ...Engine.Initialization import initialize
+from ...Engine.initialization import initialize
 
 class Command(BaseCommand):
     help = 'Test initialization'

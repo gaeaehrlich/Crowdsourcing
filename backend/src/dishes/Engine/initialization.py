@@ -1,7 +1,7 @@
 from .utils import averaged_mean, knn
 from .collaborative import calculate_distance, add_empty_review_for_user
 from django.contrib.auth.models import User
-from ..models import Review, DistanceMatrix, Estimation
+from ..models import Review, DistanceMatrix, Estimation, Tag
 
 
 def initialize():
@@ -42,8 +42,8 @@ def create_estimation_for_user(user):
         estimate = review.stars
         if estimate == 0:
             neighbors = knn(user, dish)
-            assert len(neighbors) > 0
-            estimate =  averaged_mean(user, dish, neighbors)
+            if len != 0: # only if no user reviewed this dish!
+                estimate =  averaged_mean(user, dish, neighbors)
         Estimation.objects.create(dish=dish,
                                   user=user,
                                   estimate=estimate)
@@ -52,3 +52,9 @@ def create_estimation_for_user(user):
 def create_estimations():
     for user in User.objects.all():
         create_estimation_for_user(user)
+
+
+def create_tag_distances():
+    for tag1 in Tag.objects.all():
+        for tag2 in Tag.objects.all():
+            pass

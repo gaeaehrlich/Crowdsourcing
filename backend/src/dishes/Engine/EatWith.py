@@ -1,83 +1,80 @@
-from ..models import Estimation, Dish, Restaurant
-from .utils import get_restaurants, get_tags
 from .search import is_legal_dish
+from ..models import Estimation, Restaurant
 import numpy as np
 
 
-def func(tag):
-    return lambda x: x.tags.get(col=tag, row=x).distance
-
-
 def cal_tag_loss(tag, dish):
-    return np.min(map(func(tag), dish.tags.all()))
+
+    tag_to_distance = lambda x: tag.tag_distances_from.get(row=x).distance
+    tags = dish.tags.all()
+    min_loss = tag_to_distance(tags[0]) # every dish has at least one tag
+    for tag2 in tags[1:]:
+        loss = tag_to_distance(tag2)
+        if loss < min_loss:
+            min_loss = loss
+
+    return min_loss
 
 
 def cal_dish_loss(user, tags, dish):
-    min_loss = cal_tag_loss(tags[0], dish)
-    min_tag = tags[0]
-    for tag in tags[1:]:
-        tag_loss = cal_tag_loss(tag, dish)
-        if tag_loss < min_loss:
-            min_loss = tag_loss
-            min_tag = tag
+
+    if len(tags) == 0: # user don't care
+        min_loss = 0
+    else:              # user gave us a few options
+
+        min_loss = cal_tag_loss(tags[0], dish)
+        for tag in tags[1:]:
+            tag_loss = cal_tag_loss(tag, dish)
+            if tag_loss < min_loss:
+                min_loss = tag_loss
+
     estimation = Estimation.objects.get(user=user, dish=dish).estimate
-    return min_tag, np.exp(min_loss - estimation)
+    return np.exp(min_loss - estimation) # rethink this
 
 
+def cal_restaurant_loss(user, tags, restaurant):
 
-def best_resturant_for_group(users_list, tags_list, area):
-    """
+    dishes = [dish for dish in restaurant.dish.all()
+              if is_legal_dish(dish, user.profile.preferences.all())]
 
-    :param users_list: list of users that want to eat together
-    :param tags_list: each cell i in this list is list of tags that entered the user in users_list[i]
-    :param area: where they want to eat
-    :return: the recommended restaurant and list of (user, recommended_dish)
-    """
-    n = len(users_list)
-    restaurants = Restaurant.objects.filter(addres__area=area)
-    min_loss_val = float('inf')
-    users_loss = []
+    if(len(dishes) == 0):
+        return None, float('inf')
+
+    min_loss = cal_dish_loss(user, tags, dishes[0])
+    min_dish = dishes[0]
+    for dish in dishes[1:]:
+        dish_loss = cal_dish_loss(user, tags, dish)
+        if dish_loss < min_loss:
+            min_loss = dish_loss
+            min_dish = dish
+
+    return min_dish, min_loss
+
+
+def choose_restaurant(requests, area):
+
+    restaurants = Restaurant.objects.filter(address__area=area)
+    min_total_loss = float('inf') # later
+    min_restaurant = None
+    min_loss = []
+    min_dishes = []
     for restaurant in restaurants:
-        # constraints
-        loss = 0
-        user_recommended_dish_list = []
-        current_users_lost = []
-        for i in range(n):
-            user_loss, recommended_dish = restaurant_loss(users_list[i], tags_list[i], restaurant)
-            current_users_lost.append(user_loss)
-            loss += user_loss
-            user_recommended_dish_list.append((users_list[i], recommended_dish))
-        if min_loss_val > loss:
-            best_restaurant = restaurant
-            user_and_dish_at_restaurant = user_recommended_dish_list
-            user_loss = user_and_dish_at_restaurant
-    if min_loss_val == float('inf'):
+        total_loss = 0
+        dishes = []
+        for user, tags in requests:
+            dish, loss = cal_restaurant_loss(user, tags, restaurant)
+            total_loss += loss
+            if dish == None:
+                break
+
+            dishes.append(dish)
+            min_loss.append(loss)
+
+        if total_loss < min_total_loss:
+            min_total_loss = total_loss
+            min_restaurant = restaurant
+            min_dishes = dishes
+    if min_total_loss == float('inf'):
         return None
-    return best_restaurant, user_and_dish_at_restaurant, user_loss
 
-
-# TODO : if there is no dish in  restaurant that match user constrains???
-def restaurant_loss(user, tags, restaurant):
-    """
-
-    :param user:  user django object
-    :param tags: TO ASK CHEN
-    :param restaurant: restaurant django object
-    :return: the distance of the closest dish for the given user , and the dish that achive it as tuple
-    """
-    dishes = Dish.objects.filter(resturant=restaurant)
-    # FILTER OUT THE BAD DISHES THAT CAN KILL THEM Manually :
-    user_constrains = user.profile.preferences.all()
-    dishes_loss =[float('inf')]
-    appropriate_dishes = [None]
-    for dish in dishes:
-        if is_legal_dish(dish, tags):
-            tag, loss = cal_dish_loss(user, tags, dish)
-            dishes_loss.append(loss)
-            appropriate_dishes.append(dish)
-    i = np.argmin(dishes_loss)
-    return dishes_loss[i], appropriate_dishes[i]
-
-
-def choose_restaurant(city, requests):
-    restaurants = Restaurant.objects.filter(address__city=city)
+    return min_restaurant, min_dishes, min_loss
