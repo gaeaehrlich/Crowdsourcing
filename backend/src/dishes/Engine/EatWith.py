@@ -1,5 +1,6 @@
 from ..models import Estimation, Dish, Restaurant
 from .utils import get_restaurants, get_tags
+from .search import is_legal_dish
 import numpy as np
 
 
@@ -8,8 +9,7 @@ def func(tag):
 
 
 def cal_tag_loss(tag, dish):
-    dish_tags = DishTag.objects.filter(dish=dish)
-    return np.min(map(func(tag), dish_tags))
+    return np.min(map(func(tag), dish.tags.all()))
 
 
 def cal_dish_loss(user, tags, dish):
@@ -25,7 +25,6 @@ def cal_dish_loss(user, tags, dish):
 
 
 
-# TODO
 def best_resturant_for_group(users_list, tags_list, area):
     """
 
@@ -35,7 +34,7 @@ def best_resturant_for_group(users_list, tags_list, area):
     :return: the recommended restaurant and list of (user, recommended_dish)
     """
     n = len(users_list)
-    restaurants = get_restaurants(RestaurantArea.objects.filter(area=area), "restaurant")
+    restaurants = Restaurant.objects.filter(addres__area=area)
     min_loss_val = float('inf')
     users_loss = []
     for restaurant in restaurants:
@@ -68,17 +67,11 @@ def restaurant_loss(user, tags, restaurant):
     """
     dishes = Dish.objects.filter(resturant=restaurant)
     # FILTER OUT THE BAD DISHES THAT CAN KILL THEM Manually :
-    user_constrains = get_tags(Constraint.objects.filter(user=user))
+    user_constrains = user.profile.preferences.all()
     dishes_loss =[float('inf')]
     appropriate_dishes = [None]
     for dish in dishes:
-        bad_dish = False
-        dish_tags = get_tags(DishTag.objects.filter(dish=dish))
-        for constraint in user_constrains:
-            if constraint not in dish_tags:
-                bad_dish = True
-                break
-        if not bad_dish:
+        if is_legal_dish(dish, tags):
             tag, loss = cal_dish_loss(user, tags, dish)
             dishes_loss.append(loss)
             appropriate_dishes.append(dish)
