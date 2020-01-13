@@ -32,6 +32,11 @@ def get_distance(query_set):
     return list(map(lambda x: x.distance, query_set))
 
 
+def related(tag1, tag2):
+    # tag1 is a son of tag2
+    return tag1.tag_distances_from.get(row=tag2).distance == 0
+
+
 def averaged_mean(user, dish, neighbors):
     neighbor_to_stars = lambda neighbor: neighbor.review.get(dish=dish).stars
     neighbor_to_distance = lambda neighbor: neighbor.user_distances_to.get(col=user).distance
