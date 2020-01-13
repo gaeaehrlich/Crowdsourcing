@@ -10,7 +10,7 @@ class Dish(models.Model):
     title = models.CharField(max_length=120)
     content = models.TextField()
     restaurant = models.ForeignKey('Restaurant', related_name='%(class)s', on_delete=models.PROTECT)
-    tag = models.ManyToManyField('Tag', related_name='%(class)s', blank=True)
+    tags = models.ManyToManyField('Tag', related_name='%(class)s', blank=True)
 
     def __str__(self):
         return self.title
@@ -52,9 +52,9 @@ class Profile(models.Model):
         ]
     )
     likes = models.ManyToManyField(Review, related_name="posts_liked", blank=True)
-    gift = models.ManyToManyField(Gift, related_name="posts_liked", blank=True)
-    search = models.ManyToManyField(Dish, related_name='%(class)s', blank=True)
-    preference = models.ManyToManyField(Tag, blank=True)
+    gifts = models.ManyToManyField(Gift, related_name="posts_liked", blank=True)
+    searches = models.ManyToManyField(Dish, related_name='%(class)s', blank=True)
+    preferences = models.ManyToManyField(Tag, blank=True)
 
 
 class Address(models.Model):
