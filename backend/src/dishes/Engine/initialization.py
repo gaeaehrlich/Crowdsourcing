@@ -42,7 +42,7 @@ def create_estimation_for_user(user):
         estimate = review.stars
         if estimate == 0:
             neighbors = knn(user, dish)
-            if len != 0: # only if no user reviewed this dish!
+            if len(neighbors) != 0: # only if no user reviewed this dish!
                 estimate =  averaged_mean(user, dish, neighbors)
         Estimation.objects.create(dish=dish,
                                   user=user,
@@ -54,6 +54,7 @@ def create_estimations():
         create_estimation_for_user(user)
 
 
+#TODO
 def create_tag_distances():
     for tag1 in Tag.objects.all():
         for tag2 in Tag.objects.all():
