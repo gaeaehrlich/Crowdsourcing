@@ -52,13 +52,13 @@ class Profile(models.Model):
         ]
     )
     likes = models.ManyToManyField(Review, related_name="posts_liked", blank=True)
-    gifts = models.ManyToManyField(Gift, related_name="posts_liked", blank=True)
-    searches = models.ManyToManyField(Dish, related_name='%(class)s', blank=True)
-    preferences = models.ManyToManyField(Tag, blank=True)
+    gift = models.ManyToManyField(Gift, related_name="posts_liked", blank=True)
+    search = models.ManyToManyField(Dish, related_name='%(class)s', blank=True)
+    preference = models.ManyToManyField(Tag, blank=True)
 
 
 class Address(models.Model):
-    city = models.ForeignKey('City', related_name='%(class)s', on_delete=models.PROTECT)
+    area = models.ForeignKey('CityArea', related_name='%(class)s', on_delete=models.PROTECT)
     street = models.ForeignKey('Street', related_name='%(class)s', on_delete=models.PROTECT)
     number = models.IntegerField()
 

@@ -1,5 +1,5 @@
-from .Utils import averaged_mean, knn, add_empty_review_for_user
-from .Collaborative import calculate_distance
+from .utils import averaged_mean, knn
+from .collaborative import calculate_distance, add_empty_review_for_user
 from django.contrib.auth.models import User
 from ..models import Review, DistanceMatrix, Estimation
 

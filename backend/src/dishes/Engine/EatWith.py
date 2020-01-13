@@ -1,11 +1,10 @@
-from ..models import UserDishMatrix, Dish, Restaurant, DishTag, TagTag,\
-    Constraint, RestaurantTag, RestaurantArea
-from .Utils import get_restaurants, get_tags
+from ..models import Estimation, Dish, Restaurant
+from .utils import get_restaurants, get_tags
 import numpy as np
 
 
 def func(tag):
-    return lambda x: TagTag.get(col=tag, row=x).distance
+    return lambda x: x.tags.get(col=tag, row=x).distance
 
 
 def cal_tag_loss(tag, dish):
@@ -21,7 +20,7 @@ def cal_dish_loss(user, tags, dish):
         if tag_loss < min_loss:
             min_loss = tag_loss
             min_tag = tag
-    estimation = UserDishMatrix.objects.get(user=user, dish=dish).estimate
+    estimation = Estimation.objects.get(user=user, dish=dish).estimate
     return min_tag, np.exp(min_loss - estimation)
 
 

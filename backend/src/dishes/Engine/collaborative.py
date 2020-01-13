@@ -1,4 +1,4 @@
-from .Utils import averaged_mean, get_dishes, get_stars, knn
+from .utils import averaged_mean, get_dishes, get_stars, knn
 from ..models import DistanceMatrix, Review, Estimation, Dish
 from django.contrib.auth.models import User
 from datetime import datetime, timedelta
@@ -13,13 +13,13 @@ def calculate_distance(user1_ranking, user2_ranking):
     return np.linalg.norm(user1_stars - user2_stars)
 
 
-# TODO: CHECK
+# TODO: CHECK AGAIN
 def create_users_distances(user1, user2):
     # We chose not to break the method into 2 to save time
 
     # reviews with stars = 0
-    user1_review = Review.objects.filter(user=user1)
-    user2_review = Review.objects.filter(user=user2)
+    user1_review = Review.objects.filter(author=user1)
+    user2_review = Review.objects.filter(author=user2)
 
     # reviews without stars = 0
     user1_review_positive = user1_review.filter(stars__gt=0)
@@ -39,31 +39,28 @@ def create_users_distances(user1, user2):
 
 
 def add_distances_for_new_user(new_user):
-    for old_user in User.objects.exclude(pk=new_user.pk):
+    for old_user in User.objects.exclude(id=new_user.id):
         create_users_distances(new_user, old_user)
 
 
-# TODO: CHECK
 def update_distance(distance, diff, prev_diff):
     # new distance will always be gte then 0
     return sqrt(pow(distance, 2) + pow(diff, 2) -pow(prev_diff, 2))
 
 
-def update_distance_for_new_rank(rank):
-    user = rank.user
+def update_distances_for_new_review(review):
+    user = review.author
 
     for distance_cell in DistanceMatrix.objects.filter(col=user):
         other = distance_cell.row
-        other_stars = Review.objects.get(user=other, dish=rank.dish).stars
-        diff = abs(rank.stars - other_stars)
-        new_distance = update_distance(distance_cell.distance, diff, 0)
-        distance_cell.distance = new_distance
+        other_stars = Review.objects.get(author=other, dish=review.dish).stars
+        diff = abs(review.stars - other_stars)
+        distance_cell.distance = update_distance(distance_cell.distance, diff, 0)
         distance_cell.save()
 
-        if other_stars > 0: # update for the old user
+        if other_stars > 0: # need to update distance for the old user
             distance_cell = DistanceMatrix.objects.get(col=other, row=user)
-            new_distance = update_distance(distance_cell.distance, diff, other_stars)
-            distance_cell.distance = new_distance
+            distance_cell.distance = update_distance(distance_cell.distance, diff, other_stars)
             distance_cell.save()
 
 
@@ -74,24 +71,35 @@ def update_estimation(cell):
     assert len(neighbors) > 0
     cell.estimate = averaged_mean(user, dish, neighbors)
     cell.last_update = timezone.now()
-    # save here or not?
+    cell.save()
 
 
-# TODO: ONLY UPDATE FOR USERS THAT ONE OF THEIR KNN CHANGED! (RATED A DISH LATELY)
+# todo: only update for users that ONE OF THEIR KNN CHANGED (RATED A DISH LATELY)?
 def update_estimations(days = 0):
     t = datetime.now() - timedelta(days=days)
     old_cells = Estimation.objects.filter(last_update__lt=t)
     for cell in old_cells:
         update_estimation(cell)
-        cell.save()
 
 
+# TODO: CHECK AGAIN
 def add_estimations_for_new_user(user):
+
     for dish in Dish.objects.all():
         cell = Estimation(user, dish)
-        stars = Review.objects.get(user=user, dish=dish).stars
+        stars = Review.objects.get(author=user, dish=dish).stars
         if stars == 0:
             update_estimation(cell)
         else:
             cell.estimate = stars
-        cell.save()
+            cell.save()
+
+
+def add_empty_review_for_user(user):
+    ranked_dishes = Dish.objects.filter(review__author=user,
+                                        review__stars__gt=0)
+
+    for dish in Dish.objects.all():
+        if dish not in ranked_dishes:
+            Review.objects.create(author=user,
+                                  dish=dish)

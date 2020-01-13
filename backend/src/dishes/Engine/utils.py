@@ -1,5 +1,5 @@
 import numpy as np
-from ..models import Review, DistanceMatrix, Dish, Profile
+from ..models import  DistanceMatrix
 import threading
 from django.contrib.auth.models import User
 
@@ -52,17 +52,6 @@ def knn(user, dish, k = 5):
 
     return get_rows(DistanceMatrix.objects.filter(col=user,
                                                   row__in=valid_neighbors).order_by('distance')[:k])
-
-
-def add_empty_review_for_user(user):
-    ranked_dishes = Dish.objects.filter(review__author=user,
-                                        review__stars__gt=0)
-
-    for dish in Dish.objects.all():
-        if dish not in ranked_dishes:
-            Review.objects.create(author=user,
-                                  dish=dish)
-
 
 
 # TODO: Orin - decide later where to use
