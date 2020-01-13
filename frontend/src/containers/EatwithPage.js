@@ -3,6 +3,7 @@ import React from "react";
 import { Row, Col, AutoComplete} from 'antd';
 import { Form, Input, Icon, Button } from 'antd';
 import { Typography } from 'antd';
+import axios from "axios";
 
 const { Title } = Typography;
 
@@ -22,6 +23,31 @@ class EatwithPage extends React.Component {
         areas: [],
         reviews: []
     };
+
+    setTags = obj => {
+        let temp;
+        axios.get(`http://127.0.0.1:8000/api/tag`).then(res => {
+            temp = res.data.map(tag=>tag['title']);
+            this.setState({
+                init_tags: temp
+            });
+        });
+    };
+
+    setCityAreas = obj => {
+        let temp;
+        axios.get(`http://127.0.0.1:8000/api/cityarea`).then(res => {
+            temp = res.data.map(tag=>tag['name']);
+            this.setState({
+                init_areas: temp
+            });
+        });
+    };
+
+    componentDidMount() {
+        this.setTags();
+        this.setCityAreas()
+    }
 
     remove = k => {
         const { form } = this.props;
