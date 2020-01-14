@@ -11,6 +11,7 @@ class Dish(models.Model):
     content = models.TextField()
     restaurant = models.ForeignKey('Restaurant', related_name='%(class)s', on_delete=models.PROTECT)
     tags = models.ManyToManyField('Tag', related_name='%(class)s', blank=True)
+    constraints = models.ManyToManyField('Constraint', related_name='%(class)s', blank=True)
 
     def __str__(self):
         return self.title
@@ -42,6 +43,10 @@ class Tag(models.Model):
                                null=True)
 
 
+class Constraint(models.Model):
+    title = models.CharField(max_length=30, unique=True)
+
+
 class Profile(models.Model):
     user = models.OneToOneField(User, related_name='profile', on_delete=models.CASCADE)
     level = models.IntegerField(
@@ -54,7 +59,7 @@ class Profile(models.Model):
     likes = models.ManyToManyField(Review, related_name="posts_liked", blank=True)
     gifts = models.ManyToManyField(Gift, related_name="posts_liked", blank=True)
     searches = models.ManyToManyField(Dish, related_name='%(class)s', blank=True)
-    preferences = models.ManyToManyField(Tag, blank=True)
+    constraints = models.ManyToManyField(Constraint, related_name='%(class)s', blank=True)
 
 
 class Address(models.Model):

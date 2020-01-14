@@ -1,4 +1,4 @@
-from .search import is_legal_dish
+from .search import is_legal_dish_constraints
 from ..models import Estimation, Restaurant
 import numpy as np
 
@@ -35,7 +35,7 @@ def cal_dish_loss(user, tags, dish):
 def cal_restaurant_loss(user, tags, restaurant):
 
     dishes = [dish for dish in restaurant.dish.all()
-              if is_legal_dish(dish, user.profile.preferences.all())]
+              if is_legal_dish_constraints(dish, user)]
 
     if(len(dishes) == 0):
         return None, float('inf')
