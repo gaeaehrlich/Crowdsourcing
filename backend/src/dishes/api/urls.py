@@ -10,12 +10,14 @@ from .views import (
     GiftListView,
     TagListView,
     RestaurantDetailView,
-    RestaurantListView
+    RestaurantListView,
+    ReviewCreateView
 
 )
 
 urlpatterns = [
     path('userreviews/<pk>/', UserReviewsListView.as_view()),
+    path('createreview/', ReviewCreateView.as_view()),
     path('user/<pk>/', UserDetailView.as_view()),
     path('createuser/', UserCreateView.as_view()),
     path('updateuser/<pk>/', UserUpdateView.as_view()),

@@ -1,5 +1,5 @@
 import React from "react";
-import PreferencesForm from "./UserPreferencesForm";
+import PreferencesForm from "../components/UserPreferencesForm";
 
 
 class ChangePreferences extends React.Component {

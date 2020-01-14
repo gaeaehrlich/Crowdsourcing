@@ -10,7 +10,7 @@ import Reminder from "../components/Reminder";
 
 
 
-class DishPage extends React.Component {
+class MainPage extends React.Component {
 
     state = {
         dishes: [],
@@ -163,4 +163,4 @@ const mapStateToProps = state => {
   }
 };
 
-export default connect(mapStateToProps)(DishPage);
+export default connect(mapStateToProps)(MainPage);

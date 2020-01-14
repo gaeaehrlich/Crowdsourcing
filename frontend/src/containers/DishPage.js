@@ -5,26 +5,27 @@ import {Button, Icon, List, Comment, Rate} from 'antd';
 import { Typography } from 'antd';
 import { Tag , Drawer, Form, Input, Checkbox, } from 'antd';
 import { Row, Col } from 'antd';
+import ReviewForm from "../components/ReviewForm";
+import {connect} from "react-redux";
 
 
 const { Title } = Typography;
-const { TextArea } = Input;
 
 class DishPage extends React.Component {
 
     state = {
         dish_id: 0,
-        dish_name: 'The New Noodle',
-        restaurant_name: 'Giraffe',
+        dish_name: '',
+        restaurant_name: '',
         address: '',
         price: 0,
-        tags:['Asian', 'Vegan', 'shit'],
+        tags:[],
         reviews: [],
         visible: false,
     };
 
     componentDidMount() {
-        const dishID = this.props.match.params.dishID
+        const dishID = this.props.match.params.dishID;
         this.setState({
             dish_id: dishID
         });
@@ -33,10 +34,10 @@ class DishPage extends React.Component {
             this.setState({
                 dish_name: res.data.title,
                 restaurant_name: res.data.restaurant.name,
-                // address: res.data.restaurant.street.name,
                 price: res.data.price,
-                reviews: res.data.reviews,
-
+                //reviews: res.data.reviews,
+                //tags: res.data.tags,
+                //constraints: res.data.constraints
             });
         });
     }
@@ -54,22 +55,10 @@ class DishPage extends React.Component {
 
     };
 
-    handleSubmit = e => {
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        console.log('Received values of form: ', values);
-      }
-      this.setState({
-            visible: false,
-        });
-    });
-  };
 
     render() {
-        const { getFieldDecorator } = this.props.form;
-        return(
-            <dom>
+        return (
+            <div>
                 <Row>
                     <Col span={12}>
                         <Title level={2}>
@@ -78,7 +67,7 @@ class DishPage extends React.Component {
                         <Title level={3}>
                             {this.state.restaurant_name}
                         </Title>
-                        <h6 style={{marginRight: 0, display: 'inline' }}>Tags:</h6>
+                        <h6 style={{marginRight: 0, display: 'inline'}}>Tags:</h6>
                         <div>
                             {this.state.tags.map((tag) =>
                                 <Tag>{tag}</Tag>
@@ -92,59 +81,17 @@ class DishPage extends React.Component {
                     </Col>
                 </Row>
 
-                <Button type="primary" onClick={this.showDrawer} style={{marginTop:3}}>
-                    <Icon type="plus" /> Add review
+                <Button type="primary" onClick={this.showDrawer} style={{marginTop: 3}}>
+                    <Icon type="plus"/> Add review
                 </Button>
                 <Drawer
                     title="Add review"
                     width={360}
                     onClose={this.onClose}
                     visible={this.state.visible}
-                    bodyStyle={{ paddingBottom: 80 }}
+                    bodyStyle={{paddingBottom: 80}}
                 >
-                    <Form layout="vertical" hideRequiredMark onSubmit={this.handleSubmit}>
-
-                        <Row gutter={16}>
-
-                            <Form.Item label="Rate">
-                                {getFieldDecorator('rating', {
-                                    initialValue: 3,
-                                })(<Rate />)}
-                            </Form.Item>
-                        </Row>
-
-                        <Row gutter={16}>
-                            <Form.Item label="Review">
-                                {getFieldDecorator('review_text', {
-                                    rules: [{ required: true, message: 'Please enter a review' },]
-                                        // {validator:(rule, value, callback)=>{return value}}],
-                                })(
-                                    <TextArea
-                                        style={{ width: '100%' }}
-                                        placeholder="Please enter review"
-                                        autoSize={{ minRows: 3 }}
-                                    />,
-                                )}
-                            </Form.Item>
-                        </Row>
-                        <Row gutter={16}>
-                            <Form.Item>
-                                {getFieldDecorator('is_anonymous', {
-            valuePropName: 'checked',
-            initialValue: false,
-          }
-                                )(
-                                    <Checkbox>Post anonymously?</Checkbox>,
-                                )}
-                            </Form.Item>
-                        </Row>
-                        <Form.Item wrapperCol={{ span: 12 }}>
-          <Button type="primary" htmlType="submit" style={{position:"fixed", bottom:40}}>
-            Submit
-          </Button>
-        </Form.Item>
-
-                    </Form>
+                <ReviewForm dishID={this.state.dish_id} token={this.props.token}/>
                     <div
                         style={{
                             position: 'absolute',
@@ -181,9 +128,17 @@ class DishPage extends React.Component {
                         </li>
                     )}
                 />
-            </dom>
+            </div>
         )
     }
 }
-// export default DishPage;
-export default Form.create()(DishPage)
+
+
+const mapStateToProps = state => {
+  return {
+    isAuthenticated: state.token !== null,
+    token: state.token
+  }
+};
+
+export default connect(mapStateToProps)(DishPage);

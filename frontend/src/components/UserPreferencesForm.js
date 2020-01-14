@@ -6,7 +6,7 @@ const { Option } = Select;
 
 class PreferencesForm extends React.Component {
     handleSubmit = (event, requestType) => {
-        event.preventDefault(); //need to remove to reload
+        event.preventDefault();
         this.props.form.validateFields((err, values, token) => {
             if (!err) {
                 const token = localStorage.getItem('token');
@@ -36,6 +36,7 @@ class PreferencesForm extends React.Component {
                         .then(res => console.log(res))
                         .catch(error => console.err(error));
                 }
+                this.props.history.push('/');
             }
         });
     };
