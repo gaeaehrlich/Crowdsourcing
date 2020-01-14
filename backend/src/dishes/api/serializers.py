@@ -53,8 +53,8 @@ class ProfileSerializer(serializers.ModelSerializer):
     likes = ReviewSerializer(read_only=True, many=True)
     gifts = GiftSerializer(read_only=True, many=True)
     searches = DishSerializer(read_only=True, many=True)
-    preferences = TagSerializer(read_only=True, many=True)
+    preferences = serializers.PrimaryKeyRelatedField(read_only=False, many=True, queryset=Tag.objects.all())
 
     class Meta:
         model = Profile
-        fields = ('user', 'location', 'level', 'likes', 'gifts', 'searches', 'preferences')
+        fields = ('user', 'level', 'likes', 'gifts', 'searches', 'preferences')

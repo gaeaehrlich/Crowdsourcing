@@ -18,7 +18,7 @@ class App extends Component {
       <div>
         <Router>
           <CustomLayout {...this.props}>
-              <BaseRouter />
+              <BaseRouter/>
           </CustomLayout>
         </Router>
       </div>
@@ -28,14 +28,15 @@ class App extends Component {
 
 const mapStateToProps = state => {
   return {
-    isAuthenticated: state.token !== null
+    isAuthenticated: state.token !== null,
+    token: state.token
   }
-}
+};
 
 const mapDispatchToProps = dispatch => {
   return {
     onTryAutoSignup: () => dispatch(actions.authCheckState())
   }
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
