@@ -20,7 +20,7 @@ urlpatterns = [
     path('createuser/', UserCreateView.as_view()),
     path('updateuser/<pk>/', UserUpdateView.as_view()),
     path('usergifts/<pk>/', GiftListView.as_view()),
-    path('tags/', TagListView.as_view())
+    path('tags/', TagListView.as_view()),
     path('dish/', DishesListView.as_view()),
     path('dish/<pk>', DishesDetailView.as_view()),
     path('rest/', RestaurantListView.as_view()),

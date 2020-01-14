@@ -1,15 +1,25 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.contrib.auth.models import User
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator, MinLengthValidator
 import datetime
 from django.db import models
 
-# add tag as ManyToMany!
+
+class Tag(models.Model):
+    title = models.CharField(max_length=30, unique=True)
+
+
+class Constraint(models.Model):
+    title = models.CharField(primary_key=True, max_length=30, unique=True)
+
+
 class Dish(models.Model):
     title = models.CharField(max_length=120)
     content = models.TextField()
     restaurant = models.ForeignKey('Restaurant', related_name='%(class)s', on_delete=models.PROTECT)
+    constraints = models.ManyToManyField(Constraint, related_name='%(class)s', blank=True)
+    tags = models.ManyToManyField(Tag, related_name='%(class)s', blank=True)
 
     def __str__(self):
         return self.title
@@ -32,12 +42,8 @@ class Gift(models.Model):
     description = models.CharField(max_length=500)
 
 
-class Tag(models.Model):
-    title = models.CharField(max_length=30, unique=True)
-
-
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.CharField(primary_key=True, max_length=40, validators=[MinLengthValidator(40)], unique=True)
     level = models.IntegerField(
         default=0,
         validators=[
@@ -48,7 +54,7 @@ class Profile(models.Model):
     likes = models.ManyToManyField(Review, related_name="posts_liked", blank=True)
     gifts = models.ManyToManyField(Gift, related_name="posts_liked", blank=True)
     searches = models.ManyToManyField(Dish, related_name='%(class)s', blank=True)
-    preferences = models.ManyToManyField(Tag, blank=True)
+    preferences = models.ManyToManyField(Constraint, blank=True)
 
 
 class Address(models.Model):
@@ -83,8 +89,6 @@ class DistanceMatrix(models.Model):
     distance = models.FloatField()
 
 
-# add a field that tells us if the estimation is real or not
-# or even better - unite with Rank table!!!!!!!!!!!!!
 class UserDishMatrix(models.Model):
     dish = models.ForeignKey(Dish, related_name='%(class)s', on_delete=models.PROTECT)
     user = models.ForeignKey(User, related_name='%(class)s', on_delete=models.PROTECT)
