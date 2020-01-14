@@ -6,21 +6,35 @@ const { Option } = Select;
 
 class PreferencesForm extends React.Component {
     handleSubmit = (event, requestType) => {
-        event.preventDefault();
-        this.props.form.validateFields((err, values) => {
+        event.preventDefault(); //need to remove to reload
+        this.props.form.validateFields((err, values, token) => {
             if (!err) {
+                const token = localStorage.getItem('token');
+
                 let tags = values['select-multiple'].concat(values['checkbox-group']);
+                let preferences = [];
+                tags.map(tag => {
+                    preferences.push({"title" : tag})
+                });
+                console.log(preferences);
+
                 switch (requestType) {
                     case 'post':
-                        axios.post('http://127.0.0.1:8000/api/user/', {
-                                user: ,
-                                level: 0,
+                        return axios.post('http://127.0.0.1:8000/api/createuser/', {
+                                user: token,
+                                level: 1,
                                 likes: [],
                                 gifts: [],
                                 searches: [],
                                 preferences: tags
-
+                        }).then(res => console.log(res))
+                        .catch(error => console.log(error.response));
+                    case 'put':
+                        axios.put(`http://127.0.0.1:8000/api/updateuser/${token}/`, {
+                                preferences:tags
                         })
+                        .then(res => console.log(res))
+                        .catch(error => console.err(error));
                 }
             }
         });
@@ -29,18 +43,18 @@ class PreferencesForm extends React.Component {
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
-            <Form onSubmit={this.handleSubmit}>
+            <Form onSubmit={(event) => this.handleSubmit(event, this.props.requestType)}>
 
                 <Form.Item label="Allergies: ">
                     {getFieldDecorator('select-multiple', {
                     rules: [{ required: false }],
                     })(
                     <Select mode="multiple" placeholder="Please select if you have any allergies">
-                        <Option value="peanuts">Peanuts</Option>
-                        <Option value="lactose">Lactose</Option>
-                        <Option value="eggs">Eggs</Option>
-                        <Option value="wheat">Wheat</Option>
-                        <Option value="soy">Soy</Option>
+                        <Option value="peanuts free">Peanuts</Option>
+                        <Option value="lactose free">Lactose</Option>
+                        <Option value="eggs free">Eggs</Option>
+                        <Option value="wheat free">Wheat</Option>
+                        <Option value="soy free">Soy</Option>
                     </Select>
                     )}
                 </Form.Item>

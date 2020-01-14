@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.contrib.auth import get_user_model
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator, MinLengthValidator
 import datetime
 from django.db import models
 
@@ -36,11 +36,11 @@ class Gift(models.Model):
 
 
 class Tag(models.Model):
-    title = models.CharField(max_length=30, unique=True)
+    title = models.CharField(primary_key=True, max_length=30, unique=True)
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.CharField(primary_key=True, max_length=40, validators=[MinLengthValidator(40)], unique=True)
     level = models.IntegerField(
         default=0,
         validators=[

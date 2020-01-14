@@ -28,7 +28,7 @@ class UserGiftsList extends React.Component {
         axios.get(`http://127.0.0.1:8000/api/user/${token}/`).then(res => {
             console.log(res.data);
             this.setState({
-                level: res.data[0].level
+                level: res.data.level
             });
         });
     };

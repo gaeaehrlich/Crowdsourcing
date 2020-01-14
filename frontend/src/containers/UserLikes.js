@@ -15,7 +15,7 @@ class UserLikesList extends React.Component {
         axios.get(`http://127.0.0.1:8000/api/user/${token}/`).then(res => {
             console.log(res.data);
             this.setState({
-                likes: res.data[0].likes
+                likes: res.data.likes
             });
         });
     };

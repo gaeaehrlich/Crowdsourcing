@@ -7,7 +7,8 @@ from .views import (
     UserDetailView,
     UserCreateView,
     UserUpdateView,
-    GiftListView
+    GiftListView,
+    TagListView
 )
 
 urlpatterns = [
@@ -17,5 +18,6 @@ urlpatterns = [
     path('user/<pk>/', UserDetailView.as_view()),
     path('createuser/', UserCreateView.as_view()),
     path('updateuser/<pk>/', UserUpdateView.as_view()),
-    path('usergifts/<pk>/', GiftListView.as_view())
+    path('usergifts/<pk>/', GiftListView.as_view()),
+    path('tags/', TagListView.as_view())
 ]

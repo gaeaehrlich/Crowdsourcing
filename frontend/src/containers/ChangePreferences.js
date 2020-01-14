@@ -8,7 +8,7 @@ class ChangePreferences extends React.Component {
         return (
            <div>
                <h2>Update your preferences:</h2>
-               <PreferencesForm/>
+               <PreferencesForm requestType="put"/>
            </div>
         )
     }

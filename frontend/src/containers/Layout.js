@@ -17,7 +17,9 @@ class CustomLayout extends React.Component {
           <Menu
             theme="dark"
             mode="horizontal"
-            style={{ lineHeight: '64px' }}
+            style={{ lineHeight: '64px',
+                     float: 'right'
+                    }}
           >
               {
                     this.props.isAuthenticated ?
