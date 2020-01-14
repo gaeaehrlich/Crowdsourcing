@@ -7,9 +7,9 @@ import numpy as np
 from django.utils import timezone
 
 
-def calculate_distance(user1_ranking, user2_ranking):
-    user1_stars = np.array(get_stars(user1_ranking.order_by('dish')))
-    user2_stars = np.array(get_stars(user2_ranking.order_by('dish')))
+def calculate_distance(user1_reviews, user2_reviews):
+    user1_stars = np.array(get_stars(user1_reviews.order_by('dish')))
+    user2_stars = np.array(get_stars(user2_reviews.order_by('dish')))
     return np.linalg.norm(user1_stars - user2_stars)
 
 

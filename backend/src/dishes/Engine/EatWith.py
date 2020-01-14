@@ -38,6 +38,7 @@ def cal_restaurant_loss(user, tags, restaurant):
               if is_legal_dish_constraints(dish, user)]
 
     if(len(dishes) == 0):
+        print('prob with', user, restaurant, '!')
         return None, float('inf')
 
     min_loss = cal_dish_loss(user, tags, dishes[0])

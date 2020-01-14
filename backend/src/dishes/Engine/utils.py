@@ -34,6 +34,7 @@ def get_distance(query_set):
 
 def related(tag1, tag2):
     # tag1 is a son of tag2
+    print('tag 1:', tag1, tag1.title, 'tag2: ', tag2, tag2.title)
     return tag1.tag_distances_from.get(row=tag2).distance == 0
 
 
