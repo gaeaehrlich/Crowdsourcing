@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.contrib.auth.models import User
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator, MinLengthValidator
 import datetime
 from django.db import models
+
 
 class Tag(models.Model):
     title = models.CharField(max_length=30, unique=True)
@@ -12,20 +13,28 @@ class Tag(models.Model):
         return self.title
 
 
-class Dish(models.Model):
-    # TODO: add price
-    title = models.CharField(max_length=120)
-    content = models.TextField()
-    restaurant = models.ForeignKey('Restaurant', related_name='dishes', on_delete=models.PROTECT)
-    tag = models.ManyToManyField(Tag, related_name="dishes", blank=True)
+class Constraint(models.Model):
+    title = models.CharField(primary_key=True, max_length=30, unique=True)
 
     def __str__(self):
         return self.title
 
 
+class Dish(models.Model):
+    title = models.CharField(max_length=120)
+    content = models.TextField()
+    restaurant = models.ForeignKey('Restaurant', related_name='dishes', on_delete=models.PROTECT)
+    constraints = models.ManyToManyField(Constraint, related_name='dishes', blank=True)
+    tags = models.ManyToManyField(Tag, related_name='%(class)s', blank=True)
+    price = models.IntegerField(default=0)
+
+    def __str__(self):
+        return " ".join(map(str, [self.title, self.restaurant]))
+
+
 class Review(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    dish = models.ForeignKey(Dish, related_name='%(class)s', on_delete=models.PROTECT, default=None)
+    dish = models.ForeignKey(Dish, related_name='reviews', on_delete=models.PROTECT, default=None)
     description = models.CharField(max_length=100, blank=True)
     stars = models.IntegerField(
         default=0,
@@ -34,19 +43,17 @@ class Review(models.Model):
     likes = models.IntegerField(default=0)
 
     def __str__(self):
-        return " ".join(map(str,[self.dish, self.author.username]))
+        return " ".join(map(str, [self.dish, self.author]))
 
 
 class Gift(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    restaurant = models.ForeignKey('Restaurant', related_name='%(class)s', on_delete=models.PROTECT)
+    restaurant = models.ForeignKey('Restaurant', related_name='restaurant', on_delete=models.PROTECT)
     description = models.CharField(max_length=500)
 
 
-
-
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.CharField(primary_key=True, max_length=40, validators=[MinLengthValidator(40)], unique=True)
     level = models.IntegerField(
         default=0,
         validators=[
@@ -57,48 +64,32 @@ class Profile(models.Model):
     likes = models.ManyToManyField(Review, related_name="posts_liked", blank=True)
     gifts = models.ManyToManyField(Gift, related_name="posts_liked", blank=True)
     searches = models.ManyToManyField(Dish, related_name='%(class)s', blank=True)
-    preferences = models.ManyToManyField(Tag, blank=True)
-
-
-class Address(models.Model):
-    city = models.ForeignKey('City', related_name='%(class)s', on_delete=models.PROTECT)
-    street = models.ForeignKey('Street', related_name='%(class)s', on_delete=models.PROTECT)
-    number = models.IntegerField()
+    preferences = models.ManyToManyField(Constraint, blank=True)
 
     def __str__(self):
-        return " ".join(map(str, [self.street, self.number]))
-
-
-class Restaurant(models.Model):
-    name = models.CharField(max_length=30)
-    city_area = models.ForeignKey('CityArea', related_name='%(class)s', on_delete=models.PROTECT)
-    street = models.ForeignKey('Street', related_name='%(class)s', on_delete=models.PROTECT)
-    number = models.IntegerField()
-
-    def __str__(self):
-        return " ".join([self.name])
-
+        return " ".join(map(str, [self.user]))
 
 class City(models.Model):
     name = models.CharField(max_length=30, unique=True)
 
     def __str__(self):
-        return self.name
+        return " ".join(map(str, [self.name]))
 
 
 class CityArea(models.Model):
     name = models.CharField(max_length=30, unique=True)
     city = models.ForeignKey(City, related_name='%(class)s', on_delete=models.PROTECT)
     def __str__(self):
-        return " ".join([str(self.city), self.name])
+        return " ".join(map(str, [self.name, self.city]))
 
-
-class Street(models.Model):
+class Restaurant(models.Model):
     name = models.CharField(max_length=30)
     city_area = models.ForeignKey(CityArea, related_name='%(class)s', on_delete=models.PROTECT)
+    street = models.CharField(max_length=30)
+    number = models.IntegerField(default=0)
 
     def __str__(self):
-        return " ".join([self.name, str(self.city_area)])
+        return " ".join(map(str, [self.name, self.street]))
 
 
 class DistanceMatrix(models.Model):
@@ -107,8 +98,6 @@ class DistanceMatrix(models.Model):
     distance = models.FloatField()
 
 
-# add a field that tells us if the estimation is real or not
-# or even better - unite with Rank table!!!!!!!!!!!!!
 class UserDishMatrix(models.Model):
     dish = models.ForeignKey(Dish, related_name='%(class)s', on_delete=models.PROTECT)
     user = models.ForeignKey(User, related_name='%(class)s', on_delete=models.PROTECT)
