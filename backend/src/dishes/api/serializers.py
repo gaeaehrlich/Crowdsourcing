@@ -13,7 +13,7 @@ class DishSerializer(serializers.ModelSerializer):
     reviews = ReviewSerializer(read_only=True, many=True)
     class Meta:
         model = Dish
-        fields = ('id', 'title', 'content', 'price', 'restaurant', 'reviews')
+        fields = ('id', 'title', 'content', 'price', 'restaurant', 'reviews', 'tags', 'constraints')
         # fields = '__all__'
         depth=2
 
@@ -36,7 +36,7 @@ class RestaurantSerializer(serializers.ModelSerializer):
 
 
 class GiftSerializer(serializers.ModelSerializer):
-    restaurant = RestaurantSerializer()
+    restaurant = RestaurantSerializer(read_only=True, many=True)
 
     class Meta:
         model = Gift
@@ -46,7 +46,7 @@ class GiftSerializer(serializers.ModelSerializer):
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
-        fields = ('title',)
+        fields = '__all__'
 
 
 class ProfileSerializer(serializers.ModelSerializer):
