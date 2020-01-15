@@ -5,30 +5,58 @@ import axios from "axios";
 class Reviews extends React.Component {
 
     state = {
-        likes: []
+        level: 1,
+        likes: [],
+        gifts: [],
+        searches: [],
+        preferences: []
     };
 
-    handleLike = async (authorToken, reviewID, currentLikes) => {
-        if (this.props.token !== authorToken) {
-            await axios.get(`http://127.0.0.1:8000/api/user/${this.props.token}/`).then(res => {
+    updateUserLikes = (item) => {
+        axios.put(`http://127.0.0.1:8000/api/updateuser/${this.props.token}/`, {
+            user: this.props.token,
+            level: this.state.level,
+            likes: [...this.state.likes, item.id],
+            gifts: this.state.gifts,
+            searches: this.state.searches,
+            preferences: this.state.preferences
+        })
+            .then(res => console.log(res))
+            .catch(error => console.log(error));
+
+    };
+
+    updateReviewLikes = (item) => {
+        axios.put(`http://127.0.0.1:8000/api/updatereviews/${item.id}/`, {
+            author_token: item.author_token,
+            author_username: localStorage.getItem('username'),
+            dish: item.dish,
+            description: item.description,
+            stars: item.stars,
+            is_anonymous: item.is_anonymous,
+            likes: item.likes + 1,
+        })
+            .then(res => console.log(res))
+            .catch(error => console.log(error));
+    };
+
+    handleLike = (item) => {
+        if (this.props.token !== item.author_token) {
+            axios.get(`http://127.0.0.1:8000/api/user/${this.props.token}/`).then(res => {
                 this.setState({
-                    likes: res.data.likes
+                    level: res.data.level,
+                    likes: res.data.likes,
+                    gifts: res.data.gifts,
+                    searches: res.data.searches,
+                    preferences: res.data.preferences
                 });
             })
             .catch(error => console.log(error));
 
-            console.log([...this.state.likes, reviewID]);
-            await axios.put(`http://127.0.0.1:8000/api/updateuser/${this.props.token}/`, {
-                likes: [...this.state.likes, reviewID]
-            })
-            .then(res => console.log(res))
-            .catch(error => console.log(error));
-
-            await axios.put(`http://127.0.0.1:8000/api/updatereviews/${reviewID}/`, {
-                likes: currentLikes + 1
-            })
-            .then(res => console.log(res))
-            .catch(error => console.log(error));
+            if (!this.state.likes.includes(item.id)) {
+                this.updateUserLikes(item);
+                this.updateReviewLikes(item);
+            }
         }
     };
 
@@ -63,7 +91,9 @@ class Reviews extends React.Component {
                         <div>
                             <div>By: {item.author_username}</div>
                             <Rate disabled defaultValue={item.stars} />
-                            <Button onClick={ () => this.handleLike(item.author_token, item.id, item.likes)} shape="circle" icon="like" />
+                            <Button onClick={ () =>
+                                this.handleLike(item)
+                            } shape="circle" icon="like" />
                         </div>
                     </List.Item>
                 )}

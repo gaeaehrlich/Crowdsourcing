@@ -3,8 +3,7 @@ from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView,
 
 
 from ..models import Dish, Review, Profile, Gift, Tag, Restaurant
-from .serializers import DishSerializer, ReviewSerializer, ProfileSerializer, GiftSerializer, TagSerializer, \
-    RestaurantSerializer
+from .serializers import DishSerializer, ReviewSerializer, ProfileSerializer, GiftSerializer, RestaurantSerializer
 
 
 class DishesListView(ListAPIView):
@@ -68,11 +67,6 @@ class GiftListView(ListAPIView):
             if token_obj:
                 user = token_obj.user
                 return Gift.objects.filter(user=user)
-
-
-class TagListView(ListAPIView):
-    queryset = Tag.objects.all()
-    serializer_class = TagSerializer
 
 
 class RestaurantDetailView(RetrieveAPIView):

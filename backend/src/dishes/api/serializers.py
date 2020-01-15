@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from ..models import Dish, Review, Restaurant, Gift, Tag, Profile
+from ..models import Dish, Review, Restaurant, Gift, Profile, Constraint
 
 
 class ReviewSerializer(serializers.ModelSerializer):
@@ -51,9 +51,9 @@ class GiftSerializer(serializers.ModelSerializer):
         fields = ('user', 'restaurant', 'description')
 
 
-class TagSerializer(serializers.ModelSerializer):
+class ConstraintSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Tag
+        model = Constraint
         fields = '__all__'
 
 
@@ -61,7 +61,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     likes = serializers.PrimaryKeyRelatedField(read_only=False, many=True, queryset=Review.objects.all())
     gifts = GiftSerializer(read_only=True, many=True)
     searches = DishSerializer(read_only=True, many=True)
-    preferences = serializers.PrimaryKeyRelatedField(read_only=False, many=True, queryset=Tag.objects.all())
+    preferences = serializers.PrimaryKeyRelatedField(read_only=False, many=True, queryset=Constraint.objects.all())
 
     class Meta:
         model = Profile

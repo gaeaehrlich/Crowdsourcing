@@ -5,13 +5,27 @@ import {Form, Select, Checkbox, Row, Col, Button} from 'antd';
 const { Option } = Select;
 
 class PreferencesForm extends React.Component {
+
+    state = {
+        level: 1,
+        likes: [],
+        gifts: [],
+        searches: [],
+        preferences: []
+    };
+
     handleSubmit = (event, requestType) => {
         event.preventDefault();
         this.props.form.validateFields((err, values, token) => {
             if (!err) {
                 const token = localStorage.getItem('token');
 
-                let tags = values['select-multiple'].concat(values['checkbox-group']);
+                let tags = [];
+                if(typeof values['select-multiple'] != "undefined") tags = values['select-multiple'];
+                if(typeof values['checkbox-group'] != "undefined") tags = tags.concat(values['checkbox-group']);
+                console.log(tags);
+
+
 
                 switch (requestType) {
                     case 'post':
@@ -25,13 +39,27 @@ class PreferencesForm extends React.Component {
                         }).then(res => console.log(res))
                         .catch(error => console.log(error.response));
                     case 'put':
-                        axios.put(`http://127.0.0.1:8000/api/updateuser/${token}/`, {
-                                preferences: tags
+                         axios.get(`http://127.0.0.1:8000/api/user/${token}/`).then(res => {
+                             this.setState({
+                                 level: res.data.level,
+                                 likes: res.data.likes,
+                                 gifts: res.data.gifts,
+                                 searches: res.data.searches,
+                                 preferences: res.data.preferences
+                             });
+                         });
+                        return axios.put(`http://127.0.0.1:8000/api/updateuser/${token}/`, {
+                            user: token,
+                            level: this.state.level,
+                            likes: this.state.likes,
+                            gifts: this.state.gifts,
+                            searches: this.state.searches,
+                            preferences: tags
                         })
                         .then(res => console.log(res))
                         .catch(error => console.log(error));
                 }
-                this.props.history.push('/');
+                //this.props.history.push('/');
             }
         });
     };
