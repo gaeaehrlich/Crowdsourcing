@@ -33,7 +33,8 @@ class Dish(models.Model):
 
 
 class Review(models.Model):
-    author = models.CharField(primary_key=True, max_length=40, validators=[MinLengthValidator(40)], unique=True)
+    author_token = models.CharField(max_length=40, validators=[MinLengthValidator(40)], unique=True)
+    author_username = models.CharField(max_length=40)
     dish = models.ForeignKey(Dish, related_name='reviews', on_delete=models.PROTECT, default=None)
     description = models.CharField(max_length=100, blank=True)
     stars = models.IntegerField(
@@ -44,7 +45,7 @@ class Review(models.Model):
     likes = models.IntegerField(default=0)
 
     def __str__(self):
-        return " ".join(map(str, [self.dish, self.author]))
+        return " ".join(map(str, [self.dish, self.author_username]))
 
 
 class Gift(models.Model):

@@ -1,12 +1,10 @@
 import React from "react";
 import axios from 'axios';
 
-import {Button, Icon, List, Comment, Rate} from 'antd';
-import { Typography } from 'antd';
-import { Tag , Drawer, Form, Input, Checkbox, } from 'antd';
-import { Row, Col } from 'antd';
+import {Button, Icon, Typography, Tag , Drawer, Row, Col} from 'antd';
 import ReviewForm from "../components/ReviewForm";
 import {connect} from "react-redux";
+import Reviews from "../components/Reviews";
 
 
 const { Title } = Typography;
@@ -35,12 +33,18 @@ class DishPage extends React.Component {
                 dish_name: res.data.title,
                 restaurant_name: res.data.restaurant.name,
                 price: res.data.price,
-                //reviews: res.data.reviews,
                 //tags: res.data.tags,
                 //constraints: res.data.constraints
             });
         });
-    }
+        axios.get(`http://127.0.0.1:8000/api/dishreviews/${dishID}`).then(res => {
+            console.log(res.data);
+            this.setState({
+                reviews: res.data,
+            });
+        });
+
+    };
 
     showDrawer = () => {
         this.setState({
@@ -113,21 +117,7 @@ class DishPage extends React.Component {
                     </div>
                 </Drawer>
 
-                <List
-                    itemLayout="horizontal"
-                    dataSource={this.state.reviews}
-                    renderItem={review => (
-                        <li>
-                            <Comment
-                                // actions={item.actions}
-                                author={review.author.username}
-                                // avatar={item.avatar}
-                                content={review.description}
-                                // datetime={item.datetime}
-                            />
-                        </li>
-                    )}
-                />
+                <Reviews data={this.state.reviews} token={this.props.token}/>
             </div>
         )
     }

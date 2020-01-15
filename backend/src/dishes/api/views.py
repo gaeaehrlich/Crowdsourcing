@@ -22,12 +22,25 @@ class ReviewCreateView(CreateAPIView):
     serializer_class = ReviewSerializer
 
 
+class ReviewUpdateView(UpdateAPIView):
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
+
+
 class UserReviewsListView(ListAPIView):
     serializer_class = ReviewSerializer
 
     def get_queryset(self):
         token = self.kwargs.get("pk")
         return Review.objects.filter(author=token)
+
+
+class DishReviewsListView(ListAPIView):
+    serializer_class = ReviewSerializer
+
+    def get_queryset(self):
+        dishID = self.kwargs.get("pk")
+        return Review.objects.filter(dish__id=dishID)
 
 
 class UserDetailView(RetrieveAPIView):

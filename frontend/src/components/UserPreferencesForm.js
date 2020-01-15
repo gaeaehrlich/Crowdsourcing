@@ -34,7 +34,7 @@ class PreferencesForm extends React.Component {
                                 preferences:tags
                         })
                         .then(res => console.log(res))
-                        .catch(error => console.err(error));
+                        .catch(error => console.log(error));
                 }
                 this.props.history.push('/');
             }
@@ -51,11 +51,8 @@ class PreferencesForm extends React.Component {
                     rules: [{ required: false }],
                     })(
                     <Select mode="multiple" placeholder="Please select if you have any allergies">
-                        <Option value="peanuts free">Peanuts</Option>
-                        <Option value="lactose free">Lactose</Option>
-                        <Option value="eggs free">Eggs</Option>
-                        <Option value="wheat free">Wheat</Option>
-                        <Option value="soy free">Soy</Option>
+                        <Option value="peanut free">Peanuts</Option>
+                        <Option value="gluten free">Gluten</Option>
                     </Select>
                     )}
                 </Form.Item>
