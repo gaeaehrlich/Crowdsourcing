@@ -1,12 +1,12 @@
 from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand
-from ...Engine.collaborative import update_estimations
+from ...engine.collaborative import update_estimations
 
-from ...Engine.EatWith import choose_restaurant
-from ...Engine.initialization import initialize, create_estimations, calculate_all_distance
-from ...Engine.search import is_legal_dish, search_dishes
+from ...engine.eat_with import choose_restaurant
+from ...engine.initialization import initialize, create_estimations, calculate_all_distance
+from ...engine.search import is_legal_dish, search_dishes
 from ...models import Dish, Tag, City, CityArea, TagDistances
-from ...Engine.collaborative import create_users_distances
+from ...engine.collaborative import create_users_distances
 import numpy as np
 
 
