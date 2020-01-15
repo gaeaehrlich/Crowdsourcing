@@ -49,7 +49,7 @@ class UserGiftsList extends React.Component {
 
         return (
             <div>
-                <h3>Reviews level:</h3>
+                <h3>Your level: {this.state.level}</h3>
                 <br/>
               <Steps>
                 <Step status={ProgressBarStatus("Beginner")} title="Beginner" icon={<Icon type="user" />} />

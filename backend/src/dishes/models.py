@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator, MinLengthValidator
 import datetime
 from django.db import models
+from django.db.models import Sum
 
 
 class Tag(models.Model):
@@ -56,13 +57,11 @@ class Gift(models.Model):
 
 class Profile(models.Model):
     user = models.CharField(primary_key=True, max_length=40, validators=[MinLengthValidator(40)], unique=True)
-    level = models.IntegerField(
-        default=0,
-        validators=[
-            MaxValueValidator(100),
-            MinValueValidator(1)
-        ]
-    )
+
+    @property
+    def level(self):
+        return Review.objects.filter(author_token=self.user).aggregate(Sum('likes'))["likes__sum"]
+
     likes = models.ManyToManyField(Review, related_name="posts_liked", blank=True)
     gifts = models.ManyToManyField(Gift, related_name="posts_liked", blank=True)
     searches = models.ManyToManyField(Dish, related_name='%(class)s', blank=True)
