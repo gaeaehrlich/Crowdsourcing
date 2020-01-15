@@ -68,7 +68,7 @@ def update_estimation(cell):
     user = cell.user
     dish = cell.dish
     neighbors = knn(user, dish)
-    if len(neighbors > 0):
+    if len(neighbors) > 0:
         cell.estimate = averaged_mean(user, dish, neighbors)
     cell.last_update = timezone.now()
     cell.save()
@@ -76,7 +76,7 @@ def update_estimation(cell):
 
 # todo: only update for users that ONE OF THEIR KNN CHANGED (RATED A DISH LATELY)?
 def update_estimations(days = 0):
-    t = datetime.now() - timedelta(days=days)
+    t = timezone.now() - timedelta(days=days)
     old_cells = Estimation.objects.filter(last_update__lt=t)
     for cell in old_cells:
         update_estimation(cell)
