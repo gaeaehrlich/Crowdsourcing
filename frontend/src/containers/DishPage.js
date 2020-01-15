@@ -22,6 +22,15 @@ class DishPage extends React.Component {
         visible: false,
     };
 
+    fetchReviews = (dishID) => {
+        axios.get(`http://127.0.0.1:8000/api/dishreviews/${dishID}`).then(res => {
+            console.log(res.data);
+            this.setState({
+                reviews: res.data,
+            });
+        });
+    };
+
     componentDidMount() {
         const dishID = this.props.match.params.dishID;
         this.setState({
@@ -37,14 +46,9 @@ class DishPage extends React.Component {
                 //constraints: res.data.constraints
             });
         });
-        axios.get(`http://127.0.0.1:8000/api/dishreviews/${dishID}`).then(res => {
-            console.log(res.data);
-            this.setState({
-                reviews: res.data,
-            });
-        });
-
+        this.fetchReviews(dishID);
     };
+
 
     showDrawer = () => {
         this.setState({
@@ -117,7 +121,7 @@ class DishPage extends React.Component {
                     </div>
                 </Drawer>
 
-                <Reviews data={this.state.reviews} token={this.props.token}/>
+                <Reviews data={this.state.reviews} token={this.props.token} username={this.props.username}/>
             </div>
         )
     }
@@ -125,10 +129,10 @@ class DishPage extends React.Component {
 
 
 const mapStateToProps = state => {
-  return {
-    isAuthenticated: state.token !== null,
-    token: state.token
-  }
+    return {
+        isAuthenticated: state.token !== null,
+        token: state.token
+    }
 };
 
 export default connect(mapStateToProps)(DishPage);

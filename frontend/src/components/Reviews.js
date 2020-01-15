@@ -1,16 +1,6 @@
 import React from "react";
-import { List, Icon, Rate, Button } from 'antd';
-import {connect} from "react-redux";
+import { List, Rate, Button } from 'antd';
 import axios from "axios";
-
-
-const IconText = ({ type, text }) => (
-  <span>
-    <Icon type={type} style={{ marginRight: 8 }} />
-    {text}
-  </span>
-);
-
 
 class Reviews extends React.Component {
 
@@ -18,21 +8,23 @@ class Reviews extends React.Component {
         likes: []
     };
 
-    handleLike = (authorToken, reviewID, currentLikes) => {
+    handleLike = async (authorToken, reviewID, currentLikes) => {
         if (this.props.token !== authorToken) {
-            axios.get(`http://127.0.0.1:8000/api/user/${this.props.token}/`).then(res => {
+            await axios.get(`http://127.0.0.1:8000/api/user/${this.props.token}/`).then(res => {
                 this.setState({
                     likes: res.data.likes
                 });
-            });
+            })
+            .catch(error => console.log(error));
 
-            axios.put(`http://127.0.0.1:8000/api/updateuser/${this.props.token}/`, {
+            console.log([...this.state.likes, reviewID]);
+            await axios.put(`http://127.0.0.1:8000/api/updateuser/${this.props.token}/`, {
                 likes: [...this.state.likes, reviewID]
             })
             .then(res => console.log(res))
             .catch(error => console.log(error));
 
-            axios.put(`http://127.0.0.1:8000/api/updatereviews/${reviewID}/`, {
+            await axios.put(`http://127.0.0.1:8000/api/updatereviews/${reviewID}/`, {
                 likes: currentLikes + 1
             })
             .then(res => console.log(res))
@@ -41,7 +33,6 @@ class Reviews extends React.Component {
     };
 
     render() {
-        console.log(this.props.token);
         return (
             <List
                 itemLayout="vertical"
@@ -56,12 +47,6 @@ class Reviews extends React.Component {
                 renderItem={item => (
                     <List.Item
                         key={item.title}
-                        actions={[
-                            //<div>By: {item.username}</div>, add username to Review!!!!!!!!!!!!!
-                            <Rate disabled defaultValue={item.stars} />,
-                            <Button onClick={this.handleLike(item.author, item.id, item.likes)} shape="circle" icon="like" />,
-                            //<IconText onClick={this.handleLike(item.author, item.id, item.likes)} type="like-o" text={item.likes} key="list-vertical-like-o"/>,
-                        ]}
                         extra={
                             <img
                                 width={272}
@@ -75,6 +60,11 @@ class Reviews extends React.Component {
                             description={item.description}
                         />
                         {item.content}
+                        <div>
+                            <div>By: {item.author_username}</div>
+                            <Rate disabled defaultValue={item.stars} />
+                            <Button onClick={ () => this.handleLike(item.author_token, item.id, item.likes)} shape="circle" icon="like" />
+                        </div>
                     </List.Item>
                 )}
             />

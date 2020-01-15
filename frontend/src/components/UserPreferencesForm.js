@@ -12,11 +12,6 @@ class PreferencesForm extends React.Component {
                 const token = localStorage.getItem('token');
 
                 let tags = values['select-multiple'].concat(values['checkbox-group']);
-                let preferences = [];
-                tags.map(tag => {
-                    preferences.push({"title" : tag})
-                });
-                console.log(preferences);
 
                 switch (requestType) {
                     case 'post':
@@ -31,7 +26,7 @@ class PreferencesForm extends React.Component {
                         .catch(error => console.log(error.response));
                     case 'put':
                         axios.put(`http://127.0.0.1:8000/api/updateuser/${token}/`, {
-                                preferences:tags
+                                preferences: tags
                         })
                         .then(res => console.log(res))
                         .catch(error => console.log(error));
