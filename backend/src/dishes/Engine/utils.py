@@ -72,8 +72,8 @@ def create_tag_distances():
 
 
 def create_specific_distances():
-    level0 = Tag.objects.filter(title='All')
-    level1 = Tag.objects.filter(parent_id='37')
+    #level1 = [Tag.objects.get(title='American')]+[Tag.objects.get(title='Asian')]+[Tag.objects.get(title='General Food')]+\
+    #        [Tag.objects.get(title='Middle East')]+[Tag.objects.get(title='European')]+[Tag.objects.get(title='Deserts')]
     middle_east_cat = Tag.objects.filter(parent_id='22')
     eropean_cat = Tag.objects.filter(parent_id='36')
     general_cat = Tag.objects.filter(parent_id='19')
@@ -85,91 +85,78 @@ def create_specific_distances():
     japanease_food = Tag.objects.filter(parent_id='9')
     chainese_food = Tag.objects.filter(parent_id='10')
 
-    # All with itsels:
-    TagDistances.objects.create(col=level0[0], row=level0[0], distance=0)
-    # All to its children and reverse:
-    for tag in level1:
-        TagDistances.objects.create(col=tag, row=level0[0], distance=3)
-        TagDistances.objects.create(col=level0[0], row=tag, distance=0)
+
     # distances between level 2 objects
-    for tag1 in level1:
-        for tag2 in level1:
-            if tag1 == tag2:
-                TagDistances.objects.create(col=tag1, row=tag2, distance=0)
-            else:
-                TagDistances.objects.create(col=tag1, row=tag2, distance=3)
+    # for tag1 in level1:
+    #    for tag2 in level1:
+     #       if not tag1 == tag2:
+     #           TagDistances.objects.create(col=tag1, row=tag2, distance=3)
 
     # middle east tags
-    middle_east = Tag.objects.get(title='Middle Eeast')
-    TagDistances.objects.create(col=middle_east, row=middle_east, distance=0)
+    middle_east = Tag.objects.get(title='Middle East')
     for tag in middle_east_cat:
-        TagDistances.objects.create(col=tag, row=middle_east, distance=2)
+        TagDistances.objects.create(col=middle_east, row=tag, distance=2)
     greek = Tag.objects.get(title='Greek')
     for tag1 in greek_food:
-        TagDistances.objects.create(col=tag1, row=greek, distance=1)
-        TagDistances.objects.create(col=tag1, row=tag1, distance=0)
+        TagDistances.objects.create(col=greek, row=tag1, distance=1)
         for tag2 in greek_food:
-            TagDistances.objects.create(col=tag1, row=tag2, distance=1)
+            if not tag1 == tag2:
+                TagDistances.objects.create(col=tag1, row=tag2, distance=1)
 
     # Ero tags
-    ero = Tag.objects.get(title='Europenian')
-    TagDistances.objects.create(col=ero, row=ero, distance=0)
-    for tag in eropean_cat:
-        TagDistances.objects.create(col=tag, row=ero, distance=2)
+    ero = Tag.objects.get(title='European')
+    for tag in list(eropean_cat)+list(italian_food):
+        TagDistances.objects.create(col=ero, row=tag, distance=2)
     italy = Tag.objects.get(title='Italian')
     for tag1 in italian_food:
-        TagDistances.objects.create(col=tag1, row=italy, distance=1)
-        TagDistances.objects.create(col=tag1, row=tag1, distance=0)
+        TagDistances.objects.create(col=italy, row=tag1, distance=1)
         for tag2 in italian_food:
-            TagDistances.objects.create(col=tag1, row=tag2, distance=1)
+            if not tag1 == tag2:
+                TagDistances.objects.create(col=tag1, row=tag2, distance=1)
 
     # General tags
     general = Tag.objects.get(title='General Food')
-    TagDistances.objects.create(col=general, row=general, distance=0)
     for tag1 in general_cat:
-        TagDistances.objects.create(col=tag1, row=general, distance=2)
-        TagDistances.objects.create(col=tag1, row=tag1, distance=0)
+        TagDistances.objects.create(col=general, row=tag1, distance=2)
         for tag2 in general_cat:
-            TagDistances.objects.create(col=tag1, row=tag2, distance=1)
+            if not tag1 == tag2:
+                TagDistances.objects.create(col=tag1, row=tag2, distance=1)
 
     # American tags
     american = Tag.objects.get(title='American')
-    TagDistances.objects.create(col=american, row=american, distance=0)
     for tag1 in american_cat:
-        TagDistances.objects.create(col=tag1, row=american, distance=2)
-        TagDistances.objects.create(col=tag1, row=tag1, distance=0)
+        TagDistances.objects.create(col=american, row=tag1, distance=2)
         for tag2 in american_cat:
-            TagDistances.objects.create(col=tag1, row=tag2, distance=1)
+            if not tag1 == tag2:
+                TagDistances.objects.create(col=tag1, row=tag2, distance=1)
 
     # Asian tags:
     asian = Tag.objects.get(title='Asian')
-    TagDistances.objects.create(col=asian, row=asian, distance=0)
     for tag in asian_cats:
-        TagDistances.objects.create(col=tag, row=asian, distance=2)
+        TagDistances.objects.create(col=asian, row=tag, distance=2)
 
     japan = Tag.objects.get(title='Japanese')
     for tag1 in japanease_food:
-        TagDistances.objects.create(col=tag1, row=japan, distance=1)
-        TagDistances.objects.create(col=tag1, row=tag1, distance=0)
+        TagDistances.objects.create(col=japan, row=tag1, distance=1)
         for tag2 in japanease_food:
-            TagDistances.objects.create(col=tag1, row=tag2, distance=1)
+            if not tag1 == tag2:
+                TagDistances.objects.create(col=tag1, row=tag2, distance=1)
 
     chaina = Tag.objects.get(title='Chainese')
     for tag1 in chainese_food:
-        TagDistances.objects.create(col=tag1, row=chaina, distance=1)
-        TagDistances.objects.create(col=tag1, row=tag1, distance=0)
+        TagDistances.objects.create(col=chaina, row=tag1, distance=1)
         for tag2 in chainese_food:
-            TagDistances.objects.create(col=tag1, row=tag2, distance=1)
+            if not tag1 == tag2:
+                TagDistances.objects.create(col=tag1, row=tag2, distance=1)
 
 
     # Deserts tags
     Desert = Tag.objects.get(title='Deserts')
-    TagDistances.objects.create(col=general, row=Desert, distance=0)
     for tag1 in deserts:
-        TagDistances.objects.create(col=tag1, row=Desert, distance=2)
-        TagDistances.objects.create(col=tag1, row=tag1, distance=0)
+        TagDistances.objects.create(col=Desert, row=tag1, distance=1)
         for tag2 in deserts:
-            TagDistances.objects.create(col=tag1, row=tag2, distance=1)
+            if not tag1 == tag2:
+                TagDistances.objects.create(col=tag1, row=tag2, distance=1)
 
 def create_another_tags_dists():
     middle_east_cat = Tag.objects.filter(parent_id='22')
@@ -186,14 +173,14 @@ def create_another_tags_dists():
     all_tags = Tag.objects.all()
 
     # middle east subtree
-    middle_east_subtree = [Tag.objects.get(title='Middle Eeast')]+list(middle_east_cat)+list(greek_food)
+    middle_east_subtree = [Tag.objects.get(title='Middle East')]+list(middle_east_cat)+list(greek_food)
     for tag_middle in middle_east_subtree:
         for gen_tag in all_tags:
             if gen_tag not in middle_east_subtree:
                 TagDistances.objects.create(col=tag_middle, row=gen_tag, distance=3)
 
     # Ero subtree
-    Ero_subtree = [Tag.objects.get(title='Europenian')]+list(eropean_cat)+list(italian_food)
+    Ero_subtree = [Tag.objects.get(title='European')]+list(eropean_cat)+list(italian_food)
     for tag_ero in Ero_subtree:
         for gen_tag in all_tags:
             if gen_tag not in Ero_subtree:
@@ -210,7 +197,7 @@ def create_another_tags_dists():
     American_subtree = [Tag.objects.get(title='American')]+list(american_cat)
     for American_tag in American_subtree:
         for gen_tag in all_tags:
-            if gen_tag not in General_subtree:
+            if gen_tag not in American_subtree:
                 TagDistances.objects.create(col=American_tag, row=gen_tag, distance=3)
 
 
@@ -225,5 +212,15 @@ def create_another_tags_dists():
     Desert_subtree = [Tag.objects.get(title='Deserts')]+list(deserts)
     for Desert_tag in Desert_subtree:
         for gen_tag in all_tags:
-            if gen_tag not in General_subtree:
+            if gen_tag not in Desert_subtree:
                 TagDistances.objects.create(col=Desert_tag, row=gen_tag, distance=3)
+
+def check():
+    tags = Tag.objects.all()
+    for tag1 in tags:
+        for tag2 in tags:
+            print(tag1)
+            print(tag2)
+            # print(TagDistances.objects.filter(col=tag1, row=tag2))
+            TagDistances.objects.get(col=tag1, row=tag2)
+    return None
