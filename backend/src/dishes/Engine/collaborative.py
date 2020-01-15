@@ -1,7 +1,7 @@
 from .utils import averaged_mean, get_dishes, get_stars, knn
 from ..models import DistanceMatrix, Review, Estimation, Dish
 from django.contrib.auth.models import User
-from datetime import datetime, timedelta
+from datetime import timedelta
 from math import sqrt
 import numpy as np
 from django.utils import timezone
@@ -74,8 +74,7 @@ def update_estimation(cell):
     cell.save()
 
 
-# todo: only update for users that ONE OF THEIR KNN CHANGED (RATED A DISH LATELY)?
-def update_estimations(days = 0):
+def update_estimations(days = 1):
     t = timezone.now() - timedelta(days=days)
     old_cells = Estimation.objects.filter(last_update__lt=t)
     for cell in old_cells:

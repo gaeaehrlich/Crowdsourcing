@@ -61,10 +61,3 @@ def k_multi_thread(target, args, k = 5):
     t = threading.Thread(target=target, args=args)
     t.start()
     t.join()
-
-
-def create_tag_distances():
-    for tag in Tag.objects.all():
-        children = tag.children.all()
-        for child in children:
-            TagDistances.objects.create(child, tag, 0)
