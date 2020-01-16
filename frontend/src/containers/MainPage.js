@@ -7,6 +7,8 @@ import { Row, Col } from 'antd';
 import {connect} from "react-redux";
 import logo from "../logo.png";
 import Reminder from "../components/Reminder";
+import Dishes from "../components/Dishes";
+
 
 const { Meta } = Card;
 const { Title } = Typography;
@@ -211,34 +213,7 @@ class MainPage extends React.Component {
                                 </Form>
                 </Row>
                         <Row>
-                            <List
-                                itemLayout="inline"
-                                grid={{ gutter: 16, column: 4 }}
-                                dataSource={this.state.dishes}
-                                // test={str.concat("http://127.0.0.1:3000/dish/", this.state.rest_id)}
-                                renderItem={dish => (
-                                    <List.Item>
-                                        <Card
-                                            style={{ width: 300 }}
-                                            cover={
-                                                <a href={'http://127.0.0.1:3000/dish/'+dish.id}>
-                                                    <img
-                                                        alt="https://live.staticflickr.com/2671/3810412617_d912cd013d_b.jpg"
-                                                        src={this.dishToPicLocation(dish.title)}
-                                                        width="300"
-                                                    />
-
-                                                </a>
-                                            }
-                                        >
-                                            <Meta
-                                                title={dish.title}
-                                                description={dish.content}
-                                            />
-                                        </Card>
-                                    </List.Item>
-                                )}
-                            />
+                            <Dishes data={this.state.dishes}/>
                         </Row>
                     </dom>
                 }
