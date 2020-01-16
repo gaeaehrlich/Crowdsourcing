@@ -60,6 +60,12 @@ class Reviews extends React.Component {
         }
     };
 
+    dishToPicLocation = name => {
+        let out;
+        out = name.replace(/ /g, '_');
+        return 'http://127.0.0.1:8000/api/pic/'+out;
+    };
+
     render() {
         return (
             <List
@@ -75,12 +81,12 @@ class Reviews extends React.Component {
                 renderItem={item => (
                     <List.Item
                         key={item.title}
-                        extra={
+                        extra={item.photo_name?
                             <img
                                 width={272}
                                 alt="logo"
-                                src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
-                            />
+                                src={this.dishToPicLocation(item.photo_name)}
+                            />: null
                         }
                     >
                         <List.Item.Meta

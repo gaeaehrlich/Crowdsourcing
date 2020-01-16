@@ -14,7 +14,7 @@ class ReviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Review
-        fields = ('id', 'author_token', 'author_username', 'dish', 'description', 'stars', 'is_anonymous', 'likes')
+        fields = ('id', 'author_token', 'author_username', 'dish', 'description', 'stars', 'is_anonymous', 'likes', 'photo_name')
         # fields = '__all__'
         depth = 2
 
