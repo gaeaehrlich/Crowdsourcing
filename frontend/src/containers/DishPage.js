@@ -20,6 +20,7 @@ class DishPage extends React.Component {
         tags:[],
         reviews: [],
         visible: false,
+        rest_id: null
     };
 
     fetchReviews = (dishID) => {
@@ -41,9 +42,9 @@ class DishPage extends React.Component {
             this.setState({
                 dish_name: res.data.title,
                 restaurant_name: res.data.restaurant.name,
+                rest_id: res.data.restaurant.id,
                 price: res.data.price,
-                //tags: res.data.tags,
-                //constraints: res.data.constraints
+                tags: res.data.tags.map(tag=>(tag['title'])),
             });
         });
         this.fetchReviews(dishID);
@@ -63,31 +64,58 @@ class DishPage extends React.Component {
 
     };
 
+    dishToPicLocation = name => {
+        let out;
+        out = name.replace(/ /g, '_');
+        return 'http://127.0.0.1:8000/api/pic/'+out;
+    };
+
 
     render() {
         return (
             <div>
+
                 <Row>
-                    <Col span={12}>
-                        <Title level={2}>
-                            {this.state.dish_name}
+                    <Col span={16}>
+                        <Row>
+                            <Col span={16}>
+                                <Title level={2}>
+                                {this.state.dish_name}
+                            </Title>
+                            </Col>
+                            <Col span={8}>
+                                <Title level={3}>
+                            {this.state.price} ₪
                         </Title>
-                        <Title level={3}>
-                            {this.state.restaurant_name}
-                        </Title>
-                        <h6 style={{marginRight: 0, display: 'inline'}}>Tags:</h6>
-                        <div>
-                            {this.state.tags.map((tag) =>
-                                <Tag>{tag}</Tag>
-                            )}
-                        </div>
+                            </Col>
+
+                        </Row>
+                        <Row>
+                            <Title level={3}>
+                                <a href={'http://127.0.0.1:3000/rest/'+this.state.rest_id}>
+                                {this.state.restaurant_name}
+                            </a>
+                            </Title>
+                        </Row>
+                        <Row>
+                            <h6 style={{marginRight: 0, display: 'inline'}}>Tags:</h6>
+                            <div>
+                                {this.state.tags.map((tag) =>
+                                    <Tag>{tag}</Tag>
+                                )}
+                            </div>
+                        </Row>
                     </Col>
-                    <Col span={12}>
-                        <Title level={3}>
-                            {this.state.price}
-                        </Title>
+                    <Col span={8}>
+                        <img
+                            alt="So good.."
+                            src={this.dishToPicLocation(this.state.dish_name)}
+                            width="300"
+                        />
                     </Col>
+
                 </Row>
+
 
                 <Button type="primary" onClick={this.showDrawer} style={{marginTop: 3}}>
                     <Icon type="plus"/> Add review
@@ -99,7 +127,7 @@ class DishPage extends React.Component {
                     visible={this.state.visible}
                     bodyStyle={{paddingBottom: 80}}
                 >
-                <ReviewForm dishID={this.state.dish_id} token={this.props.token}/>
+                    <ReviewForm dishID={this.state.dish_id} token={this.props.token}/>
                     <div
                         style={{
                             position: 'absolute',
@@ -112,12 +140,6 @@ class DishPage extends React.Component {
                             textAlign: 'right',
                         }}
                     >
-                        {/*<Button onClick={this.onClose} style={{ marginRight: 8 }}>*/}
-                        {/*    Cancel*/}
-                        {/*</Button>*/}
-                        {/*<Button onClick={this.onClose} type="primary">*/}
-                        {/*    Submit*/}
-                        {/*</Button>*/}
                     </div>
                 </Drawer>
 
