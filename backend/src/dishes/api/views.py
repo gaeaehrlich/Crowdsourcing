@@ -1,4 +1,5 @@
 from rest_framework.generics import ListAPIView, RetrieveAPIView
+from django.http import FileResponse, JsonResponse
 
 from ..models import Dish, Restaurant, Tag, CityArea
 from .serializers import DishSerializer, RestaurantSerializer, TagSerializer, CityAreaSerializer
@@ -28,3 +29,20 @@ class TagListView(ListAPIView):
 class CityAreaListView(ListAPIView):
     queryset = CityArea.objects.all()
     serializer_class = CityAreaSerializer
+
+def send_file(req, dish):
+    img = open('images/'+dish+'.jpg', 'rb')
+
+    response = FileResponse(img)
+
+    return response
+
+def search(req):
+    tags = req.GET['tags[]']
+    area = req.GET['area']
+    user = req.GET['user']
+
+    json = {'the new': {'name':'asd'}, 'afganit': {'name':'qwe'}}
+    response = JsonResponse(data=json)
+
+    return response

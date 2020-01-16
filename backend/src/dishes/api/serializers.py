@@ -1,8 +1,6 @@
 from rest_framework import serializers
 
-from ..models import Dish, Review, Restaurant, Gift, Tag, Profile, CityArea
-
-
+from ..models import Dish, Review, Restaurant, Gift, Tag, Profile, CityArea, Constraint
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
@@ -15,7 +13,7 @@ class DishSerializer(serializers.ModelSerializer):
     reviews = ReviewSerializer(read_only=True, many=True)
     class Meta:
         model = Dish
-        fields = ('id', 'title', 'content', 'price', 'restaurant', 'reviews')
+        fields = ('id', 'title', 'content', 'price', 'restaurant', 'reviews', 'tags', 'constraints')
         # fields = '__all__'
         depth=2
 
@@ -23,7 +21,7 @@ class DishSimpleSerializer(serializers.ModelSerializer):
     # test = serializers.RelatedField(source='restaurant', read_only=True)
     class Meta:
         model = Dish
-        fields = ('id', 'title', 'content',)
+        fields = ('id', 'title', 'content', 'price',)
         # fields = '__all__'
         depth=1
 
@@ -32,13 +30,13 @@ class RestaurantSerializer(serializers.ModelSerializer):
     dishes = DishSimpleSerializer(read_only=True, many=True)
     class Meta:
         model = Restaurant
-        fields = ('id', 'name', 'city_area', 'number', 'dishes')
+        fields = ('id', 'name', 'city', 'number', 'dishes')
         # fields = '__all__'
         depth=1
 
 
 class GiftSerializer(serializers.ModelSerializer):
-    restaurant = RestaurantSerializer()
+    restaurant = RestaurantSerializer(read_only=True, many=True)
 
     class Meta:
         model = Gift
@@ -48,19 +46,24 @@ class GiftSerializer(serializers.ModelSerializer):
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
-        fields = ('title',)
+        fields = '__all__'
+
+class ConstraintSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Constraint
+        fields = '__all__'
+
 
 class CityAreaSerializer(serializers.ModelSerializer):
     class Meta:
         model = CityArea
-        fields = ('name',)
-
+        fields = '__all__'
 
 class ProfileSerializer(serializers.ModelSerializer):
     likes = ReviewSerializer(read_only=True, many=True)
     gifts = GiftSerializer(read_only=True, many=True)
     searches = DishSerializer(read_only=True, many=True)
-    preferences = TagSerializer(read_only=True, many=True)
+    preferences = serializers.PrimaryKeyRelatedField(read_only=False, many=True, queryset=Tag.objects.all())
 
     class Meta:
         model = Profile
