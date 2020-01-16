@@ -65,6 +65,7 @@ class CityAreaSerializer(serializers.ModelSerializer):
         model = CityArea
         fields = '__all__'
 
+
 class ProfileSerializer(serializers.ModelSerializer):
     likes = serializers.PrimaryKeyRelatedField(read_only=False, many=True, queryset=Review.objects.all())
     gifts = GiftSerializer(read_only=True, many=True)
@@ -73,4 +74,4 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = ('user', 'level', 'likes', 'gifts', 'searches', 'preferences')
+        fields = ('user', 'username', 'level', 'likes', 'gifts', 'searches', 'preferences')

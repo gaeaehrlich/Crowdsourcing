@@ -20,6 +20,36 @@ class DishPage extends React.Component {
         tags:[],
         reviews: [],
         visible: false,
+        level: 1,
+        likes: [],
+        gifts: [],
+        searches: [],
+        preferences: []
+    };
+
+    updateUserSearch = (dishID) => {
+        axios.get(`http://127.0.0.1:8000/api/user/${this.props.token}/`)
+            .then(res => {
+            this.setState({
+                level: res.data.level,
+                likes: res.data.likes,
+                gifts: res.data.gifts,
+                searches: res.data.searches,
+                preferences: res.data.preferences
+            });
+            })
+            .catch(error => console.log(error));
+
+        axios.put(`http://127.0.0.1:8000/api/updateuser/${this.props.token}/`, {
+            user: this.props.token,
+            level: this.state.level,
+            likes: this.state.likes,
+            gifts: this.state.gifts,
+            searches: [...this.state.searches, dishID],
+            preferences: this.state.preferences
+        })
+            .then(res => console.log(res))
+            .catch(error => console.log(error));
     };
 
     fetchReviews = (dishID) => {
@@ -28,7 +58,7 @@ class DishPage extends React.Component {
             this.setState({
                 reviews: res.data,
             });
-        });
+        }).catch(error => console.log(error));
     };
 
     componentDidMount() {
@@ -45,7 +75,8 @@ class DishPage extends React.Component {
                 //tags: res.data.tags,
                 //constraints: res.data.constraints
             });
-        });
+        }).catch(error => console.log(error));
+        this.updateUserSearch(dishID);
         this.fetchReviews(dishID);
     };
 
@@ -112,16 +143,10 @@ class DishPage extends React.Component {
                             textAlign: 'right',
                         }}
                     >
-                        {/*<Button onClick={this.onClose} style={{ marginRight: 8 }}>*/}
-                        {/*    Cancel*/}
-                        {/*</Button>*/}
-                        {/*<Button onClick={this.onClose} type="primary">*/}
-                        {/*    Submit*/}
-                        {/*</Button>*/}
                     </div>
                 </Drawer>
 
-                <Reviews data={this.state.reviews} token={this.props.token} username={this.props.username}/>
+                <Reviews data={this.state.reviews} token={this.props.token}/>
             </div>
         )
     }

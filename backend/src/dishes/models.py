@@ -59,6 +59,7 @@ class Gift(models.Model):
 
 class Profile(models.Model):
     user = models.CharField(primary_key=True, max_length=40, validators=[MinLengthValidator(40)], unique=True)
+    username = models.CharField(max_length=40)
 
     @property
     def level(self):
