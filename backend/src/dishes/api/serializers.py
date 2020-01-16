@@ -35,14 +35,21 @@ class DishSimpleSerializer(serializers.ModelSerializer):
         # fields = '__all__'
         depth = 1
 
+
+class CityAreaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CityArea
+        fields = '__all__'
+
 class RestaurantSerializer(serializers.ModelSerializer):
-    # test = serializers.RelatedField(source='restaurant', read_only=True)
-    dishes = DishSimpleSerializer(read_only=True, many=True)
+    # Dish = serializers.RelatedField(source='Dish', read_only=True)
+    dish = DishSimpleSerializer(read_only=True, many=True)
+    # city_area = CityAreaSerializer(read_only=True, many=True)
     class Meta:
         model = Restaurant
-        fields = ('id', 'name', 'city', 'number', 'dishes')
+        fields = ('id', 'name', 'number', 'dish', 'street', 'city_area')
         # fields = '__all__'
-        depth=1
+        depth=2
 
 
 class GiftSerializer(serializers.ModelSerializer):
