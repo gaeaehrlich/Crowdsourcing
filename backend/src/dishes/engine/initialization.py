@@ -1,18 +1,12 @@
 from .utils import averaged_mean, knn
-from .collaborative import calculate_distance, add_empty_review_for_user
+from .collaborative import calculate_distance
 from django.contrib.auth.models import User
-from ..models import Review, DistanceMatrix, Estimation, Tag, TagDistances
+from ..models import Review, DistanceMatrix, Estimation
 
 
 def initialize():
-    add_empty_reviews()
     calculate_all_distance()
     create_estimations()
-
-
-def add_empty_reviews():
-    for user in User.objects.all():
-        add_empty_review_for_user(user)
 
 
 def calculate_all_distance():

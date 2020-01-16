@@ -1,4 +1,4 @@
-from .utils import averaged_mean, get_dishes, get_stars, knn
+from .utils import averaged_mean, get_dishes, get_stars, knn, create_fake_stars_list
 from ..models import DistanceMatrix, Review, Estimation, Dish
 from django.contrib.auth.models import User
 from datetime import timedelta
@@ -9,7 +9,7 @@ from django.utils import timezone
 
 def calculate_distance(user1_reviews, user2_reviews):
     user1_stars = np.array(get_stars(user1_reviews.order_by('dish')))
-    user2_stars = np.array(get_stars(user2_reviews.order_by('dish')))
+    user2_stars = np.array(create_fake_stars_list(user1_reviews, user2_reviews.order_by('dish')))
     return np.linalg.norm(user1_stars - user2_stars)
 
 
@@ -21,7 +21,8 @@ def create_users_distances(user1, user2):
     user1_review = Review.objects.filter(author=user1)
     user2_review = Review.objects.filter(author=user2)
 
-    # reviews without stars = 0
+    # reviews without stars = 0 TODO: DONT NEED POSITIVE
+
     user1_review_positive = user1_review.filter(stars__gt=0)
     user2_review_positive = user2_review.filter(stars__gt=0)
 
@@ -92,13 +93,3 @@ def add_estimations_for_new_user(user):
         else:
             cell.estimate = stars
             cell.save()
-
-
-def add_empty_review_for_user(user):
-    ranked_dishes = Dish.objects.filter(review__author=user,
-                                        review__stars__gt=0)
-
-    for dish in Dish.objects.all():
-        if dish not in ranked_dishes:
-            Review.objects.create(author=user,
-                                  dish=dish)

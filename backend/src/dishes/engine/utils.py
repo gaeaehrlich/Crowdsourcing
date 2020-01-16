@@ -56,6 +56,19 @@ def knn(user, dish, k = 5):
                                                   row__in=valid_neighbors).order_by('distance')[:k])
 
 
+def create_fake_stars_list(user_reviews, other_reviews):
+    array = []
+    i = 0
+    for j in range(len(user_reviews)):
+        if i < len(other_reviews) and other_reviews[i].dish == user_reviews[j].dish:
+            array.append(other_reviews[i].stars)
+            i += 1
+        else:
+            array.append(0)
+
+    return array
+
+
 # TODO: Orin - decide later where to use
 def k_multi_thread(target, args, k = 5):
     t = threading.Thread(target=target, args=args)

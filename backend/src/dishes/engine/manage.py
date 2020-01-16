@@ -1,4 +1,4 @@
-from .collaborative import add_empty_review_for_user, add_distances_for_new_user, update_distances_for_new_review
+from .collaborative import add_distances_for_new_user, update_distances_for_new_review
 from .search import search_dishes
 from .eat_with import choose_restaurant
 from ..models import User, Dish, CityArea, Review, Tag
@@ -6,7 +6,6 @@ from ..models import User, Dish, CityArea, Review, Tag
 
 def init__user(username): # TODO: make sure
     user = User.objects.get(username=username)
-    add_empty_review_for_user(user)
     add_distances_for_new_user(user)
 
 def init__review(review_id): # TODO: make sure
