@@ -22,7 +22,8 @@ class MainPage extends React.Component {
         possible_areas: [],
         areas: [],
         reviews: [],
-        searches: []
+        searches: [],
+        user_name: null,
     };
 
     fetchUser = () => {
@@ -39,22 +40,54 @@ class MainPage extends React.Component {
         });
     };
 
-    componentDidMount() {
-        const dishID = this.props.match.params.dishID;
-        this.fetchUser();
-        this.setState({
-            dish_id: dishID
+      setTags = obj => {
+        let temp;
+        axios.get(`http://127.0.0.1:8000/api/tag`).then(res => {
+            temp = res.data.map(tag=>tag['title']);
+            this.setState({
+                init_tags: temp
+            });
         });
-        axios.get(`http://127.0.0.1:8000/api/dish/${dishID}`).then(res => {
+    };
+
+    setCityAreas = obj => {
+        let temp;
+        axios.get(`http://127.0.0.1:8000/api/cityarea`).then(res => {
+            temp = res.data.map(tag=>tag['name']);
+            this.setState({
+                init_areas: temp
+            });
+        });
+    };
+
+
+            dishToPicLocation = name => {
+        let out;
+        out = name.replace(/ /g, '_');
+        return 'http://127.0.0.1:8000/api/pic/'+out;
+    };
+
+    setInitDishes = stam => {
+        axios.get(`http://127.0.0.1:8000/api/dish/`).then(res => {
             console.log(res.data);
             this.setState({
-                dish_name: res.data.title,
-                restaurant_name: res.data.restaurant.name,
-                // address: res.data.restaurant.street.name,
-                price: res.data.price,
-                reviews: res.data.reviews,
+                dishes: res.data
 
             });
+        });
+    };
+
+    componentDidMount() {
+        const dishID = this.props.match.params.dishID;
+
+        this.fetchUser();
+        this.setTags();
+        this.setCityAreas();
+        this.setInitDishes();
+
+        this.setState({
+            dish_id: dishID,
+            user_name: localStorage.getItem('username'),
         });
     }
 
@@ -74,7 +107,7 @@ class MainPage extends React.Component {
 
     onSearchTag = searchText => {
         this.setState({
-            possible_tags: !searchText ? [] : this.state.init_tags.filter(tag => tag.startsWith(searchText)),
+            possible_tags: !searchText ? [] : this.state.init_tags.filter(tag => tag.toLowerCase().startsWith(searchText.toLowerCase())),
         });
     };
 
@@ -93,7 +126,20 @@ class MainPage extends React.Component {
 
     onSearchArea = searchText => {
         this.setState({
-            possible_areas: !searchText ? [] : this.state.init_areas.filter(area => area.startsWith(searchText)),
+            possible_areas: !searchText ? [] : this.state.init_areas.filter(area => area.toLowerCase().startsWith(searchText.toLowerCase())),
+        });
+    };
+
+      handleSubmit = e => {
+        e.preventDefault();
+        axios.get(`http://127.0.0.1:8000/api/search`, {
+            params: {
+                tags:['tag1', 'tag2'],
+                area: 'asd',
+                user_name: ''
+            }
+        }).then(res => {
+            console.log(res)
         });
     };
 
