@@ -98,8 +98,9 @@ def send_file(req, dish):
 
 def search(req):
     tags = req.GET['tags[]']
-    area = req.GET['area']
-    user = req.GET['user']
+    area = req.GET['area[]']
+    user_name = req.GET['user_name']
+    print(tags, area, user_name)
 
     json = {'the new': {'name':'asd'}, 'afganit': {'name':'qwe'}}
     response = JsonResponse(data=json)
