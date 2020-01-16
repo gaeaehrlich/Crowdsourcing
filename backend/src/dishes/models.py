@@ -7,6 +7,8 @@ from django.db import models
 from django.core.validators import MinLengthValidator
 from django.db.models import Sum
 
+from django.utils import timezone
+
 
 
 class Tag(models.Model):
@@ -32,6 +34,9 @@ class Dish(models.Model):
     title = models.CharField(max_length=120)
     content = models.TextField()
     restaurant = models.ForeignKey('Restaurant', related_name='%(class)s', on_delete=models.PROTECT)
+    constraints = models.ManyToManyField(Constraint, related_name="dishes", blank=True)
+    tags = models.ManyToManyField(Tag, related_name="%(class)s", blank=True)
+    price = models.IntegerField(default=0)
 
     def __str__(self):
         return self.title
@@ -57,10 +62,6 @@ class Gift(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     restaurant = models.ForeignKey('Restaurant', related_name='%(class)s', on_delete=models.PROTECT)
     description = models.CharField(max_length=500)
-
-
-class Tag(models.Model):
-    title = models.CharField(max_length=30, unique=True)
 
 
 class Profile(models.Model):
