@@ -1,9 +1,27 @@
 from django.urls import path
 
+from .views import (
+    UserReviewsListView,
+    UserDetailView,
+    UserCreateView,
+    UserUpdateView,
+    GiftListView,
+    ReviewCreateView,
+    DishReviewsListView,
+    ReviewUpdateView
+)
 from .views import DishesDetailView, DishesListView, RestaurantDetailView, RestaurantListView, \
     TagListView, CityAreaListView, send_file, search
 
 urlpatterns = [
+    path('updatereviews/<pk>/', ReviewUpdateView.as_view()),
+    path('userreviews/<pk>/', UserReviewsListView.as_view()),
+    path('dishreviews/<pk>/', DishReviewsListView.as_view()),
+    path('createreview/', ReviewCreateView.as_view()),
+    path('user/<pk>/', UserDetailView.as_view()),
+    path('createuser/', UserCreateView.as_view()),
+    path('updateuser/<pk>/', UserUpdateView.as_view()),
+    path('usergifts/<pk>/', GiftListView.as_view()),
     path('dish/', DishesListView.as_view()),
     path('dish/<pk>', DishesDetailView.as_view()),
     path('rest/', RestaurantListView.as_view()),

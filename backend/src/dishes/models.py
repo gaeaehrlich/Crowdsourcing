@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.contrib.auth.models import User
-from django.core.validators import MaxValueValidator, MinValueValidator, MinLengthValidator
+from django.core.validators import MaxValueValidator, MinValueValidator
 import datetime
 from django.db import models
 
@@ -33,34 +33,38 @@ class Dish(models.Model):
 
 
 class Review(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author_token = models.CharField(max_length=40, validators=[MinLengthValidator(40)])
+    author_username = models.CharField(max_length=40)
     dish = models.ForeignKey(Dish, related_name='reviews', on_delete=models.PROTECT, default=None)
     description = models.CharField(max_length=100, blank=True)
     stars = models.IntegerField(
         default=0,
         validators=[MaxValueValidator(5), MinValueValidator(0)]
     )
+    is_anonymous = models.BooleanField(default=False)
     likes = models.IntegerField(default=0)
 
     def __str__(self):
-        return " ".join(map(str, [self.dish, self.author]))
+        return " ".join(map(str, [self.dish, self.author_username]))
 
 
 class Gift(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    restaurant = models.ForeignKey('Restaurant', related_name='restaurant', on_delete=models.PROTECT)
+    restaurant = models.ForeignKey('Restaurant', related_name='%(class)s', on_delete=models.PROTECT)
     description = models.CharField(max_length=500)
+
+
+class Tag(models.Model):
+    title = models.CharField(max_length=30, unique=True)
 
 
 class Profile(models.Model):
     user = models.CharField(primary_key=True, max_length=40, validators=[MinLengthValidator(40)], unique=True)
-    level = models.IntegerField(
-        default=0,
-        validators=[
-            MaxValueValidator(100),
-            MinValueValidator(1)
-        ]
-    )
+
+    @property
+    def level(self):
+        return Review.objects.filter(author_token=self.user).aggregate(Sum('likes'))["likes__sum"]
+
     likes = models.ManyToManyField(Review, related_name="posts_liked", blank=True)
     gifts = models.ManyToManyField(Gift, related_name="posts_liked", blank=True)
     searches = models.ManyToManyField(Dish, related_name='%(class)s', blank=True)
@@ -68,6 +72,7 @@ class Profile(models.Model):
 
     def __str__(self):
         return " ".join(map(str, [self.user]))
+
 
 class City(models.Model):
     name = models.CharField(max_length=30, unique=True)
@@ -81,6 +86,7 @@ class CityArea(models.Model):
     city = models.ForeignKey(City, related_name='%(class)s', on_delete=models.PROTECT)
     def __str__(self):
         return " ".join(map(str, [self.name, self.city]))
+
 
 class Restaurant(models.Model):
     name = models.CharField(max_length=30)
@@ -98,6 +104,8 @@ class DistanceMatrix(models.Model):
     distance = models.FloatField()
 
 
+# add a field that tells us if the estimation is real or not
+# or even better - unite with Rank table!!!!!!!!!!!!!
 class UserDishMatrix(models.Model):
     dish = models.ForeignKey(Dish, related_name='%(class)s', on_delete=models.PROTECT)
     user = models.ForeignKey(User, related_name='%(class)s', on_delete=models.PROTECT)
@@ -113,13 +121,3 @@ class TagTag(models.Model):
 class DishTag(models.Model):
     dish = models.ForeignKey(Dish, related_name='%(class)s', on_delete=models.PROTECT)
     tag = models.ForeignKey(Tag, related_name='%(class)s', on_delete=models.PROTECT)
-
-
-class RestaurantTag(models.Model):
-    restaurant = models.ForeignKey(Restaurant, related_name='%(class)s', on_delete=models.PROTECT)
-    tag = models.ForeignKey(Tag, related_name='%(class)s', on_delete=models.PROTECT)
-
-
-class RestaurantArea(models.Model):
-    restaurant = models.ForeignKey(Restaurant, related_name='%(class)s', on_delete=models.PROTECT)
-    area = models.ForeignKey(CityArea, related_name='%(class)s', on_delete=models.PROTECT)
