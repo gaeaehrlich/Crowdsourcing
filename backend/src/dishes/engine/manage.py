@@ -7,12 +7,13 @@ from ..models import User, Dish, CityArea, Review, Tag
 def init__user(username): # TODO: make sure
     user = User.objects.get(username=username)
     add_distances_for_new_user(user)
+    add_estimations_for_new_user(user)
 
 def init__review(review_id): # TODO: make sure
     review = Review.objects.get(id=review_id)
     update_distances_for_new_review(review)
 
-def search(username, areaname, tagsid, lte, gte):
+def search(username, areaname, tagsid = [], lte = None, gte = None):
     user = User.objects.get(username=username)
     area = CityArea.objects.get(name=areaname)
     tags = [Tag.objects.get(id=tag_id) for tag_id in tagsid ]

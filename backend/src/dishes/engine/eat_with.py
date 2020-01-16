@@ -35,10 +35,9 @@ def cal_dish_loss(user, tags, dish):
 def cal_restaurant_loss(user, tags, restaurant):
 
     dishes = [dish for dish in restaurant.dish.all()
-              if is_legal_dish_constraints(dish, user)]
+              if is_legal_dish_constraints(dish, user.username)]
 
     if(len(dishes) == 0):
-        print('prob with', user, restaurant, '!')
         return None, float('inf')
 
     min_loss = cal_dish_loss(user, tags, dishes[0])
@@ -54,7 +53,7 @@ def cal_restaurant_loss(user, tags, restaurant):
 
 def choose_restaurant(requests, area):
 
-    restaurants = Restaurant.objects.filter(address__area=area)
+    restaurants = Restaurant.objects.filter(city_area=area)
     min_total_loss = float('inf') # later
     min_restaurant = None
     min_loss = []
