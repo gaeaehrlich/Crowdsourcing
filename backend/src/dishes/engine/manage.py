@@ -10,8 +10,8 @@ def init__user(username):
     add_estimations_for_new_user(user)
 
 
-def init__review(username, dish_title):
-    review = Review.objects.get(author_username=username, dish__title=dish_title)
+def init__review(username, dish_id):
+    review = Review.objects.get(author_username=username, dish__id=dish_id)
     update_distances_for_new_review(review)
 
 
