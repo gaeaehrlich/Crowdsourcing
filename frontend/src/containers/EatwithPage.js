@@ -4,6 +4,7 @@ import { Row, Col, AutoComplete} from 'antd';
 import { Form, Input, Icon, Button } from 'antd';
 import { Typography } from 'antd';
 import axios from "axios";
+import eatwith from "../EatWithLogo3.png";
 
 const { Title } = Typography;
 
@@ -230,7 +231,11 @@ class EatwithPage extends React.Component {
         ));
         return (
             <Form onSubmit={this.handleSubmit}>
-                <Title level={2}>Eat With</Title>
+                <div style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}><img src={eatwith}/></div>
                 <Form.Item >
 
                 </Form.Item>
