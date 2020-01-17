@@ -9,7 +9,7 @@ const Gifts = (props) => {
             renderItem={item => (
               <List.Item>
                 <List.Item.Meta
-                  title={<a>{item.restaurant.name}</a>}
+                  title={<a>{item.restaurant_name}</a>}
                   description={item.description}
                 />
               </List.Item>

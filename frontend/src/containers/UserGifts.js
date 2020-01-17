@@ -9,8 +9,11 @@ const { Step } = Steps;
 class UserGiftsList extends React.Component {
 
     state = {
-        gifts: [],
-        level: 10
+        gifts: [{restaurant_name: "girrafe1", description: "You get 20% off your next order!"},
+        {restaurant_name: "girrafe2", description: "You get 20% off your next order!"},
+        {restaurant_name: "girrafe3", description: "You get 20% off your next order!"},
+        {restaurant_name: "girrafe4", description: "You get 20% off your next order!"}],
+        level: 0
     };
 
 
@@ -34,22 +37,22 @@ class UserGiftsList extends React.Component {
     };
 
     componentDidMount() {
-        this.fetchGifts();
+        //this.fetchGifts();
         this.fetchUser();
     }
 
     render() {
         const ProgressBarStatus = (title) => {
-            if(title === "Beginner" && this.state.level >= 10) return "finish";
-            if(title === "Intermediate" && this.state.level >= 25) return "finish";
-            if(title === "Reliable" && this.state.level >= 75) return "finish";
-            if(title === "Critic" && this.state.level === 100) return "finish";
+            if(title === "Beginner" && this.state.level >= 2) return "finish";
+            if(title === "Intermediate" && this.state.level >= 3) return "finish";
+            if(title === "Reliable" && this.state.level >= 4) return "finish";
+            if(title === "Critic" && this.state.level === 5) return "finish";
             return "wait";
         };
 
         return (
             <div>
-                <h3>Your level: {this.state.level}</h3>
+                <h3>Your level: {this.state.level ? this.state.level : 0}</h3>
                 <br/>
               <Steps>
                 <Step status={ProgressBarStatus("Beginner")} title="Beginner" icon={<Icon type="user" />} />
@@ -59,7 +62,8 @@ class UserGiftsList extends React.Component {
               </Steps>
                 <br /><br/><br/>
                 <h3>Available gifts:</h3>
-            <Gifts data={this.state.gifts}/>
+                {this.state.level ? <Gifts data={this.state.gifts[this.state.level - 1]}/> : <h4>No available gifts. To
+                        get gifts you need to LEVEL UP! to do so you need to get likes on your reviews</h4>}
             </div>
         )
     }

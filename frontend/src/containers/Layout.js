@@ -47,8 +47,6 @@ class CustomLayout extends React.Component {
                             <Menu.Item key="3"><Link to={`/usergifts/${this.props.token}/`}>Available gifts</Link></Menu.Item>
                         </SubMenu>
 
-                        <SubMenu key="sub3" title={ <span><Icon type="form"/><span>Recommend</span></span>} />
-
                         <SubMenu key="sub4" title={ <span><Icon type="setting"/><span>Settings</span></span>} >
                             <Menu.Item key="9"><Link to={`/preferences/`}>Change my preferences</Link></Menu.Item>
                         </SubMenu>

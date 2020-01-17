@@ -119,28 +119,6 @@ class ReviewForm extends React.Component {
                         )}
                     </Form.Item>
                 </Row>
-                <Row>
-                    <Form.Item label="Upload">
-                        {getFieldDecorator('upload', {
-                            valuePropName: 'fileList',
-                            getValueFromEvent: this.normFile,
-                        })(
-                            <Upload
-                                name="avatar"
-                                listType="picture-card"
-                                className="avatar-uploader"
-                                showUploadList={false}
-                                // action="http://www.mocky.io/v2/5cc8019d300000980a055e76"
-                                action="http://127.0.0.1:8000/api/uploadphoto/"
-
-                                beforeUpload={beforeUpload}
-                                onChange={this.handleUploadChange}
-                            >
-                                {this.state.imageUrl ? <img src={this.state.imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
-                            </Upload>
-                        )}
-                    </Form.Item>
-                </Row>
                 <Row gutter={16}>
                     <Form.Item>
                         {getFieldDecorator('is_anonymous', {

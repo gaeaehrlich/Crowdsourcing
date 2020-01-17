@@ -39,7 +39,7 @@ class PreferencesForm extends React.Component {
                 console.log(tags);
 
                 axios.get(`http://127.0.0.1:8000/api/user/${token}/`).then(res => {
-                    if(this._isMounted) {
+                    if (this._isMounted) {
                         this.setState({
                             level: res.data.level,
                             likes: res.data.likes,
@@ -60,10 +60,13 @@ class PreferencesForm extends React.Component {
                 })
                     .then(res => {
                         console.log(res);
-                        if(requestType === 'post') this.props.history.push(`/signup/${3}`);
-                        else this.props.history.push('/');
                     })
                     .catch(error => console.log(error));
+
+                if (requestType === 'post') {
+                    this.props.history.push(`/signup/${3}`);
+                }
+                else this.props.history.push('/');
             }
         });
     };
