@@ -6,14 +6,13 @@ const { TextArea } = Input;
 
 class ReviewForm extends React.Component {
 
-    handleSubmit = (event, token, username, dishID) => {
+    handleSubmit = (event, token, dishID) => {
         event.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 const description = values['review_text'];
                 const stars = values['rating'];
                 const anonymous = values['is_anonymous'];
-                console.log(username);
                 return axios.post('http://127.0.0.1:8000/api/createreview/', {
                         author_token: token,
                         author_username: localStorage.getItem('username'),
@@ -35,7 +34,7 @@ class ReviewForm extends React.Component {
     render() {
         const {getFieldDecorator} = this.props.form;
         return (
-            <Form layout="vertical" onSubmit={(event) => this.handleSubmit(event, this.props.token, this.props.username, this.props.dishID)}>
+            <Form layout="vertical" onSubmit={(event) => this.handleSubmit(event, this.props.token, this.props.dishID)}>
 
                 <Row gutter={16}>
 

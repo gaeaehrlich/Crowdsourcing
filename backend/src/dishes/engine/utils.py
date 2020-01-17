@@ -8,8 +8,8 @@ def get_dishes(query_set):
     return list(map(lambda x: x.dish, query_set))
 
 
-def get_users(query_set):
-    return list(map(lambda x: x.user, query_set))
+def get_users_from_review(query_set):
+    return list(map(lambda x: User.objects.get(username=x.author_username), query_set))
 
 
 def get_stars(query_set):
@@ -36,9 +36,9 @@ def related(tag1, tag2):
     # tag1 is a son of tag2
     return tag1.tag_distances_from.get(row=tag2).distance == 0
 
-
+# every neighbors gave a review on the dish since all neighbors are from knn function
 def averaged_mean(user, dish, neighbors):
-    neighbor_to_stars = lambda neighbor: neighbor.review.get(dish=dish).stars
+    neighbor_to_stars = lambda neighbor: dish.reviews.get(author_username=neighbor.username).stars
     neighbor_to_distance = lambda neighbor: neighbor.user_distances_to.get(col=user).distance
 
     # the order of both lists is important
@@ -49,9 +49,7 @@ def averaged_mean(user, dish, neighbors):
 
 
 def knn(user, dish, k = 5):
-    valid_neighbors = User.objects.filter(review__dish=dish,
-                                          review__stars__gt=0).exclude(id=user.id)
-
+    valid_neighbors = get_users_from_review(dish.reviews.all())
     return get_rows(DistanceMatrix.objects.filter(col=user,
                                                   row__in=valid_neighbors).order_by('distance')[:k])
 

@@ -1,10 +1,14 @@
 import React from "react";
 import axios from 'axios';
+import { withRouter } from 'react-router-dom';
 import {Form, Select, Checkbox, Row, Col, Button} from 'antd';
+import {connect} from "react-redux";
 
 const { Option } = Select;
 
 class PreferencesForm extends React.Component {
+
+    _isMounted = false;
 
     state = {
         level: 1,
@@ -14,52 +18,52 @@ class PreferencesForm extends React.Component {
         preferences: []
     };
 
+    componentDidMount() {
+        this._isMounted = true;
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
+
     handleSubmit = (event, requestType) => {
         event.preventDefault();
         this.props.form.validateFields((err, values, token) => {
             if (!err) {
                 const token = localStorage.getItem('token');
+                const username = localStorage.getItem('username');
 
                 let tags = [];
-                if(typeof values['select-multiple'] != "undefined") tags = values['select-multiple'];
-                if(typeof values['checkbox-group'] != "undefined") tags = tags.concat(values['checkbox-group']);
+                if (typeof values['select-multiple'] != "undefined") tags = values['select-multiple'];
+                if (typeof values['checkbox-group'] != "undefined") tags = tags.concat(values['checkbox-group']);
                 console.log(tags);
 
-
-
-                switch (requestType) {
-                    case 'post':
-                        return axios.post('http://127.0.0.1:8000/api/createuser/', {
-                                user: token,
-                                level: 1,
-                                likes: [],
-                                gifts: [],
-                                searches: [],
-                                preferences: tags
-                        }).then(res => console.log(res))
-                        .catch(error => console.log(error.response));
-                    case 'put':
-                         axios.get(`http://127.0.0.1:8000/api/user/${token}/`).then(res => {
-                             this.setState({
-                                 level: res.data.level,
-                                 likes: res.data.likes,
-                                 gifts: res.data.gifts,
-                                 searches: res.data.searches,
-                                 preferences: res.data.preferences
-                             });
-                         });
-                        return axios.put(`http://127.0.0.1:8000/api/updateuser/${token}/`, {
-                            user: token,
-                            level: this.state.level,
-                            likes: this.state.likes,
-                            gifts: this.state.gifts,
-                            searches: this.state.searches,
-                            preferences: tags
-                        })
-                        .then(res => console.log(res))
-                        .catch(error => console.log(error));
-                }
-                //this.props.history.push('/');
+                axios.get(`http://127.0.0.1:8000/api/user/${token}/`).then(res => {
+                    if(this._isMounted) {
+                        this.setState({
+                            level: res.data.level,
+                            likes: res.data.likes,
+                            gifts: res.data.gifts,
+                            searches: res.data.searches,
+                            preferences: res.data.preferences
+                        });
+                    }
+                });
+                axios.put(`http://127.0.0.1:8000/api/updateuser/${token}/`, {
+                    user: token,
+                    username: username,
+                    level: this.state.level,
+                    likes: this.state.likes,
+                    gifts: this.state.gifts,
+                    searches: this.state.searches,
+                    preferences: tags
+                })
+                    .then(res => {
+                        console.log(res);
+                        if(requestType === 'post') this.props.history.push(`/signup/${3}`);
+                        else this.props.history.push('/');
+                    })
+                    .catch(error => console.log(error));
             }
         });
     };
@@ -105,4 +109,4 @@ class PreferencesForm extends React.Component {
 
 const WrappedForm = Form.create()(PreferencesForm);
 
-export default WrappedForm;
+export default withRouter(WrappedForm);

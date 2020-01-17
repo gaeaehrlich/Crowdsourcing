@@ -1,7 +1,7 @@
 from .utils import averaged_mean, knn
 from .collaborative import calculate_distance
 from django.contrib.auth.models import User
-from ..models import Review, DistanceMatrix, Estimation
+from ..models import Review, DistanceMatrix, Estimation, Dish
 
 
 def initialize():
@@ -15,9 +15,8 @@ def calculate_all_distance():
     for user1 in all_users:
         for user2 in all_users:
             if user1 != user2:
-                user1_reviews = Review.objects.filter(author=user1,
-                                                      stars__gt=0)
-                user2_reviews = Review.objects.filter(author=user2,
+                user1_reviews = Review.objects.filter(author_username=user1.username)
+                user2_reviews = Review.objects.filter(author_username=user2.username,
                                                       dish__in=user1_reviews
                                                       .values_list('dish', flat=True))
 
@@ -31,13 +30,17 @@ def calculate_all_distance():
 
 def create_estimation_for_user(user):
 
-    for review in Review.objects.filter(author=user):
-        dish = review.dish
-        estimate = review.stars
-        if estimate == 0:
+    for dish in Dish.objects.all():
+        estimate = 0
+        if Review.objects.filter(author_username=user.username,
+                                 dish=dish).exists():
+            estimate = Review.objects.get(author_username=user.username,
+                                          dish=dish).stars
+        else:
             neighbors = knn(user, dish)
             if len(neighbors) != 0: # only if no user reviewed this dish!
-                estimate =  averaged_mean(user, dish, neighbors)
+                estimate = averaged_mean(user, dish, neighbors)
+
         Estimation.objects.create(dish=dish,
                                   user=user,
                                   estimate=estimate)
