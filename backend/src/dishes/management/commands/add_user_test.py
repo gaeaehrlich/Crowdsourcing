@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand
-from ...Engine.Utils import add_empty_ranks_for_user
+from ...engine.utils import add_empty_ranks_for_user
 
 
 class Command(BaseCommand):

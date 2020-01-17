@@ -7,10 +7,17 @@ from django.db import models
 from django.core.validators import MinLengthValidator
 from django.db.models import Sum
 
+from django.utils import timezone
+
 
 
 class Tag(models.Model):
     title = models.CharField(max_length=30, unique=True)
+    parent = models.ForeignKey('Tag',
+                               related_name='children',
+                               on_delete=models.PROTECT,
+                               blank=True,
+                               null=True)
 
     def __str__(self):
         return self.title
@@ -22,17 +29,17 @@ class Constraint(models.Model):
     def __str__(self):
         return self.title
 
-
+# add tag as ManyToMany!
 class Dish(models.Model):
     title = models.CharField(max_length=120)
     content = models.TextField()
-    restaurant = models.ForeignKey('Restaurant', related_name='dishes', on_delete=models.PROTECT)
-    constraints = models.ManyToManyField(Constraint, related_name='dishes', blank=True)
-    tags = models.ManyToManyField(Tag, related_name='%(class)s', blank=True)
+    restaurant = models.ForeignKey('Restaurant', related_name='%(class)s', on_delete=models.PROTECT)
+    constraints = models.ManyToManyField(Constraint, related_name="dishes", blank=True)
+    tags = models.ManyToManyField(Tag, related_name="%(class)s", blank=True)
     price = models.IntegerField(default=0)
 
     def __str__(self):
-        return " ".join(map(str, [self.title, self.restaurant]))
+        return self.title
 
 
 class Review(models.Model):
@@ -68,8 +75,9 @@ class Profile(models.Model):
     likes = models.ManyToManyField(Review, related_name="posts_liked", blank=True)
     gifts = models.ManyToManyField(Gift, related_name="posts_liked", blank=True)
     searches = models.ManyToManyField(Dish, related_name='%(class)s', blank=True)
-    preferences = models.ManyToManyField(Constraint, blank=True)
 
+    # TODO: was preferences and now constraints
+    constraints = models.ManyToManyField(Constraint, related_name='%(class)s', blank=True)
     def __str__(self):
         return " ".join(map(str, [self.user]))
 
@@ -87,7 +95,6 @@ class CityArea(models.Model):
     def __str__(self):
         return " ".join(map(str, [self.name, self.city]))
 
-
 class Restaurant(models.Model):
     name = models.CharField(max_length=30)
     city_area = models.ForeignKey(CityArea, related_name='%(class)s', on_delete=models.PROTECT)
@@ -97,27 +104,20 @@ class Restaurant(models.Model):
     def __str__(self):
         return " ".join(map(str, [self.name, self.street]))
 
-
 class DistanceMatrix(models.Model):
-    col = models.ForeignKey(User, related_name='col', on_delete=models.PROTECT)
-    row = models.ForeignKey(User, related_name='row', on_delete=models.PROTECT)
+    col = models.ForeignKey(User, related_name='user_distances_from', on_delete=models.PROTECT)
+    row = models.ForeignKey(User, related_name='user_distances_to', on_delete=models.PROTECT)
     distance = models.FloatField()
 
 
-# add a field that tells us if the estimation is real or not
-# or even better - unite with Rank table!!!!!!!!!!!!!
-class UserDishMatrix(models.Model):
+class Estimation(models.Model):
     dish = models.ForeignKey(Dish, related_name='%(class)s', on_delete=models.PROTECT)
     user = models.ForeignKey(User, related_name='%(class)s', on_delete=models.PROTECT)
-    estimate = models.FloatField()
-    last_update = models.DateTimeField(default=datetime.datetime.now)
+    estimate = models.FloatField(default=0)
+    last_update = models.DateTimeField(default=timezone.now)
 
 
-class TagTag(models.Model):
-    col = models.ForeignKey(Tag, related_name='col', on_delete=models.PROTECT)
-    row = models.ForeignKey(Tag, related_name='row', on_delete=models.PROTECT)
+class TagDistances(models.Model):
+    col = models.ForeignKey(Tag, related_name='tag_distances_from', on_delete=models.PROTECT)
+    row = models.ForeignKey(Tag, related_name='tag_distances_to', on_delete=models.PROTECT)
     distance = models.FloatField()
-
-class DishTag(models.Model):
-    dish = models.ForeignKey(Dish, related_name='%(class)s', on_delete=models.PROTECT)
-    tag = models.ForeignKey(Tag, related_name='%(class)s', on_delete=models.PROTECT)
