@@ -76,8 +76,6 @@ class Profile(models.Model):
     likes = models.ManyToManyField(Review, related_name="posts_liked", blank=True)
     gifts = models.ManyToManyField(Gift, related_name="posts_liked", blank=True)
     searches = models.ManyToManyField(Dish, related_name='%(class)s', blank=True)
-
-    # TODO: was preferences and now constraints
     constraints = models.ManyToManyField(Constraint, related_name='%(class)s', blank=True)
     def __str__(self):
         return " ".join(map(str, [self.user]))

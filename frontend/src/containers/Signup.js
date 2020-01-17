@@ -25,7 +25,7 @@ class RegistrationForm extends React.Component {
             likes: [],
             gifts: [],
             searches: [],
-            preferences: []
+            constraints: []
         }).then(res => console.log(res))
             .catch(error => console.log(error.response));
     };

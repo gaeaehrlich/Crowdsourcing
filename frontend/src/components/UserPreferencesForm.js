@@ -15,7 +15,7 @@ class PreferencesForm extends React.Component {
         likes: [],
         gifts: [],
         searches: [],
-        preferences: []
+        constraints: []
     };
 
     componentDidMount() {
@@ -45,7 +45,7 @@ class PreferencesForm extends React.Component {
                             likes: res.data.likes,
                             gifts: res.data.gifts,
                             searches: res.data.searches,
-                            preferences: res.data.preferences
+                            constraints: res.data.constraints
                         });
                     }
                 });
@@ -56,7 +56,7 @@ class PreferencesForm extends React.Component {
                     likes: this.state.likes,
                     gifts: this.state.gifts,
                     searches: this.state.searches,
-                    preferences: tags
+                    constraints: tags
                 })
                     .then(res => {
                         console.log(res);

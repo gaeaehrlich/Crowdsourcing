@@ -78,8 +78,8 @@ class ProfileSerializer(serializers.ModelSerializer):
     likes = serializers.PrimaryKeyRelatedField(read_only=False, many=True, queryset=Review.objects.all())
     gifts = GiftSerializer(read_only=True, many=True)
     searches = DishSerializer(read_only=True, many=True)
-    preferences = serializers.PrimaryKeyRelatedField(read_only=False, many=True, queryset=Constraint.objects.all())
+    constraints = serializers.PrimaryKeyRelatedField(read_only=False, many=True, queryset=Constraint.objects.all())
 
     class Meta:
         model = Profile
-        fields = ('user', 'username', 'level', 'likes', 'gifts', 'searches', 'preferences')
+        fields = ('user', 'username', 'level', 'likes', 'gifts', 'searches', 'constraints')
