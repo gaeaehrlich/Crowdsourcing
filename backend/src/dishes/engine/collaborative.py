@@ -87,7 +87,6 @@ def update_estimations(days = 1):
         cell.save()
 
 
-# TODO: CHECK AGAIN
 def add_estimations_for_new_user(user):
 
     for dish in Dish.objects.all():
