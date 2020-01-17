@@ -9,9 +9,11 @@ def init__user(username): # TODO: make sure
     add_distances_for_new_user(user)
     add_estimations_for_new_user(user)
 
-def init__review(review_id): # TODO: make sure
+
+def init__review(review_id): # TODO: if you need give me somthing else let me know
     review = Review.objects.get(id=review_id)
     update_distances_for_new_review(review)
+
 
 def search(username, areaname, tagsid = [], lte = None, gte = None):
     user = User.objects.get(username=username)
@@ -22,5 +24,6 @@ def search(username, areaname, tagsid = [], lte = None, gte = None):
 
     return dishes
 
-def eatwith():
+
+def eatwith(): # TODO: what the fuck am I getting here?
     pass
