@@ -51,7 +51,7 @@ class Reviews extends React.Component {
                     preferences: res.data.preferences
                 });
             })
-                .catch(error => console.log(error));
+            .catch(error => console.log(error));
 
             if (!this.state.likes.includes(item.id)) {
                 this.updateUserLikes(item);
@@ -63,6 +63,12 @@ class Reviews extends React.Component {
     author = (item) => {
         if(item.is_anonymous) return "Anonymous";
         else return item.author_username;
+    };
+
+    dishToPicLocation = name => {
+        let out;
+        out = name.replace(/ /g, '_');
+        return 'http://127.0.0.1:8000/api/pic/'+out;
     };
 
     render() {
@@ -77,32 +83,30 @@ class Reviews extends React.Component {
                     pageSize: 3,
                 }}
                 dataSource={this.props.data}
-                renderItem={item => ( item.description !== null ?
-                        <List.Item
-                            key={item.title}
-                            extra={
-                                <img
-                                    width={272}
-                                    alt="logo"
-                                    src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
-                                />
-                            }
-                        >
-                            <List.Item.Meta
-                                title={<a href={`/${item.id}/`}>{item.dish.title}</a>}
-                                description={item.description}
-                            />
-                            {item.content}
-                            <div>
-                                <div>By: {this.author(item)}</div>
-                                <Rate disabled defaultValue={item.stars} />
-                                <Button onClick={ () =>
-                                    this.handleLike(item)
-                                } shape="circle" icon="like" />
-                            </div>
-                        </List.Item>
-                        :
-                        null
+                renderItem={item => (
+                    <List.Item
+                        key={item.title}
+                        extra={item.photo_name?
+                            <img
+                                width={272}
+                                alt="logo"
+                                src={this.dishToPicLocation(item.photo_name)}
+                            /> : null
+                        }
+                    >
+                        <List.Item.Meta
+                            title={<a href={`/${item.id}/`}>{item.dish.title}</a>}
+                            description={item.description}
+                        />
+                        {item.content}
+                        <div>
+                            <div>By: {item.author_username}</div>
+                            <Rate disabled defaultValue={item.stars} />
+                            <Button onClick={ () =>
+                                this.handleLike(item)
+                            } shape="circle" icon="like" />
+                        </div>
+                    </List.Item>
                 )}
             />
         );

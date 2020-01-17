@@ -1,7 +1,11 @@
+import os
+
 from rest_framework.generics import ListAPIView, RetrieveAPIView
-from django.http import FileResponse, JsonResponse
+from django.http import FileResponse, JsonResponse, HttpResponse
+from django.core.files.uploadedfile import UploadedFile
 from rest_framework.authtoken.models import Token
 from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, UpdateAPIView
+from django.views.decorators.csrf import csrf_exempt
 
 from ..models import CityArea
 from .serializers import  TagSerializer, CityAreaSerializer
@@ -106,3 +110,19 @@ def search(req):
     response = JsonResponse(data=json)
 
     return response
+
+@csrf_exempt
+def multiuploader(request):
+    image_folder_path = os.path.dirname(os.path.abspath(__file__)) + '/../../images/'
+    
+    if request.method == 'POST':
+        name = request.FILES['avatar'].name
+        data = request.FILES['avatar'].file.read()
+
+        with open(image_folder_path+name, 'wb') as f:
+            f.write(data)
+
+        json = {'the new': {'name': 'asd'}, 'afganit': {'name': 'qwe'}}
+        response = JsonResponse(data=json)
+
+        return response
