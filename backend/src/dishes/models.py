@@ -53,7 +53,7 @@ class Review(models.Model):
     )
     is_anonymous = models.BooleanField(default=False)
     likes = models.IntegerField(default=0)
-    photo_name = models.CharField(max_length=50)
+    photo_name = models.CharField(max_length=50, blank=True)
 
     def __str__(self):
         return " ".join(map(str, [self.dish, self.author_username]))
