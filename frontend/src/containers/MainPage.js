@@ -6,6 +6,9 @@ import { Tag } from 'antd';
 import { Row, Col } from 'antd';
 import {connect} from "react-redux";
 import logo from "../logo.png";
+import eatwith from "../EatWithLogo3.png";
+import gifts from "../gifts.png";
+import search from "../search.png";
 import Reminder from "../components/Reminder";
 import Dishes from "../components/Dishes";
 
@@ -161,12 +164,32 @@ class MainPage extends React.Component {
                         <Reminder data={this.state.searches}/>
                     </div>
                     : null}
-                {!this.props.isAuthenticated ?
+                {!this.props.isAuthenticated ? <div>
+                    <a href="http://google.com">
                     <div style={{
                         display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'center',
-                    }}><img src={logo}/></div>
+                    }}><img src={logo}/> </div> </a>
+                     <a href="http://google.com">
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}><img src={eatwith}/></div></a>
+                    <a href="http://localhost:3000/eatwith">
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}><img src={search}/></div></a>
+                    <a href="http://google.com">
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}><img src={gifts}/></div> </a></div>
+
                     : <dom>
                         <Row gutter={[this.gutt, this.gutt]}>
 <Title level={2}>Welcome, {this.state.user_name}</Title>
