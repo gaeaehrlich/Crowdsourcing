@@ -173,8 +173,8 @@ class DishPage extends React.Component {
                     >
                     </div>
                 </Drawer>
-
-                <Reviews data={this.state.reviews} token={this.props.token}/>
+                {this.state.reviews.length > 0 ? <Reviews data={this.state.reviews} token={this.props.token}/> :
+                    <div><br/><h5>No reviews</h5></div>}
             </div>
         )
     }

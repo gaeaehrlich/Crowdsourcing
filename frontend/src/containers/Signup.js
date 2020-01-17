@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Icon, Button, Steps } from 'antd';
+import { Form, Input, Icon, Button, Steps, message } from 'antd';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import * as actions from '../store/actions/auth';
@@ -17,8 +17,8 @@ class RegistrationForm extends React.Component {
         step: this.props.match.params.step
     };
 
-    createProfile = async () => {
-        await axios.post('http://127.0.0.1:8000/api/createuser/', {
+    createProfile = () => {
+        axios.post('http://127.0.0.1:8000/api/createuser/', {
             user: localStorage.getItem('token'),
             username: localStorage.getItem('username'),
             level: 1,
@@ -40,10 +40,17 @@ class RegistrationForm extends React.Component {
                     values.password,
                     values.confirm
                 );
-                setTimeout(this.createProfile, 1000);
-                this.setState({
-                    step: 2
-                });
+                setTimeout(() => {
+                    if (this.props.error) {
+                        message.error('Error in creating new user');
+                    }
+                    else {
+                        this.createProfile();
+                        this.setState({
+                            step: 2
+                        });
+                    }
+                }, 1000);
             }
         });
     };
@@ -71,17 +78,18 @@ class RegistrationForm extends React.Component {
     };
 
     stepStatus = (step) => {
-        switch (step) {
-            case 'first':
-                if (this.state.step == 1) return "process";
-                if (this.state.step >= 2) return "finished";
-            case 'second':
-                if (this.state.step == 1) return "wait";
-                if (this.state.step == 2) return "process";
-                if (this.state.step == 3) return "finished";
-            case 'third':
-                if (this.state.step < 3) return "wait";
-                if (this.state.step == 3) return "process";
+        if (step === "first") {
+            if (this.state.step == 1) return "process";
+            else return "finished";
+        }
+        if (step === "second") {
+            if (this.state.step == 1) return "wait";
+            if (this.state.step == 2) return "process";
+            if (this.state.step == 3) return "finished";
+        }
+        if (step === "third") {
+            if (this.state.step < 3) return "wait";
+            else return "process";
         }
     };
 

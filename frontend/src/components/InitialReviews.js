@@ -8,7 +8,8 @@ class InitialReviews extends React.Component {
 
     state = {
         dishes: [],
-        rate: 3
+        rate: 3,
+        submitted: []
     };
 
     setRandArr = (length) => {
@@ -51,16 +52,23 @@ class InitialReviews extends React.Component {
     handleSubmit = (event, dishID) => {
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                return axios.post('http://127.0.0.1:8000/api/createreview/', {
-                    author_token: localStorage.getItem('token'),
-                    author_username: localStorage.getItem('username'),
-                    dish: dishID,
-                    description: "",
-                    stars: values['rating'],
-                    is_anonymous: true,
-                    likes: 0
-                }).then(res => console.log(res))
-                    .catch(error => console.log(error.response));
+                if(!this.state.submitted.includes(dishID)) {
+                    return axios.post('http://127.0.0.1:8000/api/createreview/', {
+                        author_token: localStorage.getItem('token'),
+                        author_username: localStorage.getItem('username'),
+                        dish: dishID,
+                        description: "",
+                        stars: values['rating'],
+                        is_anonymous: true,
+                        likes: 0,
+                        photo_name: null
+                    }).then(res => {
+                        console.log(res);
+                        this.setState({
+                            submitted: [...this.state.submitted, dishID]
+                        });
+                    }).catch(error => console.log(error.response));
+                }
             }
         });
     };
@@ -75,7 +83,7 @@ class InitialReviews extends React.Component {
                     <List.Item>
                         <Card
                             hoverable
-                            style={{width: 240}}
+                            style={{width: 240, padding: 5 }}
                             cover={<img alt="example"
                                         src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"/>}
                         >

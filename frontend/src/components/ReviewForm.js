@@ -48,7 +48,6 @@ class ReviewForm extends React.Component {
                 const description = values['review_text'];
                 const stars = values['rating'];
                 const anonymous = values['is_anonymous'];
-                console.log(username);
                 return axios.post('http://127.0.0.1:8000/api/createreview/', {
                     author_token: token,
                     author_username: localStorage.getItem('username'),
@@ -117,28 +116,6 @@ class ReviewForm extends React.Component {
                                 placeholder="Please enter review"
                                 autoSize={{minRows: 3}}
                             />,
-                        )}
-                    </Form.Item>
-                </Row>
-                <Row>
-                    <Form.Item label="Upload">
-                        {getFieldDecorator('upload', {
-                            valuePropName: 'fileList',
-                            getValueFromEvent: this.normFile,
-                        })(
-                            <Upload
-                                name="avatar"
-                                listType="picture-card"
-                                className="avatar-uploader"
-                                showUploadList={false}
-                                // action="http://www.mocky.io/v2/5cc8019d300000980a055e76"
-                                action="http://127.0.0.1:8000/api/uploadphoto/"
-
-                                beforeUpload={beforeUpload}
-                                onChange={this.handleUploadChange}
-                            >
-                                {this.state.imageUrl ? <img src={this.state.imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
-                            </Upload>
                         )}
                     </Form.Item>
                 </Row>
