@@ -48,7 +48,6 @@ class ReviewForm extends React.Component {
                 const description = values['review_text'];
                 const stars = values['rating'];
                 const anonymous = values['is_anonymous'];
-                console.log(username);
                 return axios.post('http://127.0.0.1:8000/api/createreview/', {
                     author_token: token,
                     author_username: localStorage.getItem('username'),
