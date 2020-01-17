@@ -10,7 +10,6 @@ import Reminder from "../components/Reminder";
 import Dishes from "../components/Dishes";
 
 
-const { Meta } = Card;
 const { Title } = Typography;
 
 
@@ -169,7 +168,7 @@ class MainPage extends React.Component {
                     }}><img src={logo}/></div>
                     : <dom>
                         <Row gutter={[this.gutt, this.gutt]}>
-<Title level={2}>Welcome, {this.state.user_name}</Title>
+                        <Title level={2}>Welcome, {this.state.user_name}</Title>
                             </Row>
                         <Row gutter={[this.gutt, this.gutt]}>
                                 <AutoComplete

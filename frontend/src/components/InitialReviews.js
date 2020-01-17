@@ -8,7 +8,6 @@ class InitialReviews extends React.Component {
 
     state = {
         dishes: [],
-        rate: 3,
         submitted: []
     };
 
@@ -61,7 +60,7 @@ class InitialReviews extends React.Component {
                         stars: values['rating'],
                         is_anonymous: true,
                         likes: 0,
-                        photo_name: null
+                        photo_name: ""
                     }).then(res => {
                         console.log(res);
                         this.setState({
@@ -91,7 +90,7 @@ class InitialReviews extends React.Component {
 
                             <Form layout="vertical">
                                 <Form.Item>
-                                    {getFieldDecorator('rating', {
+                                    {getFieldDecorator('rating', { initial: 4
                                     })(<Rate onChange={(event) => this.handleSubmit(event, item.id)}/>)}
                                 </Form.Item>
                             </Form>

@@ -39,7 +39,7 @@ class UserReviewsListView(ListAPIView):
 
     def get_queryset(self):
         token = self.kwargs.get("pk")
-        return Review.objects.filter(author=token)
+        return Review.objects.filter(author_token=token)
 
 
 class DishReviewsListView(ListAPIView):

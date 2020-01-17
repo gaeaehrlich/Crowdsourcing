@@ -2,7 +2,6 @@ import React from "react";
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 import {Form, Select, Checkbox, Row, Col, Button} from 'antd';
-import {connect} from "react-redux";
 
 const { Option } = Select;
 
@@ -11,7 +10,6 @@ class PreferencesForm extends React.Component {
     _isMounted = false;
 
     state = {
-        level: 1,
         likes: [],
         gifts: [],
         searches: [],
@@ -41,7 +39,6 @@ class PreferencesForm extends React.Component {
                 axios.get(`http://127.0.0.1:8000/api/user/${token}/`).then(res => {
                     if (this._isMounted) {
                         this.setState({
-                            level: res.data.level,
                             likes: res.data.likes,
                             gifts: res.data.gifts,
                             searches: res.data.searches,
@@ -52,7 +49,6 @@ class PreferencesForm extends React.Component {
                 axios.put(`http://127.0.0.1:8000/api/updateuser/${token}/`, {
                     user: token,
                     username: username,
-                    level: this.state.level,
                     likes: this.state.likes,
                     gifts: this.state.gifts,
                     searches: this.state.searches,
