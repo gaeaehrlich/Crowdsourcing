@@ -9,7 +9,7 @@ function getBase64(img, callback) {
     reader.addEventListener('load', () => callback(reader.result));
     reader.readAsDataURL(img);
 }
-let uplodedFileName = null;
+let uplodedFileName = '';
 
 function beforeUpload(file) {
     uplodedFileName = file.name.replace('.jpg', '');
@@ -63,7 +63,7 @@ class ReviewForm extends React.Component {
             }
             this.setState({
                 visible: false,
-                uplodedFileName: null
+                uplodedFileName: ''
             });
         });
     };

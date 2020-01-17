@@ -86,7 +86,7 @@ class Reviews extends React.Component {
                 renderItem={item => (
                     <List.Item
                         key={item.title}
-                        extra={item.photo_name?
+                        extra={item.photo_name!==''?
                             <img
                                 width={272}
                                 alt="logo"
