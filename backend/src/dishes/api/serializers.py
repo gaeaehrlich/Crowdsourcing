@@ -77,7 +77,7 @@ class CityAreaSerializer(serializers.ModelSerializer):
 class ProfileSerializer(serializers.ModelSerializer):
     likes = serializers.PrimaryKeyRelatedField(read_only=False, many=True, queryset=Review.objects.all())
     gifts = GiftSerializer(read_only=True, many=True)
-    searches = DishSerializer(read_only=True, many=True)
+    searches = serializers.PrimaryKeyRelatedField(read_only=False, many=True, queryset=Dish.objects.all())
     constraints = serializers.PrimaryKeyRelatedField(read_only=False, many=True, queryset=Constraint.objects.all())
 
     class Meta:

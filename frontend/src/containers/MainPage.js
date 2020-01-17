@@ -1,7 +1,7 @@
 import React from "react";
 import axios from 'axios';
 
-import { AutoComplete, List, Card, Typography, Form, Button} from 'antd';
+import { AutoComplete, Typography, Form, Button} from 'antd';
 import { Tag } from 'antd';
 import { Row, Col } from 'antd';
 import {connect} from "react-redux";
