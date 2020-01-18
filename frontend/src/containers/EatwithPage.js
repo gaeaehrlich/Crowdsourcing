@@ -4,7 +4,7 @@ import { Row, Col, AutoComplete} from 'antd';
 import { Form, Input, Icon, Button } from 'antd';
 import { Typography } from 'antd';
 import axios from "axios";
-import eatwith from "../EatWithLogo3.png";
+import eatwith from "../eatwithsmall.png";
 
 const { Title } = Typography;
 
@@ -240,7 +240,7 @@ class EatwithPage extends React.Component {
 
                 </Form.Item>
                 <Form.Item
-                            style={{visibility:"visible", }}
+                            style={{visibility:"visible", margin:"auto"}}
                         >
                             {getFieldDecorator(`area`, {
                                 validateTrigger: ['onChange', 'onBlur'],
@@ -262,7 +262,7 @@ class EatwithPage extends React.Component {
                         </Form.Item>
                 {formItems}
                 <Form.Item {...formItemLayoutWithOutLabel}>
-                    <Button type="dashed" onClick={this.add} style={{ width: '60%' }}>
+                    <Button type="dashed" onClick={this.add} style={{ width: '40%' , position:"absolute"}}>
                         <Icon type="plus" /> Add User
                     </Button>
                 </Form.Item>

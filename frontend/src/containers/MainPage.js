@@ -6,7 +6,7 @@ import { Tag } from 'antd';
 import { Row, Col } from 'antd';
 import {connect} from "react-redux";
 import logo from "../logo.png";
-import eatwith from "../EatWithLogo3.png";
+import eatwith from "../eatwithfinallogo.png";
 import gifts from "../gifts.png";
 import search from "../search.png";
 import Reminder from "../components/Reminder";
