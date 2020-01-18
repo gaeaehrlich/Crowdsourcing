@@ -107,7 +107,7 @@ class InitialReviews extends React.Component {
                             cover={
                                 <img
                                     alt="So good.."
-                                    src={this.dishToPicLocation(this.state.dish_name)}
+                                    src={this.dishToPicLocation(item.title)}
                                     width="300"
                         />}
                         >
