@@ -90,8 +90,8 @@ class Reviews extends React.Component {
                         key={item.title}
                         extra={item.photo_name!==''?
                         <img
-                            alt="So good.."
-                            src={this.dishToPicLocation(this.state.dish_name)}
+                            alt="logo"
+                            src={this.dishToPicLocation(item.photo_name)}
                             width="300"
                         />: null
                         }
