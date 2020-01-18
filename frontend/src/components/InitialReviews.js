@@ -63,14 +63,13 @@ class InitialReviews extends React.Component {
        handleSubmit = (event, dishID) => {
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log(values[dishID]);
-                if(this.state.submitted.indexOf(dishID) === -1 && values[dishID] !== 0) {
+                if(this.state.submitted.indexOf(dishID) === -1 && event !== 0) {
                     return axios.post('http://127.0.0.1:8000/api/createreview/', {
                         author_token: localStorage.getItem('token'),
                         author_username: localStorage.getItem('username'),
                         dish: dishID,
                         description: "",
-                        stars: values[dishID],
+                        stars: event,
                         is_anonymous: true,
                         likes: 0,
                         photo_name: ""
@@ -116,7 +115,7 @@ class InitialReviews extends React.Component {
 
                             <Form layout="vertical">
                                 <Form.Item>
-                                    {getFieldDecorator(`${item.id}`, { initial: 4
+                                    {getFieldDecorator(item.id+'', { initial: 4
                                     })(<Rate onChange={(event) => this.handleSubmit(event, item.id)}/>)}
                                 </Form.Item>
                             </Form>
