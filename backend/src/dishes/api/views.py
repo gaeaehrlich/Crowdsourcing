@@ -1,20 +1,16 @@
 import os
 
-from rest_framework.generics import ListAPIView, RetrieveAPIView
 from django.http import FileResponse, JsonResponse, HttpResponse
-from django.core.files.uploadedfile import UploadedFile
 from rest_framework.authtoken.models import Token
 from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, UpdateAPIView
 from django.views.decorators.csrf import csrf_exempt
 
-from ..models import CityArea
-from .serializers import  TagSerializer, CityAreaSerializer
 
-from ..models import Dish, Review, Profile, Gift, Tag, Restaurant
-from .serializers import DishSerializer, ReviewSerializer, ProfileSerializer, GiftSerializer, RestaurantSerializer
 from ..Engine.manage import search as algo_search, init__user, init__review, eatwith as algo_eatwith
 
-from django.core import serializers
+from ..models import Dish, Review, Profile, Gift, Tag, Restaurant, CityArea
+from .serializers import DishSerializer, ReviewSerializer, ProfileSerializer, GiftSerializer, RestaurantSerializer,\
+    TagSerializer, CityAreaSerializer
 
 
 class DishesListView(ListAPIView):

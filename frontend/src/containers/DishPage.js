@@ -26,10 +26,11 @@ class DishPage extends React.Component {
         gifts: [],
         searches: [],
         constraints: [],
-        prev_user_reviews: []
+        did_user_review: false
     };
 
-    updateUserSearch = async (dishID) => {
+
+    updateUserSearch = async () => {
         await axios.get(`http://127.0.0.1:8000/api/user/${this.props.token}/`)
             .then(res => {
                 this.setState({
@@ -41,12 +42,20 @@ class DishPage extends React.Component {
             })
             .catch(error => console.log(error));
 
+        let updatedHistory = [...this.state.searches];
+        const index = updatedHistory.indexOf(Number(this.state.dish_id));
+        if (index !== -1) {
+            updatedHistory.splice(index, 1);
+        } else {
+            updatedHistory = [...updatedHistory, Number(this.state.dish_id)]
+        }
+
         await axios.put(`http://127.0.0.1:8000/api/updateuser/${this.props.token}/`, {
             user: this.props.token,
             username: localStorage.getItem('username'),
             likes: this.state.likes,
             gifts: this.state.gifts,
-            searches: [...this.state.searches, dishID],
+            searches: updatedHistory,
             constraints: this.state.constraints
         })
             .then(res => console.log(res))
@@ -55,8 +64,10 @@ class DishPage extends React.Component {
 
     fetchReviews = (dishID) => {
         axios.get(`http://127.0.0.1:8000/api/dishreviews/${dishID}`).then(res => {
+            const users = res.data.map(review => review.author_token);
             this.setState({
                 reviews: res.data,
+                did_user_review: users.includes(this.props.token)
             });
         }).catch(error => console.log(error));
     };
@@ -76,25 +87,18 @@ class DishPage extends React.Component {
                 tags: res.data.tags.map(tag => (tag['title'])),
             });
         }).catch(error => console.log(error));
-        this.fetchReviews(dishID);
-        setTimeout(() => this.updateUserSearch(dishID), 300);
+        setTimeout(() => this.fetchReviews(dishID), 300);
+        setTimeout(() => this.updateUserSearch(), 300);
     };
 
 
     showDrawer = () => {
-        axios.get(`http://127.0.0.1:8000/api/userreviews/${this.props.token}/`).then(res => {
-            this.setState({
-                prev_user_reviews: res.data
-            });
-        }).catch(error => console.log(error));
-        let value;
         setTimeout(() => {
-            if (this.state.prev_user_reviews.filter(review => review.dish == this.state.dish_id).length > 0) {
+            if (this.state.did_user_review) {
                 message.error('You already gave a review for this dish');
-                value = false;
-            } else value = true;
+            }
             this.setState({
-                visible: value,
+                visible: !this.state.did_user_review,
             });
         }, 500);
     };
