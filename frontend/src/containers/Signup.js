@@ -180,7 +180,7 @@ class RegistrationForm extends React.Component {
                 }
                 {this.state.step == 3 ?
                     <div>
-                        <h2>Please rate these dishes:</h2>
+                        <h2>Please rate the dishes you liked:</h2>
                         <InitialReview/>
                         <Button onClick={ () => this.props.history.push('/')}>Finish</Button>
                     </div>

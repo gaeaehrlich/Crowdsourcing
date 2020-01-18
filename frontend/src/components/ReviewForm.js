@@ -50,18 +50,22 @@ class ReviewForm extends React.Component {
           const description = values['review_text'];
           const stars = values['rating'];
           const anonymous = values['is_anonymous'];
-          await axios.post('http://127.0.0.1:8000/api/createreview/', {
-              author_token: token,
-              author_username: localStorage.getItem('username'),
-              dish: dishID,
-              description: description,
-              stars: stars,
-              is_anonymous: anonymous,
-              likes: 0,
-              photo_name: uplodedFileName,
+          if(stars == 0) {
+              message.error('Zero stars are not allowed');
+          } else {
+              await axios.post('http://127.0.0.1:8000/api/createreview/', {
+                  author_token: token,
+                  author_username: localStorage.getItem('username'),
+                  dish: dishID,
+                  description: description,
+                  stars: stars,
+                  is_anonymous: anonymous,
+                  likes: 0,
+                  photo_name: uplodedFileName,
 
-          }).then(res => console.log(res))
-            .catch(error => console.log(error.response));
+              }).then(res => console.log(res))
+                  .catch(error => console.log(error.response));
+          }
       };
 
       handleSubmit = (event, token, dishID) => {
