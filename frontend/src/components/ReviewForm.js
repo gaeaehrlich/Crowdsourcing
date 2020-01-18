@@ -40,6 +40,17 @@ class ReviewForm extends React.Component {
         return e && e.fileList;
     };
 
+      init_review = (username, dishid) => {
+        axios.get(`http://127.0.0.1:8000/api/init_review`, {
+            params: {
+                user_name: username,
+                dish_id: dishid
+            }
+        }).then(res => {
+            console.log(res)
+        });
+    };
+
 
       handleSubmit = (event, token, dishID) => {
         event.preventDefault();
@@ -58,7 +69,9 @@ class ReviewForm extends React.Component {
                     likes: 0,
                     photo_name: uplodedFileName,
 
-                }).then(res => console.log(res))
+                }).then(res => {console.log(res);
+                this.init_review(localStorage.getItem('username'), dishID)
+                })
                     .catch(error => console.log(error.response));
             }
             this.setState({

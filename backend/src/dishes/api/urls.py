@@ -12,7 +12,7 @@ from .views import (
 
 )
 from .views import DishesDetailView, DishesListView, RestaurantDetailView, RestaurantListView, \
-    TagListView, CityAreaListView, send_file, search, multiuploader
+    TagListView, CityAreaListView, send_file, search, multiuploader, init_review, init_user
 
 urlpatterns = [
     path('updatereviews/<pk>/', ReviewUpdateView.as_view()),
@@ -32,5 +32,7 @@ urlpatterns = [
     path(r'pic/<str:dish>', send_file),
     path(r'search/', search),
     path('uploadphoto/', multiuploader),
+    path('init_user/', init_user),
+    path('init_review/', init_review),
 
 ]

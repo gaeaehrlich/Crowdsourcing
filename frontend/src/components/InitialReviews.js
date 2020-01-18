@@ -48,6 +48,17 @@ class InitialReviews extends React.Component {
         });
     }
 
+    init_review = (username, dishid) => {
+        axios.get(`http://127.0.0.1:8000/api/init_review`, {
+            params: {
+                user_name: username,
+                dish_id: dishid
+            }
+        }).then(res => {
+            console.log(res)
+        });
+    };
+
     handleSubmit = (event, dishID) => {
         this.props.form.validateFields((err, values) => {
             if (!err) {
@@ -59,7 +70,9 @@ class InitialReviews extends React.Component {
                     stars: values['rating'],
                     is_anonymous: true,
                     likes: 0
-                }).then(res => console.log(res))
+                }).then(res => {console.log(res);
+                    this.init_review(localStorage.getItem('username'), dishID)
+                })
                     .catch(error => console.log(error.response));
             }
         });

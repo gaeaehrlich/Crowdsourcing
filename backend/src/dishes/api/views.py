@@ -12,6 +12,7 @@ from .serializers import  TagSerializer, CityAreaSerializer
 
 from ..models import Dish, Review, Profile, Gift, Tag, Restaurant
 from .serializers import DishSerializer, ReviewSerializer, ProfileSerializer, GiftSerializer, RestaurantSerializer
+from ..Engine.manage import search as algo_search, init__user, init__review
 
 
 class DishesListView(ListAPIView):
@@ -94,17 +95,23 @@ class CityAreaListView(ListAPIView):
     serializer_class = CityAreaSerializer
 
 def send_file(req, dish):
-    img = open('images/'+dish+'.jpg', 'rb')
+    photo_path = 'images/'+dish+'.jpg'
+    if not os.path.exists(photo_path):
+        photo_path = 'images/the_new_asian.jpg'
 
+    img = open(photo_path, 'rb')
     response = FileResponse(img)
 
     return response
 
 def search(req):
-    tags = req.GET['tags[]']
-    area = req.GET['area[]']
+    tags = req.GET.getlist('tags[]')
+    area = req.GET.getlist('area[]')
     user_name = req.GET['user_name']
     print(tags, area, user_name)
+
+    out = algo_search(user_name, area[0], tags)
+    print(out)
 
     json = {'the new': {'name':'asd'}, 'afganit': {'name':'qwe'}}
     response = JsonResponse(data=json)
@@ -126,3 +133,26 @@ def multiuploader(request):
         response = JsonResponse(data=json)
 
         return response
+
+def init_review(req):
+    dish_id = req.GET['dish_id']
+    user_name = req.GET['user_name']
+    print('init_review was called:', user_name, dish_id)
+
+    init__review(user_name, dish_id)
+
+    json = {'the new': {'name':'asd'}, 'afganit': {'name':'qwe'}}
+    response = JsonResponse(data=json)
+
+    return response
+
+def init_user(req):
+    user_name = req.GET['user_name']
+    print('init_user was called:', user_name)
+
+    init__user(user_name)
+
+    json = {'the new': {'name':'asd'}, 'afganit': {'name':'qwe'}}
+    response = JsonResponse(data=json)
+
+    return response

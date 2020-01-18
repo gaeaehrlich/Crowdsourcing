@@ -26,6 +26,16 @@ class PreferencesForm extends React.Component {
         this._isMounted = false;
     }
 
+    init_user = (username) => {
+        axios.get(`http://127.0.0.1:8000/api/init_user`, {
+            params: {
+                user_name: username
+            }
+        }).then(res => {
+            console.log(res)
+        });
+    };
+
     handleSubmit = (event, requestType) => {
         event.preventDefault();
         this.props.form.validateFields((err, values, token) => {
@@ -62,6 +72,7 @@ class PreferencesForm extends React.Component {
                         console.log(res);
                         if(requestType === 'post') this.props.history.push(`/signup/${3}`);
                         else this.props.history.push('/');
+                        this.init_user(username)
                     })
                     .catch(error => console.log(error));
             }

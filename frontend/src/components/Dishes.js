@@ -23,12 +23,13 @@ class Dishes extends React.Component {
             <List
                 itemLayout="inline"
                 size="large"
-                grid={{ gutter: 16, column: 4 }}
+                grid={{ gutter: 0, column: 3 }}
+
                 pagination={{
                     onChange: page => {
                         console.log(page);
                     },
-                    pageSize: 3,
+                    pageSize: 20,
                 }}
                 dataSource={this.props.data}
                 renderItem={dish => (
