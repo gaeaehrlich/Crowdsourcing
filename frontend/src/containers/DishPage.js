@@ -29,6 +29,7 @@ class DishPage extends React.Component {
         did_user_review: false
     };
 
+
     updateUserSearch = async () => {
         await axios.get(`http://127.0.0.1:8000/api/user/${this.props.token}/`)
             .then(res => {
@@ -41,18 +42,24 @@ class DishPage extends React.Component {
             })
             .catch(error => console.log(error));
 
-        if(!this.state.searches.includes(Number(this.state.dish_id))) {
-            await axios.put(`http://127.0.0.1:8000/api/updateuser/${this.props.token}/`, {
-                user: this.props.token,
-                username: localStorage.getItem('username'),
-                likes: this.state.likes,
-                gifts: this.state.gifts,
-                searches: [...this.state.searches, Number(this.state.dish_id)],
-                constraints: this.state.constraints
-            })
-                .then(res => console.log(res))
-                .catch(error => console.log(error));
+        let updatedHistory = [...this.state.searches];
+        const index = updatedHistory.indexOf(Number(this.state.dish_id));
+        if (index !== -1) {
+            updatedHistory.splice(index, 1);
+        } else {
+            updatedHistory = [...updatedHistory, Number(this.state.dish_id)]
         }
+
+        await axios.put(`http://127.0.0.1:8000/api/updateuser/${this.props.token}/`, {
+            user: this.props.token,
+            username: localStorage.getItem('username'),
+            likes: this.state.likes,
+            gifts: this.state.gifts,
+            searches: updatedHistory,
+            constraints: this.state.constraints
+        })
+            .then(res => console.log(res))
+            .catch(error => console.log(error));
     };
 
     fetchReviews = (dishID) => {

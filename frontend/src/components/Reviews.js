@@ -1,5 +1,5 @@
 import React from "react";
-import {List, Rate, Button, message} from 'antd';
+import {List, Rate, Button, message, Col} from 'antd';
 import axios from "axios";
 
 class Reviews extends React.Component {
@@ -9,7 +9,7 @@ class Reviews extends React.Component {
         gifts: [],
         searches: [],
         constraints: [],
-        prev_reviews: []
+        prev_reviews: [],
     };
 
     updateUserLikes = (item) => {
@@ -66,9 +66,11 @@ class Reviews extends React.Component {
     };
 
     dishToPicLocation = name => {
-        let out;
-        out = name.replace(/ /g, '_');
-        return 'http://127.0.0.1:8000/api/pic/'+out;
+        if(name) {
+            let out;
+            out = name.replace(/ /g, '_');
+            return 'http://127.0.0.1:8000/api/pic/' + out;
+        }
     };
 
     render() {
@@ -78,6 +80,7 @@ class Reviews extends React.Component {
                 size="large"
                 pagination={{
                     onChange: page => {
+                        console.log(page);
                     },
                     pageSize: 3,
                 }}
@@ -86,15 +89,14 @@ class Reviews extends React.Component {
                     <List.Item
                         key={item.title}
                         extra={item.photo_name!==''?
-                            <img
-                                width={272}
-                                alt="logo"
-                                src={this.dishToPicLocation(item.photo_name)}
-                            /> : null
+                        <img
+                            alt="So good.."
+                            src={this.dishToPicLocation(this.state.dish_name)}
+                            width="300"
+                        />: null
                         }
                     >
                         <List.Item.Meta
-                            title={<a href={`dish/${item.id}`}>{item.title}</a>}
                             description={item.description}
                         />
                         {item.content}

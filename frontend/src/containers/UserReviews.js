@@ -28,7 +28,7 @@ class UserReviewsList extends React.Component {
     render() {
         return (
             <div>
-                <Reviews data={this.state.reviews}/>
+                <Reviews data={this.state.reviews} user={true}/>
             </div>
         )
     }

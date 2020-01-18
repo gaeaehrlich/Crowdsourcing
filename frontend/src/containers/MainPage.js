@@ -30,12 +30,23 @@ class MainPage extends React.Component {
         user_name: null,
     };
 
-    fetchUser = () => {
+    fetchUser = async () => {
         const token = localStorage.getItem('token');
-        axios.get(`http://127.0.0.1:8000/api/user/${token}/`).then(res => {
-            console.log(res.data);
+        await axios.get(`http://127.0.0.1:8000/api/userreviews/${token}/`).then(res => {
             this.setState({
-                searches: res.data.searches
+                reviews: res.data
+            });
+        });
+        axios.get(`http://127.0.0.1:8000/api/user/${token}/`).then(res => {
+            let updatedHistory = [...res.data.searches];
+            for(let i = 0; i < this.state.reviews.length; i++) {
+                const index = updatedHistory.indexOf(Number(this.state.reviews[i].dish));
+                if (index !== -1) {
+                    updatedHistory.splice(index, 1);
+                }
+            }
+            this.setState({
+                searches: updatedHistory
             });
         }).catch( () => {
             this.setState({
@@ -73,24 +84,19 @@ class MainPage extends React.Component {
 
     setInitDishes = stam => {
         axios.get(`http://127.0.0.1:8000/api/dish/`).then(res => {
-            console.log(res.data);
             this.setState({
                 dishes: res.data
-
             });
         });
     };
 
     componentDidMount() {
-        const dishID = this.props.match.params.dishID;
-
         this.fetchUser();
         this.setTags();
         this.setCityAreas();
         this.setInitDishes();
 
         this.setState({
-            dish_id: dishID,
             user_name: localStorage.getItem('username'),
         });
     }
@@ -105,7 +111,6 @@ class MainPage extends React.Component {
 
     handleCloseTag = removedTag => {
         const tags = this.state.tags.filter(tag => tag !== removedTag);
-        console.log(tags);
         this.setState({tags});
     };
 
@@ -124,7 +129,6 @@ class MainPage extends React.Component {
 
     handleCloseArea = removedArea => {
         const areas = this.state.areas.filter(area => area !== removedArea);
-        console.log(areas);
         this.setState({areas});
     };
 
