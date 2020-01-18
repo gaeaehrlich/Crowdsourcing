@@ -165,25 +165,25 @@ class MainPage extends React.Component {
                     </div>
                     : null}
                 {!this.props.isAuthenticated ? <div>
-                    <a href="http://google.com">
+                    <a href="http://localhost:3000">
                     <div style={{
                         display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'center',
                     }}><img src={logo}/> </div> </a>
-                     <a href="http://google.com">
+                     <a href="http://localhost:3000/eatwith">
                     <div style={{
                         display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'center',
                     }}><img src={eatwith}/></div></a>
-                    <a href="http://localhost:3000/eatwith">
+                    <a href="http://localhost:3000/search">
                     <div style={{
                         display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'center',
                     }}><img src={search}/></div></a>
-                    <a href="http://google.com">
+                    <a href="http://localhost:3000/search">
                     <div style={{
                         display: 'flex',
                         justifyContent: 'center',
