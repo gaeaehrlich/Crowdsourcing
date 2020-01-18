@@ -13,9 +13,10 @@ from .views import (
 )
 from .views import DishesDetailView, DishesListView, RestaurantDetailView, RestaurantListView, \
     TagListView, CityAreaListView, send_file, search, multiuploader, init_review, init_user, \
-    search_eatwith
+    search_eatwith, ReviewDetailView
 
 urlpatterns = [
+    path('review/<pk>/', ReviewDetailView.as_view()),
     path('updatereviews/<pk>/', ReviewUpdateView.as_view()),
     path('userreviews/<pk>/', UserReviewsListView.as_view()),
     path('dishreviews/<pk>/', DishReviewsListView.as_view()),

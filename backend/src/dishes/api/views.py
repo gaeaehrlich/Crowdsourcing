@@ -6,7 +6,7 @@ from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView,
 from django.views.decorators.csrf import csrf_exempt
 
 
-from ..Engine.manage import search as algo_search, init__user, init__review, eatwith as algo_eatwith
+from ..engine.manage import search as algo_search, init__user, init__review, eatwith as algo_eatwith
 
 from ..models import Dish, Review, Profile, Gift, Tag, Restaurant, CityArea
 from .serializers import DishSerializer, ReviewSerializer, ProfileSerializer, GiftSerializer, RestaurantSerializer,\
@@ -29,6 +29,11 @@ class ReviewCreateView(CreateAPIView):
 
 
 class ReviewUpdateView(UpdateAPIView):
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
+
+
+class ReviewDetailView(RetrieveAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
 

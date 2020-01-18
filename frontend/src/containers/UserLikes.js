@@ -8,16 +8,25 @@ class UserLikesList extends React.Component {
 
     state = {
         likes: [],
+        reviews: []
     };
 
-    fetchUser = () => {
+    fetchUser = async () => {
         const token = this.props.match.params.token;
-        axios.get(`http://127.0.0.1:8000/api/user/${token}/`).then(res => {
+        await axios.get(`http://127.0.0.1:8000/api/user/${token}/`).then(res => {
             console.log(res.data);
             this.setState({
                 likes: res.data.likes
             });
         });
+        for(let i = 0; i < this.state.likes.length; i++) {
+            axios.get(`http://127.0.0.1:8000/api/review/${this.state.likes[i]}/`).then(res => {
+                console.log(res.data);
+                this.setState({
+                    reviews: [...this.state.reviews, res.data]
+                });
+            });
+        }
     };
 
     componentDidMount() {
@@ -26,7 +35,10 @@ class UserLikesList extends React.Component {
 
     render() {
         return (
-           <Reviews data={this.state.likes}/>
+            <div>{this.state.likes.length > 0 ?
+                    <Reviews data={this.state.reviews}/>
+                    : <h2>You didn't like any posts</h2>
+            }</div>
         )
     }
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import {List, Rate, Button, message, Col} from 'antd';
+import {List, Rate, Button, message, IconText} from 'antd';
 import axios from "axios";
 
 class Reviews extends React.Component {
@@ -11,6 +11,7 @@ class Reviews extends React.Component {
         constraints: [],
         prev_reviews: [],
     };
+
 
     updateUserLikes = (item) => {
         axios.put(`http://127.0.0.1:8000/api/updateuser/${this.props.token}/`, {
@@ -97,16 +98,20 @@ class Reviews extends React.Component {
                         }
                     >
                         <List.Item.Meta
-                            description={item.description}
+                            title={item.title}
+                            content={item.description}
                         />
-                        {item.content}
-                        <div>
-                            <div>By: {this.author(item)}</div>
-                            <Rate disabled defaultValue={item.stars} />
+                        <h5>{item.description}</h5>
+                        <footer>
+                            <h7>By: {this.author(item)}</h7>
+                            <br/>
+                            <div style={{display: "inline-flex" , flexDirection: "row"}}>
+                            <Rate style={{marginRight: 10}} disabled defaultValue={item.stars} />
                             <Button onClick={ () =>
                                 this.handleLike(item)
                             } shape="circle" icon="like" />
-                        </div>
+                            </div>
+                        </footer>
                     </List.Item>
                 )}
             />
