@@ -2,7 +2,6 @@ import React from "react";
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 import {Form, Select, Checkbox, Row, Col, Button} from 'antd';
-import {connect} from "react-redux";
 
 const { Option } = Select;
 
@@ -11,7 +10,6 @@ class PreferencesForm extends React.Component {
     _isMounted = false;
 
     state = {
-        level: 1,
         likes: [],
         gifts: [],
         searches: [],
@@ -49,9 +47,8 @@ class PreferencesForm extends React.Component {
                 console.log(tags);
 
                 axios.get(`http://127.0.0.1:8000/api/user/${token}/`).then(res => {
-                    if(this._isMounted) {
+                    if (this._isMounted) {
                         this.setState({
-                            level: res.data.level,
                             likes: res.data.likes,
                             gifts: res.data.gifts,
                             searches: res.data.searches,
@@ -62,7 +59,6 @@ class PreferencesForm extends React.Component {
                 axios.put(`http://127.0.0.1:8000/api/updateuser/${token}/`, {
                     user: token,
                     username: username,
-                    level: this.state.level,
                     likes: this.state.likes,
                     gifts: this.state.gifts,
                     searches: this.state.searches,
@@ -70,11 +66,14 @@ class PreferencesForm extends React.Component {
                 })
                     .then(res => {
                         console.log(res);
-                        if(requestType === 'post') this.props.history.push(`/signup/${3}`);
-                        else this.props.history.push('/');
-                        this.init_user(username)
+                        this.init_user(username);
                     })
                     .catch(error => console.log(error));
+
+                if (requestType === 'post') {
+                    this.props.history.push(`/signup/${3}`);
+                }
+                else this.props.history.push('/');
             }
         });
     };

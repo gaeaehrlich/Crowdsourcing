@@ -1,6 +1,5 @@
 import React from "react";
-import {List, Rate, Button, Card} from 'antd';
-import axios from "axios";
+import {List, Card} from 'antd';
 
 const { Meta } = Card;
 
@@ -35,7 +34,7 @@ class Dishes extends React.Component {
                 renderItem={dish => (
                     <List.Item>
                         <Card
-                                            style={{ width: 300 }}
+                                            style={{ width: 300}}
                                             cover={
                                                 <a href={'http://127.0.0.1:3000/dish/'+dish.id}>
                                                     <img

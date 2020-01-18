@@ -1,7 +1,7 @@
 import React from "react";
 import axios from 'axios';
 
-import {Button, Icon, Typography, Tag , Drawer, Row, Col} from 'antd';
+import {Button, Icon, Typography, Tag, Drawer, Row, Col, message} from 'antd';
 import ReviewForm from "../components/ReviewForm";
 import {connect} from "react-redux";
 import Reviews from "../components/Reviews";
@@ -17,37 +17,37 @@ class DishPage extends React.Component {
         restaurant_name: '',
         address: '',
         price: 0,
-        tags:[],
+        tags: [],
         reviews: [],
         visible: false,
         rest_id: null,
-        level: 1,
+        username: "",
         likes: [],
         gifts: [],
         searches: [],
-        preferences: []
+        constraints: [],
+        prev_user_reviews: []
     };
 
-    updateUserSearch = (dishID) => {
-        axios.get(`http://127.0.0.1:8000/api/user/${this.props.token}/`)
+    updateUserSearch = async (dishID) => {
+        await axios.get(`http://127.0.0.1:8000/api/user/${this.props.token}/`)
             .then(res => {
-            this.setState({
-                level: res.data.level,
-                likes: res.data.likes,
-                gifts: res.data.gifts,
-                searches: res.data.searches,
-                preferences: res.data.preferences
-            });
+                this.setState({
+                    likes: res.data.likes,
+                    gifts: res.data.gifts,
+                    searches: res.data.searches,
+                    constraints: res.data.constraints
+                });
             })
             .catch(error => console.log(error));
 
-        axios.put(`http://127.0.0.1:8000/api/updateuser/${this.props.token}/`, {
+        await axios.put(`http://127.0.0.1:8000/api/updateuser/${this.props.token}/`, {
             user: this.props.token,
-            level: this.state.level,
+            username: localStorage.getItem('username'),
             likes: this.state.likes,
             gifts: this.state.gifts,
             searches: [...this.state.searches, dishID],
-            preferences: this.state.preferences
+            constraints: this.state.constraints
         })
             .then(res => console.log(res))
             .catch(error => console.log(error));
@@ -55,7 +55,6 @@ class DishPage extends React.Component {
 
     fetchReviews = (dishID) => {
         axios.get(`http://127.0.0.1:8000/api/dishreviews/${dishID}`).then(res => {
-            console.log(res.data);
             this.setState({
                 reviews: res.data,
             });
@@ -74,31 +73,42 @@ class DishPage extends React.Component {
                 restaurant_name: res.data.restaurant.name,
                 rest_id: res.data.restaurant.id,
                 price: res.data.price,
-                tags: res.data.tags.map(tag=>(tag['title'])),
+                tags: res.data.tags.map(tag => (tag['title'])),
             });
         }).catch(error => console.log(error));
-        this.updateUserSearch(dishID);
         this.fetchReviews(dishID);
+        setTimeout(() => this.updateUserSearch(dishID), 300);
     };
 
 
     showDrawer = () => {
-        this.setState({
-            visible: true,
-        });
+        axios.get(`http://127.0.0.1:8000/api/userreviews/${this.props.token}/`).then(res => {
+            this.setState({
+                prev_user_reviews: res.data
+            });
+        }).catch(error => console.log(error));
+        let value;
+        setTimeout(() => {
+            if (this.state.prev_user_reviews.filter(review => review.dish == this.state.dish_id).length > 0) {
+                message.error('You already gave a review for this dish');
+                value = false;
+            } else value = true;
+            this.setState({
+                visible: value,
+            });
+        }, 500);
     };
 
     onClose = () => {
         this.setState({
             visible: false,
         });
-
     };
 
     dishToPicLocation = name => {
         let out;
         out = name.replace(/ /g, '_');
-        return 'http://127.0.0.1:8000/api/pic/'+out;
+        return 'http://127.0.0.1:8000/api/pic/' + out;
     };
 
 
@@ -111,21 +121,21 @@ class DishPage extends React.Component {
                         <Row>
                             <Col span={16}>
                                 <Title level={2}>
-                                {this.state.dish_name}
-                            </Title>
+                                    {this.state.dish_name}
+                                </Title>
                             </Col>
                             <Col span={8}>
                                 <Title level={3}>
-                            {this.state.price} ₪
-                        </Title>
+                                    {this.state.price} ₪
+                                </Title>
                             </Col>
 
                         </Row>
                         <Row>
                             <Title level={3}>
-                                <a href={'http://127.0.0.1:3000/rest/'+this.state.rest_id}>
-                                {this.state.restaurant_name}
-                            </a>
+                                <a href={'http://127.0.0.1:3000/rest/' + this.state.rest_id}>
+                                    {this.state.restaurant_name}
+                                </a>
                             </Title>
                         </Row>
                         <Row>
@@ -173,8 +183,8 @@ class DishPage extends React.Component {
                     >
                     </div>
                 </Drawer>
-
-                <Reviews data={this.state.reviews} token={this.props.token}/>
+                {this.state.reviews.length > 0 ? <Reviews data={this.state.reviews} token={this.props.token}/> :
+                    <div><br/><h5>No reviews</h5></div>}
             </div>
         )
     }

@@ -1,5 +1,5 @@
 import React from "react";
-import { List, Rate, Button } from 'antd';
+import {List, Rate, Button, message} from 'antd';
 import axios from "axios";
 
 class Reviews extends React.Component {
@@ -9,7 +9,8 @@ class Reviews extends React.Component {
         likes: [],
         gifts: [],
         searches: [],
-        preferences: []
+        preferences: [],
+        prev_reviews: []
     };
 
     updateUserLikes = (item) => {
@@ -50,10 +51,12 @@ class Reviews extends React.Component {
                     searches: res.data.searches,
                     preferences: res.data.preferences
                 });
-            })
-            .catch(error => console.log(error));
+            }).catch(error => console.log(error));
 
-            if (!this.state.likes.includes(item.id)) {
+            if(this.state.likes.includes(item.id)) {
+                message.error('You already likes this review');
+            }
+            else {
                 this.updateUserLikes(item);
                 this.updateReviewLikes(item);
             }
@@ -78,7 +81,6 @@ class Reviews extends React.Component {
                 size="large"
                 pagination={{
                     onChange: page => {
-                        console.log(page);
                     },
                     pageSize: 3,
                 }}
