@@ -17,7 +17,6 @@ class Dishes extends React.Component {
     };
 
     render() {
-        console.log(this.props.data);
         return (
             <List
                 itemLayout="inline"
@@ -34,23 +33,22 @@ class Dishes extends React.Component {
                 renderItem={dish => (
                     <List.Item>
                         <Card
-                                            style={{ width: 300}}
-                                            cover={
-                                                <a href={'http://127.0.0.1:3000/dish/'+dish.id}>
-                                                    <img
-                                                        alt="So good..."
-                                                        src={this.dishToPicLocation(dish.title)}
-                                                        width="300"
-                                                    />
+                            style={{ width: 300}}
+                            cover={
+                                <a href={'http://127.0.0.1:3000/dish/' + dish.id}>
+                                    <img
+                                        alt="So good..."
+                                        src={this.dishToPicLocation(dish.title)}
+                                        width="300"
+                                    />
 
-                                                </a>
-                                            }
-                                        >
-                                            <Meta
-                                                title={dish.title}
-                                                description={dish.content}
-                                            />
-                                        </Card>
+                                </a>
+                            }>
+                            <Meta
+                                title={dish.title}
+                                description={dish.content}
+                            />
+                        </Card>
                     </List.Item>
                 )}
             />

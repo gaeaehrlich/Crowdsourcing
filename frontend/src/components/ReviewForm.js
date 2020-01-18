@@ -1,6 +1,7 @@
 import React from "react";
+import { withRouter } from 'react-router-dom';
 import axios from 'axios';
-import {Form, Checkbox, Row, Button, Rate, Input, Upload, Icon} from 'antd';
+import {Form, Checkbox, Row, Button, Rate, Input, Upload, Icon, message} from 'antd';
 
 const { TextArea } = Input;
 
@@ -31,53 +32,49 @@ class ReviewForm extends React.Component {
     state = {
         loading: false,
         imageUrl: null,
+        likes: [],
+        gifts: [],
+        searches: [],
+        constraints: [],
+        created: false
     };
 
       normFile = e => {
-        if (Array.isArray(e)) {
-            return e;
-        }
-        return e && e.fileList;
-    };
+          if (Array.isArray(e)) {
+              return e;
+          }
+          return e && e.fileList;
+      };
 
-      init_review = (username, dishid) => {
-        axios.get(`http://127.0.0.1:8000/api/init_review`, {
-            params: {
-                user_name: username,
-                dish_id: dishid
-            }
-        }).then(res => {
-            console.log(res)
-        });
-    };
+      createReview = async (values, token, dishID) => {
+          const description = values['review_text'];
+          const stars = values['rating'];
+          const anonymous = values['is_anonymous'];
+          await axios.post('http://127.0.0.1:8000/api/createreview/', {
+              author_token: token,
+              author_username: localStorage.getItem('username'),
+              dish: dishID,
+              description: description,
+              stars: stars,
+              is_anonymous: anonymous,
+              likes: 0,
+              photo_name: uplodedFileName,
 
+          }).then(res => console.log(res))
+            .catch(error => console.log(error.response));
+      };
 
       handleSubmit = (event, token, dishID) => {
         event.preventDefault();
-        this.props.form.validateFields((err, values) => {
+        this.props.form.validateFields(async (err, values) => {
             if (!err) {
-                const description = values['review_text'];
-                const stars = values['rating'];
-                const anonymous = values['is_anonymous'];
-                return axios.post('http://127.0.0.1:8000/api/createreview/', {
-                    author_token: token,
-                    author_username: localStorage.getItem('username'),
-                    dish: dishID,
-                    description: description,
-                    stars: stars,
-                    is_anonymous: anonymous,
-                    likes: 0,
-                    photo_name: uplodedFileName,
-
-                }).then(res => {console.log(res);
-                this.init_review(localStorage.getItem('username'), dishID)
-                })
-                    .catch(error => console.log(error.response));
+                this.createReview(values, token, dishID);
             }
-            this.setState({
+            await this.setState({
                 visible: false,
                 uplodedFileName: ''
             });
+            setTimeout( () => window.location.reload(), 1000);
         });
     };
 
@@ -156,4 +153,4 @@ class ReviewForm extends React.Component {
 
 const WrappedForm = Form.create()(ReviewForm);
 
-export default WrappedForm;
+export default withRouter(WrappedForm);

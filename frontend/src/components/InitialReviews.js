@@ -1,5 +1,5 @@
 import React from "react";
-import {List, Card, Rate, Form} from 'antd';
+import {List, Card, Rate, Form, Col, Button} from 'antd';
 import axios from "axios";
 
 const { Meta } = Card;
@@ -8,7 +8,8 @@ class InitialReviews extends React.Component {
 
     state = {
         dishes: [],
-        submitted: []
+        submitted: [],
+        length: 0
     };
 
     setRandArr = (length) => {
@@ -62,13 +63,14 @@ class InitialReviews extends React.Component {
        handleSubmit = (event, dishID) => {
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                if(!this.state.submitted.includes(dishID)) {
+                console.log(dishID);
+                if(this.state.submitted.indexOf(dishID) === -1) {
                     return axios.post('http://127.0.0.1:8000/api/createreview/', {
                         author_token: localStorage.getItem('token'),
                         author_username: localStorage.getItem('username'),
                         dish: dishID,
                         description: "",
-                        stars: values['rating'],
+                        stars: values[`rating${dishID}`],
                         is_anonymous: true,
                         likes: 0,
                         photo_name: ""
@@ -84,6 +86,14 @@ class InitialReviews extends React.Component {
         });
     };
 
+    dishToPicLocation = name => {
+        if(name) {
+            let out;
+            out = name.replace(/ /g, '_');
+            return 'http://127.0.0.1:8000/api/pic/' + out;
+        }
+    };
+
     render() {
         const {getFieldDecorator} = this.props.form;
         return (
@@ -95,21 +105,25 @@ class InitialReviews extends React.Component {
                         <Card
                             hoverable
                             style={{width: 240, padding: 5 }}
-                            cover={<img alt="example"
-                                        src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"/>}
+                            cover={
+                                <img
+                                    alt="So good.."
+                                    src={this.dishToPicLocation(this.state.dish_name)}
+                                    width="300"
+                        />}
                         >
                             <Meta title={item.title} description={item.content}/>
 
                             <Form layout="vertical">
                                 <Form.Item>
-                                    {getFieldDecorator('rating', { initial: 4
+                                    {getFieldDecorator(`rating${item.id}`, { initial: 4
                                     })(<Rate onChange={(event) => this.handleSubmit(event, item.id)}/>)}
                                 </Form.Item>
                             </Form>
-
                         </Card>
                     </List.Item>
                 )}
+
             />
         );
     }
