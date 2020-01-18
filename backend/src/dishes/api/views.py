@@ -12,7 +12,9 @@ from .serializers import  TagSerializer, CityAreaSerializer
 
 from ..models import Dish, Review, Profile, Gift, Tag, Restaurant
 from .serializers import DishSerializer, ReviewSerializer, ProfileSerializer, GiftSerializer, RestaurantSerializer
-from ..Engine.manage import search as algo_search, init__user, init__review
+from ..Engine.manage import search as algo_search, init__user, init__review, eatwith as algo_eatwith
+
+from django.core import serializers
 
 
 class DishesListView(ListAPIView):
@@ -108,13 +110,39 @@ def search(req):
     tags = req.GET.getlist('tags[]')
     area = req.GET.getlist('area[]')
     user_name = req.GET['user_name']
-    print(tags, area, user_name)
 
     out = algo_search(user_name, area[0], tags)
-    print(out)
+
+    json = list(map(lambda dish: dict(DishSerializer(dish).data), out))
+    response = JsonResponse(data=json, safe=False)
+
+    return response
+
+def search_eatwith(req):
+    tags = req.GET.getlist('tags[]')
+    area = req.GET.getlist('area')
+    user_names = req.GET.getlist('users[]')
+    print(tags, area, user_names)
+    user_tags = {}
+
+    for user_name, tags in zip(user_names, tags):
+        tags = eval(tags.replace('null', 'None'))
+        user_tags[user_name] = list(filter(lambda tag:tag, tags))
+
+
+    rest, users = algo_eatwith(area[0], user_tags)
+    print(users)
+
+    rest = dict(RestaurantSerializer(rest).data)
+    out = {'dishes': [], 'rest': rest}
+    for user in users:
+        dish, rating = users[user]
+        dish = dict(DishSerializer(dish).data)
+        out['dishes'].append(dish)
+
 
     json = {'the new': {'name':'asd'}, 'afganit': {'name':'qwe'}}
-    response = JsonResponse(data=json)
+    response = JsonResponse(data=out, safe=False)
 
     return response
 

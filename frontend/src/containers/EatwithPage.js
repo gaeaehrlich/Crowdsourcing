@@ -5,6 +5,8 @@ import { Form, Input, Icon, Button } from 'antd';
 import { Typography } from 'antd';
 import axios from "axios";
 
+import Dishes from "../components/Dishes";
+
 const { Title } = Typography;
 
 
@@ -21,7 +23,10 @@ class EatwithPage extends React.Component {
         init_areas: ['Tel Aviv', 'City Center', 'City North'],
         possible_areas: [],
         areas: [],
-        reviews: []
+        reviews: [],
+        rest_hidden: true,
+        rest_name: '',
+        rest_id: '',
     };
 
     setTags = obj => {
@@ -77,13 +82,28 @@ class EatwithPage extends React.Component {
                 const { keys, names } = values;
                 console.log('Received values of form: ', values);
                 console.log('Merged values:', keys.map(key => names[key]));
+                axios.get(`http://127.0.0.1:8000/api/search_eatwith`, {
+                    params: {
+                        tags: values['tags'],
+                        area: values['area'],
+                        users: values['names'],
+                    }
+                }).then(res => {
+                    console.log(res);
+                    this.setState({
+                        dishes: res.data.dishes,
+                        rest_name: res.data.rest.name,
+                        rest_id: res.data.rest.id,
+                        rest_hidden: false,
+                    })
+                });
             }
         });
     };
 
     onSearchTag = searchText => {
         this.setState({
-            possible_tags: !searchText ? [] : this.state.init_tags.filter(tag => tag.startsWith(searchText)),
+            possible_tags: !searchText ? [] : this.state.init_tags.filter(tag => tag.toLowerCase().startsWith(searchText.toLowerCase())),
         });
     };
 
@@ -95,7 +115,7 @@ class EatwithPage extends React.Component {
 
     onSearchArea = searchText => {
         this.setState({
-            possible_areas: !searchText ? [] : this.state.init_areas.filter(area => area.startsWith(searchText)),
+            possible_areas: !searchText ? [] : this.state.init_areas.filter(area => area.toLowerCase().startsWith(searchText.toLowerCase())),
         });
     };
 
@@ -235,18 +255,18 @@ class EatwithPage extends React.Component {
 
                 </Form.Item>
                 <Form.Item
-                            style={{visibility:"visible", }}
-                        >
-                            {getFieldDecorator(`area`, {
-                                validateTrigger: ['onChange', 'onBlur'],
-                                rules: [
-                                    {
-                                        required: false,
-                                        whitespace: true,
-                                        message: 'Please enter area'
-                                    },
-                                ],
-                            })(<AutoComplete
+                    style={{visibility:"visible", }}
+                >
+                    {getFieldDecorator(`area`, {
+                        validateTrigger: ['onChange', 'onBlur'],
+                        rules: [
+                            {
+                                required: false,
+                                whitespace: true,
+                                message: 'Please enter area'
+                            },
+                        ],
+                    })(<AutoComplete
                         dataSource={this.state.possible_areas}
                         style={{ width: 200 }}
                         // onSelect={this.onSetArea}
@@ -254,7 +274,7 @@ class EatwithPage extends React.Component {
                         placeholder="Area"
                     />)}
 
-                        </Form.Item>
+                </Form.Item>
                 {formItems}
                 <Form.Item {...formItemLayoutWithOutLabel}>
                     <Button type="dashed" onClick={this.add} style={{ width: '60%' }}>
@@ -266,7 +286,15 @@ class EatwithPage extends React.Component {
                         Submit
                     </Button>
                 </Form.Item>
+                <Title level={4}  >
+                    <a href={'http://127.0.0.1:3000/rest/' + this.state.rest_id} hidden={this.state.rest_hidden}>
+                                    We know you want: {this.state.rest_name}
+                                </a>
+                </Title>
+
+            <Dishes data={this.state.dishes}/>
             </Form>
+
         );
     }
 }

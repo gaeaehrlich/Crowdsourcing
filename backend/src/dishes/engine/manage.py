@@ -23,15 +23,20 @@ def search(username, area_name, tag_titles = [], lte = None, gte = None):
     return search_dishes(user, area, tags, lte, gte)
 
 
-def eatwith(area_name, requests_strings): # TODO: what the fuck am I getting here?
+def eatwith(area_name, requests_strings):
     area = CityArea.objects.get(name=area_name)
     requests = []
 
-
-    for request in requests_strings:
-        user = User.objects.get(username=request[0])
-        tags = Tag.objects.filter(title__in=request[1])
+    for user_name in requests_strings:
+        user = User.objects.get(username=user_name)
+        print(user_name)
+        tags = Tag.objects.filter(title__in=requests_strings[user_name])
         requests.append((user, tags))
+
+    # for request in requests_strings:
+    #     user = User.objects.get(username=request[0])
+    #     tags = Tag.objects.filter(title__in=request[1])
+    #     requests.append((user, tags))
 
     restaurant, dishes, losses  = choose_restaurant(requests, area)
     answers = {}

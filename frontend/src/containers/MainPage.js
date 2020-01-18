@@ -143,7 +143,11 @@ class MainPage extends React.Component {
                 user_name: this.state.user_name
             }
         }).then(res => {
-            console.log(res)
+            console.log(res);
+            this.setState({
+                dishes: res.data
+
+            });
         });
     };
 

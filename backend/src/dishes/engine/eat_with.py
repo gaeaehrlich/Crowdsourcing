@@ -29,7 +29,7 @@ def cal_dish_loss(user, tags, dish):
                 min_loss = tag_loss
 
     estimation = Estimation.objects.get(user=user, dish=dish).estimate
-    return np.exp(min_loss - estimation) # rethink this
+    return np.exp(min_loss - estimation*0.23) # rethink this
 
 
 def cal_restaurant_loss(user, tags, restaurant):
