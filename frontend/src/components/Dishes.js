@@ -40,6 +40,7 @@ class Dishes extends React.Component {
                                         alt="So good..."
                                         src={this.dishToPicLocation(dish.title)}
                                         width="300"
+                                        height="350"
                                     />
 
                                 </a>

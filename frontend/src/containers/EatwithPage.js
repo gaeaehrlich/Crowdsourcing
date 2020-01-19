@@ -252,7 +252,7 @@ class EatwithPage extends React.Component {
             <div>
             <Title level={2}>Eat With</Title>
             <Form onSubmit={this.handleSubmit}>
-                <div style={{display: "inline-flex"}}>
+                <div style={{display: "inline"}}>
                 <Form.Item
                     style={{visibility:"visible", }}
                 >
