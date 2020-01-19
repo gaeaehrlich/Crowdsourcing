@@ -3,6 +3,7 @@ import axios from 'axios';
 
 import Gifts from "../components/Gifts";
 import {Steps, Icon, List, Button, Modal} from 'antd';
+import share from "../facebbok.png"
 
 const { Step } = Steps;
 
@@ -42,6 +43,7 @@ class UserGiftsList extends React.Component {
     componentDidMount() {
         //this.fetchGifts();
         this.fetchUser();
+        console.log(this.state.used)
     }
 
     handleOk = e => {
@@ -52,6 +54,7 @@ class UserGiftsList extends React.Component {
     };
 
     handleClick = (itemID) => {
+        console.log(this.state.used);
         this.setState({
             used: [...this.state.used, itemID],
             visible: true,
@@ -69,7 +72,7 @@ class UserGiftsList extends React.Component {
             return "wait";
         };
 
-        const maxLevel = 5;//this.state.level > 5 ? 5 : this.state.level;
+        const maxLevel = this.state.level > 5 ? 5 : this.state.level;
         return (
             <div>
                 <h3>Your level: {this.state.level ? maxLevel : 0} / 5</h3>
@@ -81,10 +84,10 @@ class UserGiftsList extends React.Component {
                     <Step status={ProgressBarStatus("Critic")} title="Critic" icon={<Icon type="trophy"/>}/>
                 </Steps>
                 <br/>
-                <Button>Share</Button>
+                <img style={{width: "15%", height: "15%"}} src={share}/>
                 <br/><br/>
                 <h3>Available gifts:</h3>
-                {!this.state.level ? //changed
+                {this.state.level ?
                     <List
                         itemLayout="horizontal"
                         dataSource={this.state.gifts.slice(0, maxLevel)}
@@ -95,9 +98,9 @@ class UserGiftsList extends React.Component {
                                     description={item.description}
                                 />
                                 {this.state.used.indexOf(item.id) == -1 ?
-                                    <Button onClick={this.handleClick(item.id)}>Use gift</Button>
+                                    <Button onClick={() => this.handleClick(item.id)}>Use gift</Button>
                                     :
-                                    <Button>Used!</Button>
+                                    <Button disabled={true}>Used!</Button>
                                 }
                                 <Modal
                                     title="Your gift token:"

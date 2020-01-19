@@ -143,7 +143,7 @@ class EatwithPage extends React.Component {
             <Row>
                 <Form.Item
                     {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
-                    label={index === 0 ? 'Passengers' : ''}
+                    label={index === 0 ? 'User:' : ''}
                     required={false}
                     key={k}
                 >
@@ -156,7 +156,7 @@ class EatwithPage extends React.Component {
                                 message: "Please input passenger's name or delete this field.",
                             },
                         ],
-                    })(<Input placeholder="User Name" style={{ width: '40%', marginRight: 8 }} />)}
+                    })(<Input placeholder="User Name" style={{ width: '70%', marginRight: 30 }} />)}
                     {keys.length > 1 ? (
                         <Icon
                             className="dynamic-delete-button"
@@ -165,8 +165,6 @@ class EatwithPage extends React.Component {
                         />
                     ) : null}
                 </Form.Item>
-                {/*    </Row>*/}
-                {/*<Row>*/}
                 <Form.Item
                     {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
                     label={index === 0 ? 'Tags' : ''}
@@ -183,7 +181,7 @@ class EatwithPage extends React.Component {
                         ],
                     })(<AutoComplete
                         dataSource={this.state.possible_tags}
-                        style={{ width: '15%' }}
+                        style={{ width: '100%' }}
                         onSelect={this.onSelectTag}
                         onSearch={this.onSearchTag}
                         placeholder="Tag"
@@ -209,7 +207,7 @@ class EatwithPage extends React.Component {
                                 ],
                             })(<AutoComplete
                                 dataSource={this.state.possible_tags}
-                                style={{ width: '15%' }}
+                                style={{ width: '100%' }}
                                 onSelect={this.onSelectTag}
                                 onSearch={this.onSearchTag}
                                 placeholder="Tag"
@@ -235,7 +233,7 @@ class EatwithPage extends React.Component {
                                 ],
                             })(<AutoComplete
                                 dataSource={this.state.possible_tags}
-                                style={{ width: '15%' }}
+                                style={{ width: '100%' }}
                                 onSelect={this.onSelectTag}
                                 onSearch={this.onSearchTag}
                                 placeholder="Tag"
@@ -252,7 +250,8 @@ class EatwithPage extends React.Component {
             <div>
             <Title level={2}>Eat With</Title>
             <Form onSubmit={this.handleSubmit}>
-                <div style={{display: "inline-flex"}}>
+                <div style={{display: "flex"}}>
+                    <br/>
                 <Form.Item
                     style={{visibility:"visible", }}
                 >
@@ -267,7 +266,7 @@ class EatwithPage extends React.Component {
                         ],
                     })(<AutoComplete
                         dataSource={this.state.possible_areas}
-                        style={{ width: 200 }}
+                        style={{ width: 200, marginRight: 10 }}
                         // onSelect={this.onSetArea}
                         onSearch={this.onSearchArea}
                         placeholder="Area"
