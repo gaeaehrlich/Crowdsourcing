@@ -1,7 +1,5 @@
-from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand
 from ...engine.collaborative import update_estimations
-from ...models import Rank, Dish
 
 
 class Command(BaseCommand):

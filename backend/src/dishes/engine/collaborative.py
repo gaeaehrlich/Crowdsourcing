@@ -70,6 +70,7 @@ def updated_estimation(user, dish):
     estimate = 0
     if dish.reviews.filter(author_username=user.username).exists():
         estimate = dish.reviews.get(author_username=user.username).stars
+        print('where should, ', estimate)
     else:
         neighbors = knn(user, dish)
         if len(neighbors) > 0:
@@ -78,7 +79,7 @@ def updated_estimation(user, dish):
     return estimate
 
 
-def update_estimations(days = 1):
+def update_estimations(days = 0):
     t = timezone.now() - timedelta(days=days)
     old_cells = Estimation.objects.filter(last_update__lt=t)
     for cell in old_cells:
@@ -91,6 +92,7 @@ def add_estimations_for_new_user(user):
 
     for dish in Dish.objects.all():
         estimate = updated_estimation(user, dish)
+        print(estimate)
         Estimation.objects.create(dish=dish,
                                       user=user,
                                       estimate=estimate)

@@ -147,7 +147,7 @@ class ReviewForm extends React.Component {
                                 beforeUpload={beforeUpload}
                                 onChange={this.handleUploadChange}
                             >
-                                {this.state.imageUrl ? <img src={this.state.imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
+                                {this.state.imageUrl ? <img src={this.state.imageUrl} alt="avatar" style={{ width: '100%'}} /> : uploadButton}
                             </Upload>
                         )}
                     </Form.Item>

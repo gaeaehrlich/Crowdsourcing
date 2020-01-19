@@ -93,7 +93,8 @@ class Reviews extends React.Component {
                         <img
                             alt="logo"
                             src={this.dishToPicLocation(item.photo_name)}
-                            width="300"
+                            width="100px"
+                            height="100px"
                         />: null
                         }
                     >
