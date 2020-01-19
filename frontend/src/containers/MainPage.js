@@ -27,7 +27,7 @@ class MainPage extends React.Component {
         areas: [],
         reviews: [],
         searches: [],
-        user_name: null,
+        user_name: localStorage.getItem('username'),
     };
 
     fetchUser = async () => {
