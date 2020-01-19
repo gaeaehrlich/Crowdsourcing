@@ -1,20 +1,19 @@
 import React from "react";
 import axios from 'axios';
-import { Link} from 'react-router-dom';
 
-import { AutoComplete, Typography, Form, Button, Row, Col, Tag } from 'antd';
+import { AutoComplete, Typography, Form, Button} from 'antd';
+import { Tag } from 'antd';
+import { Row, Col } from 'antd';
 import {connect} from "react-redux";
 import logo from "../logo.png";
-import search from "../search.png"
-import eatWith from "../eat_with_logo.png"
-import Reminder from "../components/Reminder";
+import Dishes from "../components/Dishes";
 
 
 const { Title } = Typography;
 
 
 
-class MainPage extends React.Component {
+class SearchPage extends React.Component {
 
     state = {
         dishes: [],
@@ -25,35 +24,9 @@ class MainPage extends React.Component {
         init_areas: ['Tel Aviv', 'City Center', 'City North'],
         possible_areas: [],
         areas: [],
-        reviews: [],
-        searches: [],
         user_name: null,
     };
 
-    fetchUser = async () => {
-        const token = localStorage.getItem('token');
-        await axios.get(`http://127.0.0.1:8000/api/userreviews/${token}/`).then(res => {
-            this.setState({
-                reviews: res.data
-            });
-        });
-        axios.get(`http://127.0.0.1:8000/api/user/${token}/`).then(res => {
-            let updatedHistory = [...res.data.searches];
-            for(let i = 0; i < this.state.reviews.length; i++) {
-                const index = updatedHistory.indexOf(Number(this.state.reviews[i].dish));
-                if (index !== -1) {
-                    updatedHistory.splice(index, 1);
-                }
-            }
-            this.setState({
-                searches: updatedHistory
-            });
-        }).catch( () => {
-            this.setState({
-                searches: []
-            });
-        });
-    };
 
     setTags = obj => {
         let temp;
@@ -91,7 +64,6 @@ class MainPage extends React.Component {
     };
 
     componentDidMount() {
-        this.fetchUser();
         this.setTags();
         this.setCityAreas();
         this.setInitDishes();
@@ -163,22 +135,56 @@ class MainPage extends React.Component {
             <div>
                 {this.props.isAuthenticated ?
                     <div>
-                    <Title level={2}>Welcome, {this.state.user_name}</Title>
-                    {this.state.searches.length > 0 ?
-                    <div>
-                        <h3>Have you tried these courses?</h3>
-                        <br/>
-                        <Reminder data={this.state.searches}/>
-                    </div>
-                    : null}
-                    <div style={{
-                        display: "inline-flex",
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                    }}><Link to={'search'}><img src={search}/></Link>
-                        <Link to={'eatwith'}><img src={eatWith}/></Link></div>
-                    </div>
-                        :
+                    <Title level={2}>What would you like to eat, {this.state.user_name}?</Title>
+                    <dom>
+                        <Row gutter={[this.gutt, this.gutt]}>
+                            </Row>
+                        <Row gutter={[this.gutt, this.gutt]}>
+                                <AutoComplete
+                                    dataSource={this.state.possible_tags}
+                                    style={{width: 400}}
+                                    onSelect={this.onSetTag}
+                                    onSearch={this.onSearchTag}
+                                    placeholder="Tags"
+                                />
+                        </Row>
+                        <Row gutter={[this.gutt, this.gutt]}>
+                                {this.state.tags.map((tag) =>
+                                    <Tag key={tag} closable onClose={() => this.handleCloseTag(tag)}>{tag}</Tag>
+                                )}
+                        </Row>
+                        <Row gutter={[this.gutt, this.gutt]}>
+                            <Col>
+                                <AutoComplete
+                                    dataSource={this.state.possible_areas}
+                                    style={{width: 200}}
+                                    onSelect={this.onSetArea}
+                                    onSearch={this.onSearchArea}
+                                    placeholder="Areas"
+                                />
+                            </Col>
+
+                            <Col>
+                                {this.state.areas.map((area) =>
+                                    <Tag key={area} closable onClose={() => this.handleCloseArea(area)}>{area}</Tag>
+                                )}
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Form onSubmit={this.handleSubmit}>
+                    <Form.Item>
+                    <Button type="primary" htmlType="submit">
+                        Submit
+                    </Button>
+
+                </Form.Item>
+                                </Form>
+                </Row>
+                        <Row>
+                            <Dishes data={this.state.dishes}/>
+                        </Row>
+                    </dom>
+                    </div> :
                     <div style={{
                         display: 'flex',
                         justifyContent: 'center',
@@ -199,4 +205,4 @@ const mapStateToProps = state => {
     }
 };
 
-export default connect(mapStateToProps)(MainPage);
+export default connect(mapStateToProps)(SearchPage);

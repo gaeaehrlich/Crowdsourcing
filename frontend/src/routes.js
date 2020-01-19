@@ -11,6 +11,7 @@ import DishPage from "./containers/DishPage";
 import RestPage from "./containers/RestPage";
 import MainPage from "./containers/MainPage"
 import EatwithPage from "./containers/EatwithPage"
+import SearchPage from "./containers/SearchPage";
 
 const BaseRouter = () => (
   <div>
@@ -24,6 +25,8 @@ const BaseRouter = () => (
     <Route exact path="/dish/:dishID" component={DishPage} />
     <Route exact path="/rest/:restID" component={RestPage} />
     <Route exact path="/eatwith" component={EatwithPage} />
+    <Route exact path="/search" component={SearchPage} />
+
   </div>
 );
 

@@ -249,11 +249,10 @@ class EatwithPage extends React.Component {
 
         ));
         return (
+            <div>
+            <Title level={2}>Eat With</Title>
             <Form onSubmit={this.handleSubmit}>
-                <Title level={2}>Eat With</Title>
-                <Form.Item >
-
-                </Form.Item>
+                <div style={{display: "inline-flex"}}>
                 <Form.Item
                     style={{visibility:"visible", }}
                 >
@@ -277,10 +276,12 @@ class EatwithPage extends React.Component {
                 </Form.Item>
                 {formItems}
                 <Form.Item {...formItemLayoutWithOutLabel}>
-                    <Button type="dashed" onClick={this.add} style={{ width: '60%' }}>
+                    <Button type="dashed" onClick={this.add} style={{ width: '110%' }}>
                         <Icon type="plus" /> Add User
                     </Button>
                 </Form.Item>
+
+                </div>
                 <Form.Item {...formItemLayoutWithOutLabel}>
                     <Button type="primary" htmlType="submit">
                         Submit
@@ -292,9 +293,9 @@ class EatwithPage extends React.Component {
                                 </a>
                 </Title>
 
-            <Dishes data={this.state.dishes}/>
             </Form>
-
+            {this.state.dishes.length > 0 ? <Dishes data={this.state.dishes}/> : null }
+            </div>
         );
     }
 }
