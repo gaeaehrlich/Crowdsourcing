@@ -14,14 +14,14 @@ class InitialReviews extends React.Component {
 
     setRandArr = (length) => {
         let res = [];
-        if(length < 8) {
+        if(length < 6) {
             for(let i = 0; i < length; i++) {
                 res = [...res, i];
             }
         }
         else {
             let i = 0;
-            while(i < 8) {
+            while(i < 6) {
                 let num = Math.floor(Math.random()*length);
                 if(!res.includes(num)) {
                     res = [...res, num];
@@ -97,7 +97,7 @@ class InitialReviews extends React.Component {
         const {getFieldDecorator} = this.props.form;
         return (
             <List
-                grid={{gutter: 2, column: 4}}
+                grid={{gutter: 2, column: 3}}
                 dataSource={this.state.dishes}
                 renderItem={item => (
                     <List.Item>
