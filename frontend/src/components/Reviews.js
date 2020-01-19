@@ -93,7 +93,8 @@ class Reviews extends React.Component {
                         <img
                             alt="logo"
                             src={this.dishToPicLocation(item.photo_name)}
-                            width="300"
+                            width="100px"
+                            height="100px"
                         />: null
                         }
                     >
@@ -107,10 +108,10 @@ class Reviews extends React.Component {
                             <br/>
                             <div style={{display: "inline-flex" , flexDirection: "row"}}>
                             <Rate style={{marginRight: 10}} disabled defaultValue={item.stars} />
-                            <Button onClick={ () =>
-                                this.handleLike(item)
-                            } shape="circle" icon="like" />
+                            <div style={{marginRight:10}}><Button style={{marginRight: 10}} onClick={ () => this.handleLike(item) } shape="circle" icon="like" />
+                                <h7 style={{display: "inline-flex"}}>{item.likes}</h7></div>
                             </div>
+                            <a>spam</a>
                         </footer>
                     </List.Item>
                 )}

@@ -186,7 +186,7 @@ class MainPage extends React.Component {
                             display: "inline-flex",
                             justifyContent: 'center',
                             alignItems: 'center',
-                        }}><Link to={'search'}><img src={search}/></Link>
+                        }}><Link to={'search'}><img src={search} style={{marginRight: 200}}/></Link>
                             <Link to={'eatwith'}><img src={eatWith}/></Link></div>
                     </div>
                     :
