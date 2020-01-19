@@ -155,7 +155,7 @@ class DishPage extends React.Component {
                         <img
                             alt="So good.."
                             src={this.dishToPicLocation(this.state.dish_name)}
-                            width="300"
+                            style={{width:"300px", height:"100px"}}
                         />
                     </Col>
 
