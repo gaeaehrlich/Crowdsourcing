@@ -124,19 +124,19 @@ class DishPage extends React.Component {
                     <Col span={16}>
                         <Row>
                             <Col span={16}>
-                                <Title level={2}>
+                                <Title level={2} style={{fontFamily: 'Raleway'}}>
                                     {this.state.dish_name}
                                 </Title>
                             </Col>
                             <Col span={8}>
-                                <Title level={3}>
+                                <Title level={3} style={{fontFamily: 'Raleway'}}>
                                     {this.state.price} ₪
                                 </Title>
                             </Col>
 
                         </Row>
                         <Row>
-                            <Title level={3}>
+                            <Title level={3} style={{fontFamily: 'Raleway'}}>
                                 <a href={'http://127.0.0.1:3000/rest/' + this.state.rest_id}>
                                     {this.state.restaurant_name}
                                 </a>

@@ -248,7 +248,7 @@ class EatwithPage extends React.Component {
         ));
         return (
             <div>
-            <Title level={2}>Eat With</Title>
+            <Title level={2} style={{fontFamily: 'Raleway'}}>Eat With</Title>
             <Form onSubmit={this.handleSubmit}>
                 <div style={{display: "flex"}}>
                     <br/>
@@ -286,7 +286,7 @@ class EatwithPage extends React.Component {
                         Submit
                     </Button>
                 </Form.Item>
-                <Title level={4}  >
+                <Title level={4} style={{fontFamily: 'Raleway'}}>
                     <a href={'http://127.0.0.1:3000/rest/' + this.state.rest_id} hidden={this.state.rest_hidden}>
                                     We know you want: {this.state.rest_name}
                                 </a>

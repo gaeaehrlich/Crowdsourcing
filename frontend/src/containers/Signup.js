@@ -172,7 +172,7 @@ class RegistrationForm extends React.Component {
                 }
                 {this.state.step == 2 ?
                     <div>
-                        <h2>Please select your preferences:</h2>
+                        <h2 style={{fontFamily: 'Raleway'}}>Please select your preferences:</h2>
                         <PreferencesForm requestType="post"/>
                     </div>
                     :
@@ -180,7 +180,7 @@ class RegistrationForm extends React.Component {
                 }
                 {this.state.step == 3 ?
                     <div>
-                        <h2>Please rate the dishes you liked:</h2>
+                        <h2 style={{fontFamily: 'Raleway'}}>Please rate the dishes you liked:</h2>
                         <InitialReview/>
                         <Button onClick={ () => this.props.history.push('/')}>Finish</Button>
                     </div>

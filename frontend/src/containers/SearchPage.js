@@ -135,7 +135,7 @@ class SearchPage extends React.Component {
             <div>
                 {this.props.isAuthenticated ?
                     <div>
-                    <Title level={2}>What would you like to eat, {this.state.user_name}?</Title>
+                    <Title level={2} style={{fontFamily: 'Raleway'}}>What would you like to eat, {this.state.user_name}?</Title>
                     <dom>
                         <Row gutter={[this.gutt, this.gutt]}>
                             </Row>

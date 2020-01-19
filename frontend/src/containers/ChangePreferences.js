@@ -7,7 +7,7 @@ class ChangePreferences extends React.Component {
     render() {
         return (
            <div>
-               <h2>Update your preferences:</h2>
+               <h2 style={{fontFamily: 'Raleway'}}>Update your preferences:</h2>
                <PreferencesForm requestType="put"/>
            </div>
         )

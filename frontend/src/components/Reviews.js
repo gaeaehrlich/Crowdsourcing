@@ -102,9 +102,9 @@ class Reviews extends React.Component {
                             title={item.title}
                             content={item.description}
                         />
-                        <h5>{item.description}</h5>
+                        <h5 style={{fontFamily: 'Raleway'}}>{item.description}</h5>
                         <footer>
-                            <h7>By: {this.author(item)}</h7>
+                            <h7 style={{fontFamily: 'Raleway'}}>By: {this.author(item)}</h7>
                             <br/>
                             <div style={{display: "inline-flex" , flexDirection: "row"}}>
                             <Rate style={{marginRight: 10}} disabled defaultValue={item.stars} />

@@ -75,7 +75,7 @@ class UserGiftsList extends React.Component {
         const maxLevel = this.state.level > 5 ? 5 : this.state.level;
         return (
             <div>
-                <h3>Your level: {this.state.level ? maxLevel : 0} / 5</h3>
+                <h3 style={{fontFamily: 'Raleway'}}>Your level: {this.state.level ? maxLevel : 0} / 5</h3>
                 <br/>
                 <Steps>
                     <Step status={ProgressBarStatus("Beginner")} title="Beginner" icon={<Icon type="user"/>}/>
@@ -86,7 +86,7 @@ class UserGiftsList extends React.Component {
                 <br/>
                 <img style={{width: "15%", height: "15%"}} src={share}/>
                 <br/><br/>
-                <h3>Available gifts:</h3>
+                <h3 style={{fontFamily: 'Raleway'}}>Available gifts:</h3>
                 {this.state.level ?
                     <List
                         itemLayout="horizontal"

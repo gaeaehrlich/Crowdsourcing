@@ -43,11 +43,11 @@ class RestPage extends React.Component {
     render() {
         return(
             <dom>
-                <Title level={2}>
+                <Title level={2} style={{fontFamily: 'Raleway'}}>
                     {this.state.rest_name}
                 </Title>
                 <Row>
-                    <Title level={4}>
+                    <Title level={4} style={{fontFamily: 'Raleway'}}>
                         {this.state.rest_street} {this.state.rest_number}, {this.state.rest_city_area}
                     </Title>
                 </Row>

@@ -173,7 +173,7 @@ class MainPage extends React.Component {
             <div>
                 {this.props.isAuthenticated ?
                     <div>
-                        <Title level={2}>Welcome, {this.state.user_name}</Title>
+                        <Title level={2} style={{fontFamily: 'Raleway'}}>Welcome, {this.state.user_name}</Title>
                         {this.state.searches.length > 0 ?
                             // <div>
                             //     <h3>Have you tried these courses?</h3>

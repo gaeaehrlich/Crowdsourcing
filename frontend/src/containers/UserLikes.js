@@ -37,7 +37,7 @@ class UserLikesList extends React.Component {
         return (
             <div>{this.state.likes.length > 0 ?
                     <Reviews data={this.state.reviews}/>
-                    : <h2>You didn't like any posts</h2>
+                    : <h2 style={{fontFamily: 'Raleway'}}>You didn't like any posts</h2>
             }</div>
         )
     }
