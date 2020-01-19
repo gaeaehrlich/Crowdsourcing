@@ -2,7 +2,7 @@ import React from "react";
 import axios from 'axios';
 import { Link} from 'react-router-dom';
 
-import { AutoComplete, Typography, Form, Button, Row, Col, Tag } from 'antd';
+import { AutoComplete, Typography, Form, Button, Row, Col, Tag, notification } from 'antd';
 import {connect} from "react-redux";
 import logo from "../logo.png";
 import search from "../search.png"
@@ -27,7 +27,7 @@ class MainPage extends React.Component {
         areas: [],
         reviews: [],
         searches: [],
-        user_name: null,
+        user_name: localStorage.getItem('username'),
     };
 
     fetchUser = async () => {
@@ -101,6 +101,16 @@ class MainPage extends React.Component {
         });
     }
 
+    openNotification = () => {
+        const args = {
+            message: 'What about some review??',
+            description:
+                <Reminder data={this.state.searches}/>,
+            duration: 0,
+        };
+        notification.open(args);
+    };
+
 
     onSetTag = tag => {
         this.setState(state => {
@@ -163,22 +173,23 @@ class MainPage extends React.Component {
             <div>
                 {this.props.isAuthenticated ?
                     <div>
-                    <Title level={2}>Welcome, {this.state.user_name}</Title>
-                    {this.state.searches.length > 0 ?
-                    <div>
-                        <h3>Have you tried these courses?</h3>
-                        <br/>
-                        <Reminder data={this.state.searches}/>
+                        <Title level={2}>Welcome, {this.state.user_name}</Title>
+                        {this.state.searches.length > 0 ?
+                            // <div>
+                            //     <h3>Have you tried these courses?</h3>
+                            //     <br/>
+                            //     <Reminder data={this.state.searches}/>
+                            // </div>
+                            this.openNotification()
+                            : null}
+                        <div style={{
+                            display: "inline-flex",
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}><Link to={'search'}><img src={search}/></Link>
+                            <Link to={'eatwith'}><img src={eatWith}/></Link></div>
                     </div>
-                    : null}
-                    <div style={{
-                        display: "inline-flex",
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                    }}><Link to={'search'}><img src={search}/></Link>
-                        <Link to={'eatwith'}><img src={eatWith}/></Link></div>
-                    </div>
-                        :
+                    :
                     <div style={{
                         display: 'flex',
                         justifyContent: 'center',

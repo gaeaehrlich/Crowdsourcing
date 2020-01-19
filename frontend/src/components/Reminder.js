@@ -23,7 +23,9 @@ class Reminder extends React.Component {
 
     render() {
         return (
-            <Dishes data={this.state.dishes}/>
+            this.state.dishes.length>0?
+            <a href={"http://127.0.0.1:3000/dish/" + this.state.dishes[0].id}>Review {this.state.dishes[0].title}</a>:
+        null
         );
     }
 }
