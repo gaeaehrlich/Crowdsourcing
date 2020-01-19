@@ -10,11 +10,11 @@ const { Step } = Steps;
 class UserGiftsList extends React.Component {
 
     state = {
-        gifts: [{id: 0, restaurant_name: "girrafe1", description: "You get 20% off your next order!"},
-            {id: 1, restaurant_name: "girrafe2", description: "You get 20% off your next order!"},
-            {id: 2, restaurant_name: "girrafe3", description: "You get 20% off your next order!"},
-            {id: 3, restaurant_name: "girrafe4", description: "You get 20% off your next order!"},
-            {id: 4, restaurant_name: "girrafe5", description: "You get 20% off your next order!"}],
+        gifts: [{id: 0, restaurant_name: "Italkiya Batahana", description: "You get one free drink!"},
+            {id: 1, restaurant_name: "Max Brener", description: "You get a free desert!"},
+            {id: 2, restaurant_name: "Greco", description: "You get 20% off your next order!"},
+            {id: 3, restaurant_name: "Namos", description: "You get a couple's meal for the price of one!"},
+            {id: 4, restaurant_name: "Vitrina", description: "You get 50% off your next order!"}],
         level: 0,
         used: [],
         visible: false
