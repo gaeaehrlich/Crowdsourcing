@@ -19,7 +19,7 @@ def is_legal_dish(dish, tags, username):
 
 
 def is_legal_dish_tags(dish, tags):
-    return all(related(x,y) for x in dish.tags.all() for y in tags)
+    return any(related(x,y) for x in dish.tags.all() for y in tags)
 
 
 def is_legal_dish_constraints(dish, username):
