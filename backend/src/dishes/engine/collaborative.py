@@ -1,4 +1,4 @@
-from .utils import averaged_mean, get_dishes, get_stars, knn, create_fake_stars_list
+from .utils import averaged_mean, get_dishes, get_stars, knn, create_fake_stars_list, get_users
 from ..models import DistanceMatrix, Review, Estimation, Dish
 from django.contrib.auth.models import User
 from datetime import timedelta
@@ -70,7 +70,6 @@ def updated_estimation(user, dish):
     estimate = 0
     if dish.reviews.filter(author_username=user.username).exists():
         estimate = dish.reviews.get(author_username=user.username).stars
-        print('where should, ', estimate)
     else:
         neighbors = knn(user, dish)
         if len(neighbors) > 0:
@@ -92,7 +91,6 @@ def add_estimations_for_new_user(user):
 
     for dish in Dish.objects.all():
         estimate = updated_estimation(user, dish)
-        print(estimate)
         Estimation.objects.create(dish=dish,
                                       user=user,
                                       estimate=estimate)

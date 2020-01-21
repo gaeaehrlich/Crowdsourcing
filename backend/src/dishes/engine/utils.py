@@ -4,6 +4,10 @@ import threading
 from django.contrib.auth.models import User
 
 
+def get_users(query_set):
+    return list(map(lambda x: x.user, query_set))
+
+
 def get_dishes(query_set):
     return list(map(lambda x: x.dish, query_set))
 
@@ -14,14 +18,6 @@ def get_users_from_review(query_set):
 
 def get_stars(query_set):
     return list(map(lambda x: x.stars, query_set))
-
-
-def get_restaurants(query_set):
-    return list(map(lambda x: x.restaurant, query_set))
-
-
-def get_tags(query_set):
-    return list(map(lambda x: x.tag, query_set))
 
 
 def get_rows(query_set):
