@@ -1,13 +1,22 @@
 from .collaborative import add_distances_for_new_user, update_distances_for_new_review, add_estimations_for_new_user
 from .search import search_dishes
 from .eat_with import choose_restaurant
-from ..models import User, Dish, CityArea, Review, Tag
+from ..models import User, Dish, CityArea, Review, Tag, DistanceMatrix, Estimation
+
+
+# make sure that init_user wasn't call before for some reason
+# (because of a double click or any other reason)
+# caused the bug in the presentation :(
+def first_call_init_user(user):
+    return not (( DistanceMatrix.objects.filter(col=user).exists()) or \
+                (Estimation.objects.get(user=user).exists()))
 
 
 def init__user(username):
     user = User.objects.get(username=username)
-    add_distances_for_new_user(user)
-    add_estimations_for_new_user(user)
+    if first_call_init_user(user):
+        add_distances_for_new_user(user)
+        add_estimations_for_new_user(user)
 
 
 def init__review(username, dish_id):
