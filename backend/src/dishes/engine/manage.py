@@ -1,5 +1,5 @@
 from .collaborative import add_distances_for_new_user, update_distances_for_new_review,\
-    add_estimations_for_new_user, update_estimations
+    add_estimations_for_new_user, update_estimations, update_distances_for_del_review
 from .search import search_dishes
 from .eat_with import choose_restaurant
 from ..models import User, Dish, CityArea, Review, Tag, DistanceMatrix, Estimation
@@ -24,6 +24,12 @@ def init__review(username, dish_id):
     review = Review.objects.get(author_username=username, dish__id=dish_id)
     update_distances_for_new_review(review)
     update_estimations()
+
+
+def del__review(username, dish_id, stars):
+    if Review.objects.filter(author_username=username, dish__id=dish_id).exists():
+        update_distances_for_del_review(username, dish_id, stars)
+        update_estimations()
 
 
 def search(username, area_name, tag_titles = [], lte = None, gte = None):

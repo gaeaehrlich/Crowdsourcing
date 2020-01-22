@@ -6,7 +6,8 @@ from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView,
 from django.views.decorators.csrf import csrf_exempt
 
 
-from ..engine.manage import search as algo_search, init__user, init__review, eatwith as algo_eatwith
+from ..engine.manage import search as algo_search, init__user, init__review, del__review,\
+    eatwith as algo_eatwith
 
 from ..models import Dish, Review, Profile, Tag, Restaurant, CityArea
 from .serializers import DishSerializer, ReviewSerializer, ProfileSerializer, RestaurantSerializer,\
@@ -174,6 +175,17 @@ def init_review(req):
 
     return response
 
+
+def del_review(req):
+    user_name = req.GET['user_name']
+    dish_id = req.GET['dish_id']
+    stars = req.GET['stars']
+    print('del_review was called:', user_name, dish_id, stars)
+
+    json = {'the new': {'name': 'asd'}, 'afganit': {'name': 'qwe'}}
+    response = JsonResponse(data=json)
+
+    return response
 
 def init_user(req):
     user_name = req.GET['user_name']

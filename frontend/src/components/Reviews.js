@@ -42,12 +42,26 @@ class Reviews extends React.Component {
             .catch(error => console.log(error));
     };
 
+
+    del_review = (item) => {
+          axios.get(`http://127.0.0.1:8000/api/del_review`, {
+              params: {
+                  user_name: item.author_username,
+                  dish_id: item.dish,
+                  stars: item.stars
+              }
+          }).then(res => {
+              console.log(res)
+          });
+      };
+
+
     handleSpam = (item) => {
         if(item.spam === this.props.token) {
             message.error('You have already reported this review');
         }
         else if(item.spam !== "") {
-            //call chen func
+            this.del_review(item);
             axios.delete(`http://127.0.0.1:8000/api/deletereview/${item.id}/`).catch(error => console.log(error));
             message.success('Thank you for reporting spam');
             setTimeout( () => window.location.reload(), 1000);

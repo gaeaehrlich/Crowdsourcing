@@ -66,6 +66,27 @@ def update_distances_for_new_review(review):
             distance_cell.save()
 
 
+def update_distances_for_del_review(username, dish_id, stars):
+    for distance_cell in DistanceMatrix.objects.filter(col__username=user):
+        other = distance_cell.row
+        other_review = Review.objects.filter(author_username=other.username,
+                                             dish__id=dish_id)
+
+        if other_review.exists():
+            other_stars = other_review.get().stars
+        else:
+            other_stars = 0
+
+        diff = abs(stars - other_stars)
+        distance_cell.distance = update_distance(distance_cell.distance, 0, diff)
+        distance_cell.save()
+
+        if other_review.exists():  # need to update distance for the old user
+            distance_cell = DistanceMatrix.objects.get(col=other, row__username=username)
+            distance_cell.distance = update_distance(distance_cell.distance, other_stars, diff)
+            distance_cell.save()
+
+
 def updated_estimation(user, dish):
     estimate = 0
     if dish.reviews.filter(author_username=user.username).exists():

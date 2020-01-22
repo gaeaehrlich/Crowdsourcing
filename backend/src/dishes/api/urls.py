@@ -18,6 +18,7 @@ from .views import (
     search,
     multiuploader,
     init_review,
+    del_review,
     init_user,
     search_eatwith,
     ReviewDetailView,
@@ -45,6 +46,7 @@ urlpatterns = [
     path('uploadphoto/', multiuploader),
     path('init_user/', init_user),
     path('init_review/', init_review),
+    path('del_review/', del_review),
     path('search_eatwith/', search_eatwith),
 
 
