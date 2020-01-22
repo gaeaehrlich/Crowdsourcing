@@ -10,7 +10,7 @@ from ..models import User, Dish, CityArea, Review, Tag, DistanceMatrix, Estimati
 # caused the bug in the presentation :(
 def first_call_init_user(user):
     return not (( DistanceMatrix.objects.filter(col=user).exists()) or \
-                (Estimation.objects.get(user=user).exists()))
+                (Estimation.objects.filter(user=user).exists()))
 
 
 def init__user(username):

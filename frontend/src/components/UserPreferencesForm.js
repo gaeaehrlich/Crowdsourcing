@@ -1,7 +1,7 @@
 import React from "react";
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
-import {Form, Select, Checkbox, Row, Col, Button} from 'antd';
+import {Form, Select, Checkbox, Row, Col, Button, message} from 'antd';
 
 const { Option } = Select;
 
@@ -81,7 +81,10 @@ class PreferencesForm extends React.Component {
                 if (this.props.requestType === 'post') {
                     this.props.step();
                 }
-                else this.props.history.push('/');
+                else {
+                    message.success('Your update was successful');
+                    setTimeout( () => this.props.history.push('/'), 1000);
+                }
             }}>
 
                 <Form.Item label="Allergies: ">
