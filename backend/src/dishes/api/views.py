@@ -180,7 +180,11 @@ def del_review(req):
     user_name = req.GET['user_name']
     dish_id = req.GET['dish_id']
     stars = req.GET['stars']
-    print('del_review was called:', user_name, dish_id, stars)
+
+    print('del_review was called:', user_name, dish_id)
+
+    del__review(user_name, dish_id, stars)
+
 
     json = {'the new': {'name': 'asd'}, 'afganit': {'name': 'qwe'}}
     response = JsonResponse(data=json)

@@ -61,13 +61,14 @@ def update_distances_for_new_review(review):
         distance_cell.save()
 
         if other_review.exists(): # need to update distance for the old user
+            print('hey a')
             distance_cell = DistanceMatrix.objects.get(col=other, row=user)
             distance_cell.distance = update_distance(distance_cell.distance, diff, other_stars)
             distance_cell.save()
 
 
 def update_distances_for_del_review(username, dish_id, stars):
-    for distance_cell in DistanceMatrix.objects.filter(col__username=user):
+    for distance_cell in DistanceMatrix.objects.filter(col__username=username):
         other = distance_cell.row
         other_review = Review.objects.filter(author_username=other.username,
                                              dish__id=dish_id)
@@ -82,6 +83,7 @@ def update_distances_for_del_review(username, dish_id, stars):
         distance_cell.save()
 
         if other_review.exists():  # need to update distance for the old user
+            print('hey b!')
             distance_cell = DistanceMatrix.objects.get(col=other, row__username=username)
             distance_cell.distance = update_distance(distance_cell.distance, other_stars, diff)
             distance_cell.save()

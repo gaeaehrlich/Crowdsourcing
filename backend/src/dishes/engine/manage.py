@@ -27,9 +27,9 @@ def init__review(username, dish_id):
 
 
 def del__review(username, dish_id, stars):
-    if Review.objects.filter(author_username=username, dish__id=dish_id).exists():
-        update_distances_for_del_review(username, dish_id, stars)
-        update_estimations()
+    update_distances_for_del_review(username, dish_id, int(stars))
+    update_estimations()
+
 
 
 def search(username, area_name, tag_titles = [], lte = None, gte = None):
