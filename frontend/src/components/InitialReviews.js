@@ -110,6 +110,7 @@ class InitialReviews extends React.Component {
                                     alt="So good.."
                                     src={this.dishToPicLocation(item.title)}
                                     width="300"
+                                    height="350"
                         />}
                         >
                             <Meta title={item.title} description={item.content}/>
