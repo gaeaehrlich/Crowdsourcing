@@ -47,6 +47,7 @@ class Reviews extends React.Component {
             message.error('You have already reported this review');
         }
         else if(item.spam !== "") {
+            //call chen func
             axios.delete(`http://127.0.0.1:8000/api/deletereview/${item.id}/`).catch(error => console.log(error));
             message.success('Thank you for reporting spam');
             setTimeout( () => window.location.reload(), 1000);
