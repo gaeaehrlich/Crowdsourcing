@@ -2,12 +2,7 @@ import React from "react";
 import axios from 'axios';
 import Dishes from "../components/Dishes";
 
-
-import {List, Typography, Row, Col} from 'antd';
-import { Card } from 'antd';
-
-const { Meta } = Card;
-
+import { Typography, Row } from 'antd';
 
 const { Title } = Typography;
 

@@ -59,7 +59,7 @@ class ReviewForm extends React.Component {
               is_anonymous: anonymous,
               likes: 0,
               photo_name: uplodedFileName,
-
+              spam: ""
           }).then(res => console.log(res))
               .catch(error => console.log(error.response));
       };
@@ -84,7 +84,6 @@ class ReviewForm extends React.Component {
             return;
         }
         if (info.file.status === 'done') {
-            // Get this url from response in real world.
             getBase64(info.file.originFileObj, imageUrl =>
                 this.setState({
                     imageUrl,

@@ -1,5 +1,5 @@
 import React from "react";
-import {List, Rate, Button, message, IconText} from 'antd';
+import {List, Rate, Button, message} from 'antd';
 import axios from "axios";
 
 class Reviews extends React.Component {
@@ -35,9 +35,38 @@ class Reviews extends React.Component {
             stars: item.stars,
             is_anonymous: item.is_anonymous,
             likes: item.likes + 1,
+            photo_name: item.photo_name,
+            spam: item.spam
         })
             .then(res => console.log(res))
             .catch(error => console.log(error));
+    };
+
+    handleSpam = (item) => {
+        if(item.spam === this.props.token) {
+            message.error('You have already reported this review');
+        }
+        else if(item.spam !== "") {
+            axios.delete(`http://127.0.0.1:8000/api/deletereview/${item.id}/`).catch(error => console.log(error));
+            message.success('Thank you for reporting spam');
+            setTimeout( () => window.location.reload(), 1000);
+        }
+        else {
+            axios.put(`http://127.0.0.1:8000/api/updatereviews/${item.id}/`, {
+                author_token: item.author_token,
+                author_username: item.author_username,
+                dish: item.dish,
+                description: item.description,
+                stars: item.stars,
+                is_anonymous: item.is_anonymous,
+                likes: item.likes,
+                photo_name: item.photo_name,
+                spam: this.props.token
+            })
+                .then(res => console.log(res))
+                .catch(error => console.log(error));
+            message.success('Thank you for reporting spam');
+        }
     };
 
     handleLike = async (item) => {
@@ -58,6 +87,11 @@ class Reviews extends React.Component {
                 this.updateUserLikes(item);
                 this.updateReviewLikes(item);
             }
+            message.success('Your like has been counted!');
+            setTimeout( () => window.location.reload(), 1000);
+        }
+        else {
+            message.error('You can`t like your ouw review');
         }
     };
 
@@ -111,7 +145,7 @@ class Reviews extends React.Component {
                             <div style={{marginRight:10}}><Button style={{marginRight: 10}} onClick={ () => this.handleLike(item) } shape="circle" icon="like" />
                                 <h7 style={{display: "inline-flex"}}>{item.likes}</h7></div>
                             </div>
-                            <a>spam</a>
+                            <a onClick={() => this.handleSpam(item)}>spam</a>
                         </footer>
                     </List.Item>
                 )}

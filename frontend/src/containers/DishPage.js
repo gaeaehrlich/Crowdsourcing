@@ -15,7 +15,6 @@ class DishPage extends React.Component {
         dish_id: 0,
         dish_name: '',
         restaurant_name: '',
-        address: '',
         price: 0,
         tags: [],
         reviews: [],
@@ -23,7 +22,7 @@ class DishPage extends React.Component {
         rest_id: null,
         username: "",
         likes: [],
-        gifts: [],
+        gifts: "",
         searches: [],
         constraints: [],
         did_user_review: false

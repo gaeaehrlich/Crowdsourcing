@@ -14,7 +14,7 @@ const FormItem = Form.Item;
 class RegistrationForm extends React.Component {
     state = {
         confirmDirty: false,
-        step: this.props.match.params.step
+        step: 1
     };
 
     createProfile = () => {
@@ -23,7 +23,7 @@ class RegistrationForm extends React.Component {
             username: localStorage.getItem('username'),
             level: 1,
             likes: [],
-            gifts: [],
+            gifts: "",
             searches: [],
             constraints: []
         }).then(res => console.log(res))
@@ -91,6 +91,12 @@ class RegistrationForm extends React.Component {
             if (this.state.step < 3) return "wait";
             else return "process";
         }
+    };
+
+    startThirdStep = () => {
+        this.setState({
+            step: 3
+        })
     };
 
     render() {
@@ -173,7 +179,7 @@ class RegistrationForm extends React.Component {
                 {this.state.step == 2 ?
                     <div>
                         <h2 style={{fontFamily: 'Raleway'}}>Please select your preferences:</h2>
-                        <PreferencesForm requestType="post"/>
+                        <PreferencesForm requestType="post" step={this.startThirdStep}/>
                     </div>
                     :
                     null

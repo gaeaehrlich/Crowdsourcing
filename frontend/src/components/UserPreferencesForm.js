@@ -11,7 +11,7 @@ class PreferencesForm extends React.Component {
 
     state = {
         likes: [],
-        gifts: [],
+        gifts: "",
         searches: [],
         constraints: []
     };
@@ -69,11 +69,6 @@ class PreferencesForm extends React.Component {
                         this.init_user(username);
                     })
                     .catch(error => console.log(error));
-
-                if (requestType === 'post') {
-                    this.props.history.push(`/signup/${3}`);
-                }
-                else this.props.history.push('/');
             }
         });
     };
@@ -81,7 +76,13 @@ class PreferencesForm extends React.Component {
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
-            <Form onSubmit={(event) => this.handleSubmit(event, this.props.requestType)}>
+            <Form onSubmit={(event) => {
+                this.handleSubmit(event, this.props.requestType);
+                if (this.props.requestType === 'post') {
+                    this.props.step();
+                }
+                else this.props.history.push('/');
+            }}>
 
                 <Form.Item label="Allergies: ">
                     {getFieldDecorator('select-multiple', {

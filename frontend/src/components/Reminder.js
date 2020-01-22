@@ -1,7 +1,5 @@
 import React from "react";
-import {List, Card, Row} from 'antd';
 import axios from "axios";
-import Dishes from "./Dishes";
 
 class Reminder extends React.Component {
 

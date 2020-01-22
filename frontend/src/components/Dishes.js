@@ -6,10 +6,6 @@ const { Meta } = Card;
 
 class Dishes extends React.Component {
 
-    state = {
-    };
-
-
     dishToPicLocation = name => {
         let out;
         out = name.replace(/ /g, '_');

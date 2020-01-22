@@ -1,7 +1,6 @@
 import React from "react";
 import axios from 'axios';
 
-import Gifts from "../components/Gifts";
 import {Steps, Icon, List, Button, Modal} from 'antd';
 import share from "../facebbok.png"
 
@@ -17,44 +16,51 @@ class UserGiftsList extends React.Component {
             {id: 4, restaurant_name: "Vitrina", description: "You get 50% off your next order!"}],
         level: 0,
         used: [],
-        visible: false
+        user_gifts: "",
+        visible: false,
+        likes: [],
+        searches: [],
+        constraints: []
     };
 
-
-    fetchGifts = () => {
-        const token = this.props.match.params.token;
-        axios.get(`http://127.0.0.1:8000/api/usergifts/${token}/`).then(res => {
-            this.setState({
-                gifts: res.data
-            });
-        });
-    };
 
     fetchUser = () => {
         const token = this.props.match.params.token;
         axios.get(`http://127.0.0.1:8000/api/user/${token}/`).then(res => {
             console.log(res.data);
             this.setState({
-                level: res.data.level
+                level: res.data.level,
+                user_gifts: res.data.gifts,
+                used: res.data.gifts.split(','),
+                likes: res.data.likes,
+                searches: res.data.searches,
+                constraints: res.data.constraints
             });
         });
     };
 
     componentDidMount() {
-        //this.fetchGifts();
         this.fetchUser();
-        console.log(this.state.used)
     }
 
     handleOk = e => {
-        console.log(e);
         this.setState({
             visible: false,
         });
+        window.location.reload();
     };
 
     handleClick = (itemID) => {
-        console.log(this.state.used);
+        const token = this.props.match.params.token;
+        axios.put(`http://127.0.0.1:8000/api/updateuser/${token}/`, {
+            user: token,
+            username: localStorage.getItem('username'),
+            likes: this.state.likes,
+            gifts: `${this.state.user_gifts}${itemID}`,
+            searches: this.state.searches,
+            constraints: this.state.constraints
+        })
+        .then(res => console.log(res)).catch(error => console.log(error));
         this.setState({
             used: [...this.state.used, itemID],
             visible: true,
@@ -97,7 +103,7 @@ class UserGiftsList extends React.Component {
                                     title={<a>{item.restaurant_name}</a>}
                                     description={item.description}
                                 />
-                                {this.state.used.indexOf(item.id) == -1 ?
+                                {!this.state.user_gifts.includes(item.id) ?
                                     <Button onClick={() => this.handleClick(item.id)}>Use gift</Button>
                                     :
                                     <Button disabled={true}>Used!</Button>
@@ -120,7 +126,6 @@ class UserGiftsList extends React.Component {
                             </List.Item>
                         )}
                     />
-                    // <Gifts data={this.state.gifts.slice(0, maxLevel)}/>
                     :
                     <h4>No available gifts. To get gifts you need to LEVEL UP! to do so you need to get likes on your
                         reviews</h4>}

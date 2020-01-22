@@ -22,14 +22,12 @@ class EatwithPage extends React.Component {
         tags: [],
         init_areas: ['Tel Aviv', 'City Center', 'City North'],
         possible_areas: [],
-        areas: [],
-        reviews: [],
         rest_hidden: true,
         rest_name: '',
         rest_id: '',
     };
 
-    setTags = obj => {
+    setTags = () => {
         let temp;
         axios.get(`http://127.0.0.1:8000/api/tag`).then(res => {
             temp = res.data.map(tag=>tag['title']);
@@ -39,7 +37,7 @@ class EatwithPage extends React.Component {
         });
     };
 
-    setCityAreas = obj => {
+    setCityAreas = () => {
         let temp;
         axios.get(`http://127.0.0.1:8000/api/cityarea`).then(res => {
             temp = res.data.map(tag=>tag['name']);
@@ -267,7 +265,6 @@ class EatwithPage extends React.Component {
                     })(<AutoComplete
                         dataSource={this.state.possible_areas}
                         style={{ width: 200, marginRight: 10 }}
-                        // onSelect={this.onSetArea}
                         onSearch={this.onSearchArea}
                         placeholder="Area"
                     />)}

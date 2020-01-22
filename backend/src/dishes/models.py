@@ -1,8 +1,6 @@
-# -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
-import datetime
 from django.db import models
 from django.core.validators import MinLengthValidator
 from django.db.models import Sum
@@ -10,14 +8,9 @@ from django.db.models import Sum
 from django.utils import timezone
 
 
-
 class Tag(models.Model):
     title = models.CharField(max_length=30, unique=True)
-    parent = models.ForeignKey('Tag',
-                               related_name='children',
-                               on_delete=models.PROTECT,
-                               blank=True,
-                               null=True)
+    parent = models.ForeignKey('Tag', related_name='children', on_delete=models.PROTECT, blank=True, null=True)
 
     def __str__(self):
         return self.title
@@ -29,7 +22,7 @@ class Constraint(models.Model):
     def __str__(self):
         return self.title
 
-# add tag as ManyToMany!
+
 class Dish(models.Model):
     title = models.CharField(max_length=120)
     content = models.TextField()
@@ -54,15 +47,10 @@ class Review(models.Model):
     is_anonymous = models.BooleanField(default=False)
     likes = models.IntegerField(default=0)
     photo_name = models.CharField(max_length=50, blank=True)
+    spam = models.CharField(max_length=40, validators=[MinLengthValidator(40)], blank=True)
 
     def __str__(self):
         return " ".join(map(str, [self.dish, self.author_username]))
-
-
-class Gift(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    restaurant = models.ForeignKey('Restaurant', related_name='%(class)s', on_delete=models.PROTECT)
-    description = models.CharField(max_length=500)
 
 
 class Profile(models.Model):
@@ -74,9 +62,10 @@ class Profile(models.Model):
         return Review.objects.filter(author_token=self.user).aggregate(Sum('likes'))["likes__sum"]
 
     likes = models.ManyToManyField(Review, related_name="posts_liked", blank=True)
-    gifts = models.ManyToManyField(Gift, related_name="posts_liked", blank=True)
+    gifts = models.CharField(max_length=50, blank=True)
     searches = models.ManyToManyField(Dish, related_name='%(class)s', blank=True)
     constraints = models.ManyToManyField(Constraint, related_name='%(class)s', blank=True)
+
     def __str__(self):
         return " ".join(map(str, [self.user]))
 
@@ -91,8 +80,10 @@ class City(models.Model):
 class CityArea(models.Model):
     name = models.CharField(max_length=30, unique=True)
     city = models.ForeignKey(City, related_name='%(class)s', on_delete=models.PROTECT)
+
     def __str__(self):
         return " ".join(map(str, [self.name, self.city]))
+
 
 class Restaurant(models.Model):
     name = models.CharField(max_length=30)
@@ -102,6 +93,7 @@ class Restaurant(models.Model):
 
     def __str__(self):
         return " ".join(map(str, [self.name, self.street]))
+
 
 class DistanceMatrix(models.Model):
     col = models.ForeignKey(User, related_name='user_distances_from', on_delete=models.PROTECT)

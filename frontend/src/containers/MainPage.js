@@ -2,7 +2,7 @@ import React from "react";
 import axios from 'axios';
 import { Link} from 'react-router-dom';
 
-import { AutoComplete, Typography, Form, Button, Row, Col, Tag, notification } from 'antd';
+import { Typography, notification } from 'antd';
 import {connect} from "react-redux";
 import logo from "../logo.png";
 import search from "../search.png"
@@ -18,13 +18,8 @@ class MainPage extends React.Component {
 
     state = {
         dishes: [],
-        area: '',
         init_tags: ['Asian', 'Vegan', 'Vegetarian', 'Shit', 'Kosher', 'PeanutsFree'],
-        possible_tags: [],
-        tags: [],
         init_areas: ['Tel Aviv', 'City Center', 'City North'],
-        possible_areas: [],
-        areas: [],
         reviews: [],
         searches: [],
         user_name: localStorage.getItem('username'),
@@ -55,7 +50,7 @@ class MainPage extends React.Component {
         });
     };
 
-    setTags = obj => {
+    setTags = () => {
         let temp;
         axios.get(`http://127.0.0.1:8000/api/tag`).then(res => {
             temp = res.data.map(tag=>tag['title']);
@@ -65,7 +60,7 @@ class MainPage extends React.Component {
         });
     };
 
-    setCityAreas = obj => {
+    setCityAreas = () => {
         let temp;
         axios.get(`http://127.0.0.1:8000/api/cityarea`).then(res => {
             temp = res.data.map(tag=>tag['name']);
@@ -76,13 +71,7 @@ class MainPage extends React.Component {
     };
 
 
-    dishToPicLocation = name => {
-        let out;
-        out = name.replace(/ /g, '_');
-        return 'http://127.0.0.1:8000/api/pic/'+out;
-    };
-
-    setInitDishes = stam => {
+    setInitDishes = ()=> {
         axios.get(`http://127.0.0.1:8000/api/dish/`).then(res => {
             this.setState({
                 dishes: res.data
@@ -112,62 +101,6 @@ class MainPage extends React.Component {
     };
 
 
-    onSetTag = tag => {
-        this.setState(state => {
-            const tags = state.tags.concat(tag);
-            return {tags,};
-        });
-    };
-
-    handleCloseTag = removedTag => {
-        const tags = this.state.tags.filter(tag => tag !== removedTag);
-        this.setState({tags});
-    };
-
-    onSearchTag = searchText => {
-        this.setState({
-            possible_tags: !searchText ? [] : this.state.init_tags.filter(tag => tag.toLowerCase().startsWith(searchText.toLowerCase())),
-        });
-    };
-
-    onSetArea = area => {
-        this.setState(state => {
-            const areas = state.areas.concat(area);
-            return {areas,};
-        });
-    };
-
-    handleCloseArea = removedArea => {
-        const areas = this.state.areas.filter(area => area !== removedArea);
-        this.setState({areas});
-    };
-
-    onSearchArea = searchText => {
-        this.setState({
-            possible_areas: !searchText ? [] : this.state.init_areas.filter(area => area.toLowerCase().startsWith(searchText.toLowerCase())),
-        });
-    };
-
-    handleSubmit = e => {
-        e.preventDefault();
-        axios.get(`http://127.0.0.1:8000/api/search`, {
-            params: {
-                tags: this.state.tags,
-                area: this.state.areas,
-                user_name: this.state.user_name
-            }
-        }).then(res => {
-            console.log(res);
-            this.setState({
-                dishes: res.data
-
-            });
-        });
-    };
-
-    gutt = -16;
-
-
     render() {
         return (
             <div>
@@ -175,11 +108,6 @@ class MainPage extends React.Component {
                     <div>
                         <Title level={2} style={{fontFamily: 'Raleway'}}>Welcome, {this.state.user_name}</Title>
                         {this.state.searches.length > 0 ?
-                            // <div>
-                            //     <h3>Have you tried these courses?</h3>
-                            //     <br/>
-                            //     <Reminder data={this.state.searches}/>
-                            // </div>
                             this.openNotification()
                             : null}
                         <div style={{

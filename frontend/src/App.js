@@ -9,34 +9,34 @@ import CustomLayout from './containers/Layout';
 
 class App extends Component {
 
-  componentDidMount() {
-    this.props.onTryAutoSignup();
-  }
+    componentDidMount() {
+        this.props.onTryAutoSignup();
+    }
 
-  render() {
-    return (
-      <div>
-        <Router>
-          <CustomLayout {...this.props}>
-              <BaseRouter/>
-          </CustomLayout>
-        </Router>
-      </div>
-    );
-  }
+    render() {
+        return (
+            <div>
+              <Router>
+                <CustomLayout {...this.props}>
+                  <BaseRouter/>
+                </CustomLayout>
+              </Router>
+            </div>
+        );
+    }
 }
 
 const mapStateToProps = state => {
-  return {
-    isAuthenticated: state.token !== null,
-    token: state.token
-  }
+    return {
+      isAuthenticated: state.token !== null,
+      token: state.token
+    }
 };
 
 const mapDispatchToProps = dispatch => {
-  return {
-    onTryAutoSignup: () => dispatch(actions.authCheckState())
-  }
+    return {
+      onTryAutoSignup: () => dispatch(actions.authCheckState())
+    }
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

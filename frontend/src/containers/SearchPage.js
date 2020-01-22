@@ -28,7 +28,7 @@ class SearchPage extends React.Component {
     };
 
 
-    setTags = obj => {
+    setTags = () => {
         let temp;
         axios.get(`http://127.0.0.1:8000/api/tag`).then(res => {
             temp = res.data.map(tag=>tag['title']);
@@ -38,7 +38,7 @@ class SearchPage extends React.Component {
         });
     };
 
-    setCityAreas = obj => {
+    setCityAreas = () => {
         let temp;
         axios.get(`http://127.0.0.1:8000/api/cityarea`).then(res => {
             temp = res.data.map(tag=>tag['name']);
@@ -48,14 +48,7 @@ class SearchPage extends React.Component {
         });
     };
 
-
-    dishToPicLocation = name => {
-        let out;
-        out = name.replace(/ /g, '_');
-        return 'http://127.0.0.1:8000/api/pic/'+out;
-    };
-
-    setInitDishes = stam => {
+    setInitDishes = () => {
         axios.get(`http://127.0.0.1:8000/api/dish/`).then(res => {
             this.setState({
                 dishes: res.data

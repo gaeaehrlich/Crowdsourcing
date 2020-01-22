@@ -1,5 +1,5 @@
 import React from "react";
-import {List, Card, Rate, Form, Col, Button} from 'antd';
+import {List, Card, Rate, Form} from 'antd';
 import axios from "axios";
 
 const { Meta } = Card;
@@ -64,7 +64,7 @@ class InitialReviews extends React.Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 if(this.state.submitted.indexOf(dishID) === -1 && event !== 0) {
-                    return axios.post('http://127.0.0.1:8000/api/createreview/', {
+                    axios.post('http://127.0.0.1:8000/api/createreview/', {
                         author_token: localStorage.getItem('token'),
                         author_username: localStorage.getItem('username'),
                         dish: dishID,
@@ -72,7 +72,8 @@ class InitialReviews extends React.Component {
                         stars: event,
                         is_anonymous: true,
                         likes: 0,
-                        photo_name: ""
+                        photo_name: "",
+                        spam: ""
                     }).then(res => {
                         console.log(res);
                         this.setState({
@@ -127,7 +128,7 @@ class InitialReviews extends React.Component {
         );
     }
 
-};
+}
 
 const WrappedForm = Form.create()(InitialReviews);
 
