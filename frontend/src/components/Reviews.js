@@ -67,6 +67,7 @@ class Reviews extends React.Component {
                 .then(res => console.log(res))
                 .catch(error => console.log(error));
             message.success('Thank you for reporting spam');
+            setTimeout( () => window.location.reload(), 1000);
         }
     };
 
