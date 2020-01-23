@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Row, Col, AutoComplete} from 'antd';
-import { Form, Input, Icon, Button } from 'antd';
+import { Form, Input, Icon, Button, message } from 'antd';
 import { Typography } from 'antd';
 import axios from "axios";
 
@@ -77,6 +77,14 @@ class EatwithPage extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
+                if(typeof values['area'] === "undefined") {
+                    message.warning('Please insert area');
+                    return;
+                }
+                if(typeof values['names'] === "undefined") {
+                    message.warning('Please insert user');
+                    return;
+                }
                 const { keys, names } = values;
                 console.log('Received values of form: ', values);
                 console.log('Merged values:', keys.map(key => names[key]));
@@ -94,7 +102,7 @@ class EatwithPage extends React.Component {
                         rest_id: res.data.rest.id,
                         rest_hidden: false,
                     })
-                });
+                }).catch(error => console.log(error));
             }
         });
     };
