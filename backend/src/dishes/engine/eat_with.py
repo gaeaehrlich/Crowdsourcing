@@ -29,7 +29,7 @@ def cal_dish_loss(user, tags, dish):
                 min_loss = tag_loss
 
     estimation = Estimation.objects.get(user=user, dish=dish).estimate
-    return np.exp(min_loss - estimation*0.23) # rethink this
+    return np.exp(min_loss - estimation*0.23)
 
 
 def cal_restaurant_loss(user, tags, restaurant):
@@ -54,7 +54,7 @@ def cal_restaurant_loss(user, tags, restaurant):
 def choose_restaurant(requests, area):
 
     restaurants = Restaurant.objects.filter(city_area=area)
-    min_total_loss = float('inf') # later
+    min_total_loss = float('inf')
     min_restaurant = None
     min_loss = []
     min_dishes = []

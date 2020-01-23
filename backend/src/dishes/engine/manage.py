@@ -5,9 +5,6 @@ from .eat_with import choose_restaurant
 from ..models import User, Dish, CityArea, Review, Tag, DistanceMatrix, Estimation
 
 
-# make sure that init_user wasn't call before for some reason
-# (because of a double click or any other reason)
-# caused the bug in the presentation :(
 def first_call_init_user(user):
     return not (( DistanceMatrix.objects.filter(col=user).exists()) or \
                 (Estimation.objects.filter(user=user).exists()))
@@ -50,13 +47,9 @@ def eatwith(area_name, requests_strings):
         tags = Tag.objects.filter(title__in=requests_strings[user_name])
         requests.append((user, tags))
 
-    # for request in requests_strings:
-    #     user = User.objects.get(username=request[0])
-    #     tags = Tag.objects.filter(title__in=request[1])
-    #     requests.append((user, tags))
-
     restaurant, dishes, losses  = choose_restaurant(requests, area)
     answers = {}
+
     for i in range(len(requests)):
         answers[requests[i][0]] = (dishes[i], losses[i])
 

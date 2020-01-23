@@ -3,7 +3,7 @@ from ...engine.initialization import initialize
 from ...models import DistanceMatrix, Estimation
 
 class Command(BaseCommand):
-    help = 'Test initialization'
+    help = 'Initialization'
 
     def handle(self, *args, **kwargs):
         DistanceMatrix.objects.all().delete()
