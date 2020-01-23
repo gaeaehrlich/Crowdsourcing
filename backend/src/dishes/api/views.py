@@ -1,7 +1,6 @@
 import os
 
 from django.http import FileResponse, JsonResponse
-from rest_framework.authtoken.models import Token
 from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView
 from django.views.decorators.csrf import csrf_exempt
 
@@ -185,11 +184,11 @@ def del_review(req):
 
     del__review(user_name, dish_id, stars)
 
-
     json = {'the new': {'name': 'asd'}, 'afganit': {'name': 'qwe'}}
     response = JsonResponse(data=json)
 
     return response
+
 
 def init_user(req):
     user_name = req.GET['user_name']

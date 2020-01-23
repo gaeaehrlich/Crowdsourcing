@@ -25,6 +25,7 @@ class EatwithPage extends React.Component {
         rest_hidden: true,
         rest_name: '',
         rest_id: '',
+        success: true
     };
 
     setTags = () => {
@@ -95,14 +96,24 @@ class EatwithPage extends React.Component {
                         users: values['names'],
                     }
                 }).then(res => {
-                    console.log(res);
+                    console.log("res " , res);
                     this.setState({
                         dishes: res.data.dishes,
                         rest_name: res.data.rest.name,
                         rest_id: res.data.rest.id,
                         rest_hidden: false,
+                        success: true
                     })
-                }).catch(error => console.log(error));
+                }).catch(error => {
+                    console.log(error);
+                    this.setState({
+                        dishes: [],
+                        rest_hidden: true,
+                        rest_name: '',
+                        rest_id: '',
+                        success: false
+                    })
+                });
             }
         });
     };
@@ -291,11 +302,17 @@ class EatwithPage extends React.Component {
                         Submit
                     </Button>
                 </Form.Item>
-                <Title level={4} style={{fontFamily: 'Raleway'}}>
+                {this.state.success ?
+                    <Title level={4} style={{fontFamily: 'Raleway'}}>
                     <a href={'http://127.0.0.1:3000/rest/' + this.state.rest_id} hidden={this.state.rest_hidden}>
-                                    We know you want: {this.state.rest_name}
-                                </a>
-                </Title>
+                        We know you want: {this.state.rest_name}
+                    </a>
+                    </Title>
+                    :
+                    <h4 style={{fontFamily: 'Raleway'}}>
+                        Couldn't find a matching restaurant. Please try a different search.
+                    </h4>
+                }
 
             </Form>
             {this.state.dishes.length > 0 ? <Dishes data={this.state.dishes}/> : null }
