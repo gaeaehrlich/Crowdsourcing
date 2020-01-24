@@ -97,7 +97,7 @@ class EatwithPage extends React.Component {
                     }
                 }).then(res => {
                     console.log("res " , res);
-                    if(res.data.rest.trim() != '') {
+                    if(res.data.rest.name.trim() !== '') {
                         this.setState({
                         dishes: res.data.dishes,
                         rest_name: res.data.rest.name,
