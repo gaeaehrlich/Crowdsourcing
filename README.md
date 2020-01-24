@@ -1,7 +1,7 @@
 #What's the Dish?
-This project is broken up into a backend and frontend. 
+This project is broken up into a backend and a frontend. 
 
-The backend contains the Django project which uses the Django Rest Framework, and hold the Collaborative Filtering algorithm. 
+The backend contains the Django project which uses the Django Rest Framework, and holds the Collaborative Filtering algorithm. 
 
 The frontend uses React and queries data from the API.
 
@@ -54,22 +54,19 @@ Croudsoursing
 ##About the DB
 
 This sample data base contains a few restaurants, dishes, tags, constraints and users. The majority of the restaurants
-are located at a City Area called "Tel Aviv- North" (like our university), and one restaurant at a different area - "Herzliya Pituah" so you can search over different areas.
+are located at the City Area called "Tel Aviv- North", and one restaurant at a the area "Herzliya Pituah".
 
 Also, this DB contains several users, who reviewed a few dishes and listed few constraints (Chen for example is a
  vegetarian), so every user will get different results for every search, sorted by our estimations.
  
  
- ##Users:
- ####`Gaea`
- ####`Adi`
- ####`Chen`
- ####`Orin`
- ####`Slava (your allergic to peanuts now)`
+ ###Users
+ ####`Gaea` `Adi` `Chen` `Orin`
+ ####`Slava` 
+ (you're allergic to peanuts now)
  
- ##Passwords:
- ##### for every username, the password is:
- ####`username1234567!`
+ ###Passwords
+ ##### for every username the password is:  `username1234567!`
  
  
     

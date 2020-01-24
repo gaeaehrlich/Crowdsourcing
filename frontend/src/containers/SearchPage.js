@@ -1,16 +1,13 @@
 import React from "react";
 import axios from 'axios';
 
-import { AutoComplete, Typography, Form, Button} from 'antd';
-import { Tag } from 'antd';
-import { Row, Col } from 'antd';
+import { AutoComplete, Typography, Form, Button, Tag, Row, Col, message } from 'antd';
 import {connect} from "react-redux";
 import logo from "../logo.png";
 import Dishes from "../components/Dishes";
 
 
 const { Title } = Typography;
-
 
 
 class SearchPage extends React.Component {
@@ -105,19 +102,23 @@ class SearchPage extends React.Component {
 
     handleSubmit = e => {
         e.preventDefault();
-        axios.get(`http://127.0.0.1:8000/api/search`, {
-            params: {
-                tags: this.state.tags,
-                area: this.state.areas,
-                user_name: this.state.user_name
-            }
-        }).then(res => {
-            console.log(res);
-            this.setState({
-                dishes: res.data
-
+        if(this.state.areas.length > 0 && this.state.tags > 0) {
+            axios.get(`http://127.0.0.1:8000/api/search`, {
+                params: {
+                    tags: this.state.tags,
+                    area: this.state.areas,
+                    user_name: this.state.user_name
+                }
+            }).then(res => {
+                console.log(res);
+                this.setState({
+                    dishes: res.data
+                });
             });
-        });
+        }
+        else {
+            message.warning('Please fill in all search criteria');
+        }
     };
 
     gutt = -16;

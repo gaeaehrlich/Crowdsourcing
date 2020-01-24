@@ -1,6 +1,7 @@
 import React from "react";
 import {List, Rate, Button, message} from 'antd';
 import axios from "axios";
+import {connect} from "react-redux";
 
 class Reviews extends React.Component {
 
@@ -170,4 +171,11 @@ class Reviews extends React.Component {
     }
 }
 
-export default Reviews;
+const mapStateToProps = state => {
+    return {
+        isAuthenticated: state.token !== null,
+        token: state.token
+    }
+};
+
+export default connect(mapStateToProps)(Reviews);
