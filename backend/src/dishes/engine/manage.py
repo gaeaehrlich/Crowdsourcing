@@ -48,9 +48,5 @@ def eatwith(area_name, requests_strings):
         requests.append((user, tags))
 
     restaurant, dishes, losses  = choose_restaurant(requests, area)
-    answers = {}
 
-    for i in range(len(requests)):
-        answers[requests[i][0]] = (dishes[i], losses[i])
-
-    return restaurant, answers
+    return restaurant, dishes

@@ -134,8 +134,7 @@ def search_eatwith(req):
 
     rest = dict(RestaurantSerializer(rest).data)
     out = {'dishes': [], 'rest': rest}
-    for user in users:
-        dish, rating = users[user]
+    for dish in users:
         dish = dict(DishSerializer(dish).data)
         out['dishes'].append(dish)
 

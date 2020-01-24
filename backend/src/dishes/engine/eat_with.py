@@ -54,10 +54,12 @@ def cal_restaurant_loss(user, tags, restaurant):
 def choose_restaurant(requests, area):
 
     restaurants = Restaurant.objects.filter(city_area=area)
+
     min_total_loss = float('inf')
     min_restaurant = None
     min_loss = []
     min_dishes = []
+
     for restaurant in restaurants:
         total_loss = 0
         dishes = []
@@ -74,7 +76,6 @@ def choose_restaurant(requests, area):
             min_total_loss = total_loss
             min_restaurant = restaurant
             min_dishes = dishes
-    if min_total_loss == float('inf'):
-        return None
+
 
     return min_restaurant, min_dishes, min_loss
