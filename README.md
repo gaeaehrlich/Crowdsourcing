@@ -10,13 +10,13 @@ We put a lot of effort into small user experience details make the usability as 
 
 
 ## Needed installations
-####`react`
-####`node`
-####`npm`
-####`react-auth`
-####`allauth`
-####`redux`
-####`antd`
+#### `react`
+#### `node`
+#### `npm`
+#### `react-auth`
+#### `allauth`
+#### `redux`
+#### `antd`
 
 ## Run the project
 You will need to run both backend and frontend server.
@@ -63,8 +63,8 @@ Also, this DB contains several users, who reviewed a few dishes and listed few c
  
  
  ### Users
- ####`Gaea` `Adi` `Chen` `Orin`
- ####`Slava` 
+ #### `Gaea` `Adi` `Chen` `Orin`
+ #### `Slava` 
  (you're allergic to peanuts now)
  
  ### Passwords
