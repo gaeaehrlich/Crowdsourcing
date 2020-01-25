@@ -102,7 +102,7 @@ class SearchPage extends React.Component {
 
     handleSubmit = e => {
         e.preventDefault();
-        if(this.state.areas.length > 0 && this.state.tags > 0) {
+        if(this.state.areas.length > 0 && this.state.tags.length > 0) {
             axios.get(`http://127.0.0.1:8000/api/search`, {
                 params: {
                     tags: this.state.tags,
