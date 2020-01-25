@@ -1,4 +1,4 @@
-#What's the Dish?
+# What's the Dish?
 This project is broken up into a backend and a frontend. 
 
 The backend contains the Django project which uses the Django Rest Framework, and holds the Collaborative Filtering algorithm. 
@@ -9,7 +9,7 @@ We hope you enjoy using it.
 We put a lot of effort into small user experience details make the usability as smooth as possible
 
 
-##Needed installations
+## Needed installations
 ####`react`
 ####`node`
 ####`npm`
@@ -18,7 +18,7 @@ We put a lot of effort into small user experience details make the usability as 
 ####`redux`
 ####`antd`
 
-##Run the project
+## Run the project
 You will need to run both backend and frontend server.
 
 To run the frontend, in the project directory, you can run in terminal of path /Crowdsourcing/frontend/src  :
@@ -31,7 +31,7 @@ To run the backend server you should run in terminal of path /Crowdsourcing/back
 
 ### `python3 manage.py runserver`
 
-##Important directories
+## Important directories
 
 ```
 Croudsoursing
@@ -53,7 +53,7 @@ Croudsoursing
         │   ... 
 ```
 
-##About the DB
+## About the DB
 
 This sample data base contains a few restaurants, dishes, tags, constraints and users. The majority of the restaurants
 are located at the City Area called "Tel Aviv- North", and one restaurant at a the area "Herzliya Pituah".
@@ -62,12 +62,12 @@ Also, this DB contains several users, who reviewed a few dishes and listed few c
  vegetarian), so every user will get different results for every search, sorted by our estimations.
  
  
- ###Users
+ ### Users
  ####`Gaea` `Adi` `Chen` `Orin`
  ####`Slava` 
  (you're allergic to peanuts now)
  
- ###Passwords
+ ### Passwords
  ##### for every username the password is:  `username1234567!`
  ##### where 'username' is the users username with capital letter
 
