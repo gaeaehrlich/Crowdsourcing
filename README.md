@@ -6,7 +6,7 @@ The backend contains the Django project which uses the Django Rest Framework, an
 The frontend uses React and queries data from the API.
 
 We hope you enjoy using it. 
-We put a lot of effort into small user experience details make the usability as smooth as possible
+We put a lot of effort into small user experience details make that the usability as smooth as possible
 
 
 ## Needed installations
@@ -52,6 +52,28 @@ Croudsoursing
         └───store                   -> user authentication
         │   ... 
 ```
+
+## User Interaction Features
+### User incentive system
+
+The motive for users to use and re-use our program is the gifts they get from our "sponsors" .
+In order to get gifts, the user needs to LEVEL UP! the way to do so is to get "likes" on the reviews he published.
+ 1 like = 1 level up.
+ 
+Our way to make sure that the user doesn't spam the reviews is the spam button.
+Once a review gets 2 spam warnings it gets deleted, and the reviewer's level decreases accordingly.
+
+Rules: the user can't like his own posts and can't mark as spam the same review twice.
+
+There are 4 levels: Beginner, Intermediate, Reliable and Critic.
+The user can share his level on social media via the Share button. We did not implement a connection with Facebook,
+however this is another motive for the user to level up - show off to his friends.
+
+### Notifications
+
+Once a user is looking into a certain dish, it means he might be ordering it soon. That is why we have a reminder 
+mechanism. The next time the user goes to our Homepage he will get a notification asking him to review that dish.
+The user will stop receiving notifications for a certain dish once he reviews it, or if he enters the dish's page again. 
 
 ## About the DB
 
