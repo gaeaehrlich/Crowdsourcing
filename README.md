@@ -5,6 +5,9 @@ The backend contains the Django project which uses the Django Rest Framework, an
 
 The frontend uses React and queries data from the API.
 
+We hope you enjoy using it. 
+We put a lot of effort into small user experience details make the usability as smooth as possible
+
 
 ##Needed installations
 ####`react`
@@ -16,16 +19,15 @@ The frontend uses React and queries data from the API.
 ####`antd`
 
 ##Run the project
+You will need to run both backend and frontend server.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-In the project directory, you can run in terminal of path /Crowdsourcing/frontend/src  :
+To run the frontend, in the project directory, you can run in terminal of path /Crowdsourcing/frontend/src  :
 
 ### `npm start`
 
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-To run the server you should run in terminal of path /Crowdsourcing/backend/src   :
+To run the backend server you should run in terminal of path /Crowdsourcing/backend/src   :
 
 ### `python3 manage.py runserver`
 
@@ -65,11 +67,12 @@ Also, this DB contains several users, who reviewed a few dishes and listed few c
  ####`Adi`
  ####`Chen`
  ####`Orin`
- ####`Slava (your allergic to peanuts now)`
+ ####`Slava (you'r allergic to peanuts now)`
  
  ##Passwords:
  ##### for every username, the password is:
  ####`username1234567!`
+ #### where 'username' is the users username with capital letter
  
  
     
